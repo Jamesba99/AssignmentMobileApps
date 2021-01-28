@@ -8,8 +8,11 @@ Above adds all imports that are required for stack navigation
 below includes all screens that are going to be called as part of the stack
 **/
 
-import HomeScreen from './Components/HomeScreen';
-// import HomeScreen from './Components/home_with_buttons';
+//import HomeScreen from './Components/HomeScreen';
+import HomeScreen from './Components/home_with_buttons';
+import About from './Components/About';
+import Contact from './Components/Contact';
+
 const Stack = createStackNavigator();// adds a stack navigator
 
 class App extends Component{
@@ -18,6 +21,8 @@ class App extends Component{
         <NavigationContainer>
           <Stack.Navigator>
               <Stack.Screen name="HomeScreen" component={HomeScreen} />
+              <Stack.Screen name="About" component={About} />
+              <Stack.Screen name="Contact" component={Contact} />
           </Stack.Navigator>
         </NavigationContainer>
       );
