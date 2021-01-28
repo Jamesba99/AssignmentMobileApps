@@ -2,31 +2,30 @@ import 'react-native-gesture-handler';
 
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+import HomeScreen from './Components/DefaultHomeScreen';
+import Register from './Components/Register';
+import Login from './Components/Login';
+//import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
 /**
-Above adds all imports that are required for stack navigation
-below includes all screens that are going to be called as part of the stack
+Stack screen can then add options which will change what the top panel will say
 **/
-
-//import HomeScreen from './Components/HomeScreen';
-import HomeScreen from './Components/home_with_buttons';
-import About from './Components/About';
-import Contact from './Components/Contact';
-
-const Stack = createStackNavigator();// adds a stack navigator
+const Drawer = createDrawerNavigator();
 
 class App extends Component{
   render(){
     return(
-        <NavigationContainer>
-          <Stack.Navigator>
-              <Stack.Screen name="HomeScreen" component={HomeScreen} />
-              <Stack.Screen name="About" component={About} />
-              <Stack.Screen name="Contact" component={Contact} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      );
+      <NavigationContainer>
+        <Drawer.Navigator>
+            <Drawer.Screen name="HomeScreen" component={HomeScreen} />
+            <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account"}} />
+            <Drawer.Screen name="Login" component={Login} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    );
   }
 }
 
-export default App; // exports the app
+
+export default App; // exports the apps

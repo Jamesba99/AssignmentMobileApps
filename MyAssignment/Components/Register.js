@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
-class Contact extends Component{
+class About extends Component{
   render(){
 
     const navigation = this.props.navigation;
 
     return(
         <View style={styles.container}>
-          <Text style={styles.text}>Contact</Text>
+          <Text style={styles.text}>RegisterScreen</Text>
+          <Text/>
           <Button
             title="Go Back"
             onPress={() =>navigation.goBack()}
-          /> // adds a go back button so user can go back at all times
+          />
         </View>
     );
   }
@@ -30,4 +31,4 @@ class Contact extends Component{
     }
   });
 
-  export default Contact;
+  export default About;

@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
-class About extends Component{
+class Contact extends Component{
   render(){
 
     const navigation = this.props.navigation;
 
     return(
         <View style={styles.container}>
-          <Text style={styles.text}>About</Text>
+          <Text style={styles.text}>LoginScreen</Text>
+          <Text/>
+          <Button
+            title="Don't have an account? Register now!"
+            onPress={() =>navigation.navigate('Register')} // opens the about screen if clicked
+          />
+          <Text/>
           <Button
             title="Go Back"
             onPress={() =>navigation.goBack()}
@@ -30,4 +36,4 @@ class About extends Component{
     }
   });
 
-  export default About;
+  export default Contact;

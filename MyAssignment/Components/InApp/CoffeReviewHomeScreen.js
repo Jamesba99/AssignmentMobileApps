@@ -11,14 +11,16 @@ class HomeScreen extends Component{
 
     return(
         <View style={styles.container}>
-          <Text style={styles.text}>HomeScreen</Text>
+          <Text style={styles.text}>CoffeeRewviewHomePage</Text>
+          <Text/>
           <Button
-            title="About"
-            onPress={() =>navigation.navigate('About')} // opens the about screen if clicked
+            title="Register"
+            onPress={() =>navigation.navigate('Register')} // opens the about screen if clicked
           />
+          <Text/>
           <Button
-            title="Contact"
-            onPress={() =>navigation.navigate('Contact')} // opens the stack contact screen
+            title="Login"
+            onPress={() =>navigation.navigate('Login')} // opens the stack contact screen
           />
         </View>
     );
