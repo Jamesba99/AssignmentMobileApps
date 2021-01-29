@@ -1,39 +1,77 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, ToastAndroid } from 'react-native';
+import {ScrollView, TextInput } from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class Contact extends Component{
-  render(){
+class LoginScreen extends Component {
+    constructor(props){
+        super(props);
 
-    const navigation = this.props.navigation;
-
-    return(
-        <View style={styles.container}>
-          <Text style={styles.text}>LoginScreen</Text>
-          <Text/>
-          <Button
-            title="Don't have an account? Register now!"
-            onPress={() =>navigation.navigate('Register')} // opens the about screen if clicked
-          />
-          <Text/>
-          <Button
-            title="Go Back"
-            onPress={() =>navigation.goBack()}
-          />
-        </View>
-    );
-  }
-}
-  const styles = StyleSheet.create({
-    container:{
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'brown'
-    },
-    text: {
-      color: 'white',
-      fontSize: 25
+        this.state={
+            email: "",
+            password: ""
+        }
     }
-  });
 
-  export default Contact;
+    login =async () => {
+      //valadation is created here
+
+        return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
+            method: 'post',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(this.state)
+          })
+          .then((response) => {
+              if(response.status === 200){
+                  return response.json()
+              }else if(response.status === 400){
+                  throw ' invalid email or password';
+              }else{
+                  throw 'Something went wrong';
+              }
+          })
+          .then(async (responseJson) => {
+              console.log(responseJson);
+              await AsyncStorage.setItem('@session_token', responseJson.this)
+              this.props.navigation.navigate("Home");
+          })
+          .catch((error) => {
+              console.log(error);
+              ToastAndroid.show(error,ToastAndroid.SHORT);
+          })
+
+    }
+
+    render(){
+        return(
+            <ScrollView>
+                <TextInput
+                    placeholder="Enter your email"
+                    onChangeText={(email) => this.setState({email})}
+                    value={this.state.email}
+                    style={{padding:5,boarderWidth:1, margin:5}}
+                />
+                <TextInput
+                    placeholder="Enter your password"
+                    onChangeText={(password) => this.setState({password})}
+                    value={this.state.password}
+                    //secureTextEntry
+                    style={{padding:5,boarderWidth:1, margin:5}}
+                />
+                <Button
+                    title="Login"
+                    onPress={() => this.login()}
+                />
+                <Button
+                    title="Don't have an account?"
+                    onPress={() => this.props.navigation.navigate("Register")}
+               />
+            </ScrollView>
+        )
+    }
+
+}
+
+export default LoginScreen;

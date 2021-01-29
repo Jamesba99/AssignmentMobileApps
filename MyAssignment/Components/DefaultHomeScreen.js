@@ -30,12 +30,13 @@ const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
     backgroundColor: 'brown'
   },
   text: { // styles the text colour and style
     color: 'white',
-    fontSize: 25
+    fontSize: 50,
+    fontWeight:"bold"
   }
 });
 
