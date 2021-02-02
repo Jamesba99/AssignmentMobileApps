@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity } from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -13,7 +13,7 @@ class LoginScreen extends Component {
         }
     }
 
-    login =async () => {
+    login = async () => {
       //valadation is created here
 
         return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
@@ -34,44 +34,84 @@ class LoginScreen extends Component {
           })
           .then(async (responseJson) => {
               console.log(responseJson);
-              await AsyncStorage.setItem('@session_token', responseJson.this)
-              this.props.navigation.navigate("Home");
+              await AsyncStorage.setItem('@session_token', responseJson.token);
+              this.props.navigation.navigate("HomeScreen");
           })
           .catch((error) => {
               console.log(error);
               ToastAndroid.show(error,ToastAndroid.SHORT);
           })
-
     }
 
     render(){
+        const navigation = this.props.navigation;
         return(
-            <ScrollView>
-                <TextInput
-                    placeholder="Enter your email"
-                    onChangeText={(email) => this.setState({email})}
-                    value={this.state.email}
-                    style={{padding:5,boarderWidth:1, margin:5}}
-                />
-                <TextInput
-                    placeholder="Enter your password"
-                    onChangeText={(password) => this.setState({password})}
-                    value={this.state.password}
-                    //secureTextEntry
-                    style={{padding:5,boarderWidth:1, margin:5}}
-                />
-                <Button
-                    title="Login"
-                    onPress={() => this.login()}
-                />
-                <Button
-                    title="Don't have an account?"
-                    onPress={() => this.props.navigation.navigate("Register")}
-               />
-            </ScrollView>
-        )
+            <SafeAreaView style={styles.container}>
+              <ScrollView>
+                  <Text style={styles.text}>       Login </Text>
+                  <TextInput
+                      placeholder="Enter your email"
+                      onChangeText={(email) => this.setState({email})}
+                      backgroundColor= 'white'
+                      value={this.state.email}
+                      style={styles.textInput}
+                  />
+                  <TextInput
+                      placeholder="Enter your password"
+                      onChangeText={(password) => this.setState({password})}
+                      backgroundColor= 'white'
+                      value={this.state.password}
+                      //secureTextEntry
+                      style={styles.textInput}
+                  />
+                  <TouchableOpacity
+                      style={styles.button1}
+                        onPress={() => this.login()}>
+                      <Text style={styles.buttonText}>Login!</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                      style={styles.button1}
+                      onPress={() =>navigation.navigate('Register')}>
+                      <Text style={styles.buttonText}>Don't have an account? register now!</Text>
+                  </TouchableOpacity>
+                </ScrollView>
+              </SafeAreaView>
+        );
     }
 
 }
-
+const styles = StyleSheet.create({ // styles the text on the screen
+  container:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'brown'
+  },
+  text: { // styles the text colour and style
+    color: 'white',
+    fontSize: 50,
+    fontWeight:"bold",
+    justifyContent: 'center'
+  },
+  textInput:{
+    padding:5,
+    borderWidth:1,
+    margin:5
+  },
+  button1:{
+    height: 60,
+    width: 300,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 10,
+    borderColor: 'green',
+    margin:10
+  },
+  buttonText:{
+    color: 'white',
+    fontSize: 15,
+    fontWeight:'bold',
+    //justifyContent: 'center'
+  }
+});
 export default LoginScreen;

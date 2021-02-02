@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity } from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 /**
 Makes a class called register to register an account
@@ -8,12 +8,15 @@ makes a constructor that will create props for each field that needs to be enter
 class Register extends Component{
     constructor(props){
         super(props);
-
         this.state = {
           first_name: "",
+          first_nameError: "",
           last_name: "",
+          last_nameError: "",
           email:"",
-          password: ""
+          EmailError:"",
+          password: "",
+
         }
     }
 /**
@@ -22,7 +25,7 @@ initiating the post method
 Then when data is inputted  returns a response depending on the status code
 **/
     signup = () => {
-      //validation here
+      //validation here - make sure the email is valid etc
       return fetch("http://10.0.2.2:3333/api/1.0.0/user",{
           method: 'post',
           headers:{
@@ -39,59 +42,111 @@ Then when data is inputted  returns a response depending on the status code
             throw 'Something went wrong';
           }
       })
-      .then(async (responseJson) => {
+      .then((responseJson) => {
           console.log("User created with ID: ", responseJson);
+          ToastAndroid.show("Account has been created",ToastAndroid.SHORT);
+          this.props.navigation.navigate("LoginScreen")
       })
       .catch((error)=> {
           console.log(error);
           ToastAndroid.show(error,ToastAndroid.SHORT);
-          // check slides for what goes here
       })
     }
     /**
 creates the input boxes and the input area of them
 While navigation buttons are added to help with navigation of the app
     **/
+/**
+ validator to make sure the gaps are filled
+**/
+// to create a letter only when numbers pop up it fails
+    submit(){
+      let rjx=/^[a-zA-z]+$/;
+      let isValid=rjx.test(this.state.first_name)
+      console.warn(isValid)
+
+      if(!isValid)
+      {
+        this.setState({first_nameError:"name can not be number"})
+      }
+      else
+      {
+          this.setState({first_nameError:""})
+      }
+    }
+
+    emailValidator(){
+
+        if(this.state.email=="")
+        {
+          this.setState({EmailError:"email can not be empty"})
+        }
+        else
+        {
+            this.setState({EmailError:""})
+        }
+    }
+
     render(){
           const navigation = this.props.navigation;
           return (
+            <SafeAreaView style={styles.container}>
               <ScrollView>
                   <Text style={styles.text}>RegisterScreen</Text>
                   <TextInput
                       placeholder="Enter your first name"
                       onChangeText={(first_name) => this.setState ({first_name})}
+                      backgroundColor="white"
+                      onBlur={()=>this.submit()}
                       value={this.state.first_name}
-                      style={{padding:5, boarderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5}}
                   />
+                  <Text style={styles.errorMessage}> {this.state.first_nameError}</Text>
+
                   <TextInput
                       placeholder="Enter your second name"
                       onChangeText={(second_name) => this.setState ({second_name})}
+                      backgroundColor="white"
                       value={this.state.second_name}
-                      style={{padding:5, boarderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5}}
                   />
+
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState ({email})}
+                      onBlur={()=>this.emailValidator()}
+                      backgroundColor="white"
                       value={this.state.email}
-                      style={{padding:5, boarderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5}}
                   />
+                  <Text style={styles.errorMessage}> {this.state.EmailError}</Text>
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState ({password})}
+                      backgroundColor="white"
                       value={this.state.password}
+                      minLength={5}
                     //secureTextEntry
-                      style={{padding:5, boarderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5}}
                   />
+                  <Text style={styles.errorMessage}> {this.state.error}</Text>
+                  <TouchableOpacity
+                      style={styles.button1}
+                      onPress={()=> this.signup()}>
+                      <Text style={styles.buttonText}>Create Account!</Text>
+                  </TouchableOpacity>
                   <Button
-                      title= "create an account!!"
+                      title= "create an account!!Button"
+                      color= "brown"
                       onPress={()=> this.signup()}
                   />
-
                   <Button
                       title="Back"
+                      color="green"
                       onPress={() =>navigation.goBack()}
                   />
               </ScrollView>
+            </SafeAreaView>
         )
 
     }
@@ -106,8 +161,32 @@ const styles = StyleSheet.create({ // styles the text on the screen
     backgroundColor: 'brown'
   },
   text: { // styles the text colour and style
-    color: 'red',
+    color: 'white',
     fontSize: 25
-  }
+  },
+  textInput:{
+    padding:5,
+    borderWidth:1,
+    margin:5
+  },
+  button1:{
+    height: 60,
+    width: 300,
+    padding: 10,
+    alignItems: 'center',
+    borderWidth: 10,
+    borderColor: 'green',
+    margin:10
+  },
+  buttonText:{
+    color: 'white',
+    fontSize: 15,
+    fontWeight:'bold',
+    //justifyContent: 'center'
+  },
+  errorMessage:{
+  color: 'black',
+  marginLeft: 20
+ }
 });
   export default Register;
