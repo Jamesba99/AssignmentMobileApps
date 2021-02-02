@@ -21,9 +21,10 @@ const Drawer = createDrawerNavigator();
 class App extends Component{
   render(){
     return(
+
       <NavigationContainer>
         <Drawer.Navigator>
-            <Drawer.Screen name="Login" component={Login} />
+            <Drawer.Screen  name="LoginScreen" component={Login} options={{headerShown: false}} />
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
             <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account"}} />
             <Drawer.Screen name="LogoutScreen" component={LogoutScreen}/>

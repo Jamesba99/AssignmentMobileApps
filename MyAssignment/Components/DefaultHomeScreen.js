@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import SeeLocalCoffee from './SeeLocalCoffee';
 class HomeScreen extends Component{
 // adds a listener to check that the user is logged in
   constructor(props){
@@ -82,7 +82,7 @@ class HomeScreen extends Component{
       return(
           <View style={styles.container}>
             <Text style={styles.titleText}>HomeScreen</Text>
-        
+
             <TouchableOpacity
                 style={styles.button1}
                   onPress={() =>navigation.navigate('LeaveReviews')}>
@@ -93,7 +93,7 @@ class HomeScreen extends Component{
                 onPress={() =>navigation.navigate('ViewReviews')}>
                 <Text style={styles.buttonText}>View Reviews</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+              <TouchableOpacity
                 style={styles.button1}
                 onPress={() =>navigation.navigate('SeeLocalCoffee')}
                 >
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   button1:{
     height: 60,
     width: 320,
-    padding: 5,
+    padding: 50,
     alignItems: 'center',
     borderWidth: 10,
     borderColor: 'green',

@@ -6,9 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class LogoutScreen extends Component {
   constructor(props){
       super(props);
-
-
-
   }
 
   logout = async () => {
@@ -23,6 +20,7 @@ class LogoutScreen extends Component {
     .then((response)=> {
       if(response.status === 200){
         ToastAndroid.show("Succesfully  gone!", ToastAndroid.SHORT);
+        this.props.navigation.navigate("LoginScreen");
       }else if(response.status === 401){
           ToastAndroid.show("you werent logged in", ToastAndroid.SHORT);
           this.props.navigation.navigate("LoginScreen");
@@ -36,20 +34,23 @@ class LogoutScreen extends Component {
     })
   }
   render(){
+    const navigation = this.props.navigation;
       return(
-        <ScrollView>
-        <TouchableOpacity
-            style={styles.button1}
+        <SafeAreaView style={styles.container}>
+          <ScrollView>
+            <TouchableOpacity
+              style={styles.button1}
               onPress={() => this.logout()}
-              onPress={() =>navigation.navigate('Login')}>
-            <Text style={styles.buttonText}>Logout!</Text>
-        </TouchableOpacity>
-        <Button
-            title="Back"
-            color="green"
-            onPress={() =>navigation.goBack()}
-        />
-        </ScrollView>
+              >
+              <Text style={styles.buttonText}>Logout!</Text>
+            </TouchableOpacity>
+          <Button
+              title="Back"
+              color="green"
+              onPress={() =>navigation.goBack()}
+            />
+          </ScrollView>
+        </SafeAreaView>
       );
   }
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     backgroundColor: 'brown'
   },
   text: { // styles the text colour and style
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
     color: 'white',
     fontSize: 15,
     fontWeight:'bold',
-    //justifyContent: 'center'
+    justifyContent: 'center'
   }
 });
 

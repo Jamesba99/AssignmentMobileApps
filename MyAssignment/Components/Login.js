@@ -35,6 +35,7 @@ class LoginScreen extends Component {
           .then(async (responseJson) => {
               console.log(responseJson);
               await AsyncStorage.setItem('@session_token', responseJson.token);
+              console.log(responseJson);
               this.props.navigation.navigate("HomeScreen");
           })
           .catch((error) => {
@@ -48,7 +49,7 @@ class LoginScreen extends Component {
         return(
             <SafeAreaView style={styles.container}>
               <ScrollView>
-                  <Text style={styles.text}>       Login </Text>
+                  <Text style={styles.text}> Login </Text>
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState({email})}
