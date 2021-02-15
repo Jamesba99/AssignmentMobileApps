@@ -53,14 +53,14 @@ class LoginScreen extends Component {
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState({email})}
-                      backgroundColor= 'white'
+                      backgroundColor= '#C7E8F3'
                       value={this.state.email}
                       style={styles.textInput}
                   />
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState({password})}
-                      backgroundColor= 'white'
+                      backgroundColor= '#C7E8F3'
                       value={this.state.password}
                       //secureTextEntry
                       style={styles.textInput}
@@ -86,10 +86,10 @@ const styles = StyleSheet.create({ // styles the text on the screen
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'brown'
+    backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 50,
     fontWeight:"bold",
     justifyContent: 'center'
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({ // styles the text on the screen
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
-    borderColor: 'green',
+    borderColor: '#8E4162',
     margin:10
   },
   buttonText:{
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 15,
     fontWeight:'bold',
     //justifyContent: 'center'

@@ -46,7 +46,7 @@ class LogoutScreen extends Component {
             </TouchableOpacity>
           <Button
               title="Back"
-              color="green"
+              color="#8E4162"
               onPress={() =>navigation.goBack()}
             />
           </ScrollView>
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({ // styles the text on the screen
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'brown'
+    backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 50,
     fontWeight:"bold",
     justifyContent: 'center'
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({ // styles the text on the screen
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
-    borderColor: 'green',
+    borderColor: '#8E4162',
     margin:10
   },
   buttonText:{
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 15,
     fontWeight:'bold',
     justifyContent: 'center'

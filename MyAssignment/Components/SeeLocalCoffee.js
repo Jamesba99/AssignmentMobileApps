@@ -113,7 +113,6 @@ class SeeLocalCoffee extends Component{
                 description="hello"
                 />
             </MapView>
-        
             <Button
               title="Back"
               onPress={() =>navigation.goBack()}
@@ -124,8 +123,8 @@ class SeeLocalCoffee extends Component{
   }
 }
 const styles = StyleSheet.create({
-   container: {
 
+   container: {
     // ...StyleSheet.absoluteFillObject,
      height: 400,
      width: 400,

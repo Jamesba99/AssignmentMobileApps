@@ -11,6 +11,7 @@ import LogoutScreen from './Components/Logout';
 import LeaveReviews from './Components/LeaveReviews';
 import SeeLocalCoffee from './Components/SeeLocalCoffee';
 import ViewReviews from './Components/ViewReviews';
+import UserInfo from './Components/UserInfo';
 //import AfterLoginScreen from './Components/AfterLoginScreen';
 //import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
 /**
@@ -31,6 +32,7 @@ class App extends Component{
             <Drawer.Screen name="LeaveReviews" component={LeaveReviews}/>
             <Drawer.Screen name="ViewReviews" component={ViewReviews}/>
             <Drawer.Screen name="SeeLocalCoffee" component={SeeLocalCoffee}/>
+            <Drawer.Screen name="UserInfo" component={UserInfo}/>
         </Drawer.Navigator>
       </NavigationContainer>
     );

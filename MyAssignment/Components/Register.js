@@ -96,7 +96,7 @@ While navigation buttons are added to help with navigation of the app
                   <TextInput
                       placeholder="Enter your first name"
                       onChangeText={(first_name) => this.setState ({first_name})}
-                      backgroundColor="white"
+                      backgroundColor="#C7E8F3"
                       onBlur={()=>this.submit()}
                       value={this.state.first_name}
                       style={{padding:5, borderWidth:1, margin:5}}
@@ -106,7 +106,7 @@ While navigation buttons are added to help with navigation of the app
                   <TextInput
                       placeholder="Enter your second name"
                       onChangeText={(second_name) => this.setState ({second_name})}
-                      backgroundColor="white"
+                      backgroundColor="#C7E8F3"
                       value={this.state.second_name}
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
@@ -115,7 +115,7 @@ While navigation buttons are added to help with navigation of the app
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState ({email})}
                       onBlur={()=>this.emailValidator()}
-                      backgroundColor="white"
+                      backgroundColor="#C7E8F3"
                       value={this.state.email}
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
@@ -123,7 +123,7 @@ While navigation buttons are added to help with navigation of the app
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState ({password})}
-                      backgroundColor="white"
+                      backgroundColor="#C7E8F3"
                       value={this.state.password}
                       minLength={5}
                     //secureTextEntry
@@ -135,14 +135,10 @@ While navigation buttons are added to help with navigation of the app
                       onPress={()=> this.signup()}>
                       <Text style={styles.buttonText}>Create Account!</Text>
                   </TouchableOpacity>
-                  <Button
-                      title= "create an account!!Button"
-                      color= "brown"
-                      onPress={()=> this.signup()}
-                  />
+
                   <Button
                       title="Back"
-                      color="green"
+                      color="#8E4162"
                       onPress={() =>navigation.goBack()}
                   />
               </ScrollView>
@@ -158,10 +154,10 @@ const styles = StyleSheet.create({ // styles the text on the screen
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'brown'
+    backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 25
   },
   textInput:{
@@ -175,11 +171,11 @@ const styles = StyleSheet.create({ // styles the text on the screen
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
-    borderColor: 'green',
+    borderColor: '#8E4162',
     margin:10
   },
   buttonText:{
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 15,
     fontWeight:'bold',
     //justifyContent: 'center'

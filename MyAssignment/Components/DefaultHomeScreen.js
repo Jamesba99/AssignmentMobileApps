@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SeeLocalCoffee from './SeeLocalCoffee';
+
 class HomeScreen extends Component{
 // adds a listener to check that the user is logged in
   constructor(props){
@@ -57,7 +58,7 @@ class HomeScreen extends Component{
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
-        this.props.navigation.navigate('Login');
+        this.props.navigation.navigate('LoginScreen');
     }
   };
   render(){
@@ -73,16 +74,16 @@ class HomeScreen extends Component{
           flex: 1,
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          backgroundColor: '#41393E'
           }}>
-          <Text> loading </Text>
+          <Text style={styles.text}> Loading.... </Text>
       </View>
       );
     }else{
       return(
           <View style={styles.container}>
             <Text style={styles.titleText}>HomeScreen</Text>
-
             <TouchableOpacity
                 style={styles.button1}
                   onPress={() =>navigation.navigate('LeaveReviews')}>
@@ -115,15 +116,15 @@ const styles = StyleSheet.create({ // styles the text on the screen
     flex: 1,
     alignItems: 'center',
     //justifyContent: 'center',
-    backgroundColor: 'brown'
+    backgroundColor: '#41393E'
   },
   titleText: { // styles the text colour and style
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 50,
     fontWeight:"bold"
   },
   buttonText:{
-    color: 'white',
+    color: '#C7E8F3',
     fontSize: 20,
     fontWeight:'bold',
     //justifyContent: 'center'
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
     padding: 50,
     alignItems: 'center',
     borderWidth: 10,
-    borderColor: 'green',
+    borderColor: '#8E4162',
     margin:5
   },
   logo: {
