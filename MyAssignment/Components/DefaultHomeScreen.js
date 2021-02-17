@@ -13,7 +13,6 @@ class HomeScreen extends Component{
       listData: []
     }
   }
-
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
@@ -83,7 +82,11 @@ class HomeScreen extends Component{
     }else{
       return(
           <View style={styles.container}>
-            <Text style={styles.titleText}>HomeScreen</Text>
+            <Text style={styles.titleText}>CoffeeDa</Text>
+            <Image
+              style={styles.stretch}
+              source={require('./images/coffee.jpg')}
+            />
             <TouchableOpacity
                 style={styles.button1}
                   onPress={() =>navigation.navigate('LeaveReviews')}>
@@ -130,18 +133,19 @@ const styles = StyleSheet.create({ // styles the text on the screen
     //justifyContent: 'center'
   },
   button1:{
-    height: 60,
+    height: 10,
     width: 320,
     padding: 50,
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:5
+    margin:2
   },
-  logo: {
-   width: 66,
-   height: 58,
- }
+  stretch: {
+    width: 150,
+    height: 150,
+    resizeMode: 'stretch'
+  }
 
 });
 

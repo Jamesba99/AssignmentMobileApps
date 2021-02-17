@@ -85,7 +85,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+  //  justifyContent: 'center',
     backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style

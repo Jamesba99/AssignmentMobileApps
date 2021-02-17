@@ -76,7 +76,6 @@ While navigation buttons are added to help with navigation of the app
     }
 
     emailValidator(){
-
         if(this.state.email=="")
         {
           this.setState({EmailError:"email can not be empty"})
@@ -86,7 +85,6 @@ While navigation buttons are added to help with navigation of the app
             this.setState({EmailError:""})
         }
     }
-
     render(){
           const navigation = this.props.navigation;
           return (
@@ -144,9 +142,7 @@ While navigation buttons are added to help with navigation of the app
               </ScrollView>
             </SafeAreaView>
         )
-
     }
-
 }
 
 const styles = StyleSheet.create({ // styles the text on the screen
