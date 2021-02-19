@@ -41,11 +41,18 @@ class ViewReviews extends Component{
         if(response.status === 200){
           return response.json()
           console.log(response)
-        }else if(response.status === 400){
+          }else if(response.status === 400){
             throw 'Bad Request';
-        }else{
-            throw 'something went wrong';
-        }
+          }else if(response.status === 400){
+              throw 'Bad Request';
+          }else if(response.status === 401){
+              throw '401 Unauthorized';
+              console.log(response);
+          }else if (response.status === 404){
+              throw 'Not found';
+          }else if (response.status === 500){
+              throw 'server error';
+          }
       })
       .then((responseJson) =>{
         console.log(responseJson);
@@ -114,7 +121,6 @@ class ViewReviews extends Component{
             ToastAndroid.show(error,ToastAndroid.SHORT);
         })
   }
-
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
