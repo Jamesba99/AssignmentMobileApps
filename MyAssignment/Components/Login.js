@@ -9,7 +9,8 @@ class LoginScreen extends Component {
 
         this.state={
             email: "",
-            password: ""
+            password: "",
+            id: []
         }
     }
 
@@ -32,12 +33,15 @@ class LoginScreen extends Component {
                   throw 'Something went wrong';
               }
           })
+
           .then(async (responseJson) => {
               console.log(responseJson);
               await AsyncStorage.setItem('@session_token', responseJson.token);
-              console.log(responseJson);
+              await AsyncStorage.setItem('id', responseJson.id.toString());
               this.props.navigation.navigate("HomeScreen");
           })
+
+
           .catch((error) => {
               console.log(error);
               ToastAndroid.show(error,ToastAndroid.SHORT);
@@ -47,33 +51,35 @@ class LoginScreen extends Component {
     render(){
         const navigation = this.props.navigation;
         return(
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={customStyle.container}>
               <ScrollView>
-                  <Text style={styles.text}> Login </Text>
+                  <Text style={ customStyle.text }>      Welcome to</Text>
+                  <Text style={ customStyle.text }>CoffeeDa Reviews!</Text>
+                  <Text style={customStyle.text}>    Login to begin </Text>
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState({email})}
                       backgroundColor= '#C7E8F3'
                       value={this.state.email}
-                      style={styles.textInput}
+                      style={customStyle.textInput}
                   />
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState({password})}
                       backgroundColor= '#C7E8F3'
                       value={this.state.password}
-                      //secureTextEntry
-                      style={styles.textInput}
+                      secureTextEntry
+                      style={customStyle.textInput}
                   />
                   <TouchableOpacity
-                      style={styles.button1}
+                      style={customStyle.button1}
                         onPress={() => this.login()}>
-                      <Text style={styles.buttonText}>Login!</Text>
+                      <Text style={customStyle.buttonText}>Login!</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                      style={styles.button1}
+                      style={customStyle.button1}
                       onPress={() =>navigation.navigate('Register')}>
-                      <Text style={styles.buttonText}>Don't have an account? register now!</Text>
+                      <Text style={customStyle.buttonText}>Don't have an account? register now!</Text>
                   </TouchableOpacity>
                 </ScrollView>
               </SafeAreaView>
@@ -81,16 +87,16 @@ class LoginScreen extends Component {
     }
 
 }
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
-  //  justifyContent: 'center',
+    justifyContent: 'center',
     backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style
     color: '#C7E8F3',
-    fontSize: 50,
+    fontSize: 40,
     fontWeight:"bold",
     justifyContent: 'center'
   },

@@ -43,8 +43,6 @@ class ViewReviews extends Component{
           console.log(response)
           }else if(response.status === 400){
             throw 'Bad Request';
-          }else if(response.status === 400){
-              throw 'Bad Request';
           }else if(response.status === 401){
               throw '401 Unauthorized';
               console.log(response);
@@ -130,16 +128,32 @@ class ViewReviews extends Component{
 
   render(){
     const navigation = this.props.navigation;
+    if(this.state.isLoading){
+      return(
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#41393E'
+          }}>
+          <Text style={customStyle.text}> Loading.... </Text>
+      </View>
+      );
+    }else{
+
+
     return(
-        <View style={styles.container}>
-            <Text style={styles.text}>Leave a Review!</Text>
+        <View style={customStyle.container}>
+            <Text style={customStyle.text}>Leave a Review!</Text>
               <FlatList
                 data = {this.state.listData}
                 renderItem = {({item}) => (
                   <TouchableOpacity
                     onPress={() => this.setState({loc_id: item.location_id})}
                     >
-                    <Text style={styles.buttonText}> entry: {item.location_id} is {item.location_name}</Text>
+                    <Text style={customStyle.buttonText}> entry: {item.location_id} is {item.location_name}</Text>
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item,index) => index.toString()}
@@ -149,40 +163,40 @@ class ViewReviews extends Component{
                 onChangeText={(overall_rating) => this.setState ({overall_rating})}
                 backgroundColor="#C7E8F3"
                 value={this.state.overall_rating}
-                style ={styles.textInput}
+                style ={customStyle.textInput}
               />
               <TextInput
                 placeholder= "Enter the overall rating of the price for this coffee"
                 onChangeText={(price_rating) => this.setState ({price_rating})}
                 backgroundColor="#C7E8F3"
                 value={this.state.price_rating}
-                style ={styles.textInput}
+                style ={customStyle.textInput}
               />
               <TextInput
                 placeholder= "Enter the overall rating of the quality of this coffee"
                 onChangeText={(quality_rating) => this.setState ({quality_rating})}
                 backgroundColor="#C7E8F3"
                 value={this.state.quality_rating}
-                style ={styles.textInput}
+                style ={customStyle.textInput}
               />
               <TextInput
                 placeholder= "Enter the overall rating of the clenliness_rating"
                 onChangeText={(clenliness_rating) => this.setState ({clenliness_rating})}
                 backgroundColor="#C7E8F3"
                 value={this.state.clenliness_rating}
-                style ={styles.textInput}
+                style ={customStyle.textInput}
               />
               <TextInput
                 placeholder= "What was good/bad about this coffee (review body)"
                 onChangeText={(review_body) => this.setState ({review_body})}
                 backgroundColor="#C7E8F3"
                 value={this.state.review_body}
-                style ={styles.textInput}
+                style ={customStyle.textInput}
               />
               <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={()=> this.addReviews()}>
-                <Text style={styles.touchOpacityText}> Post Review!</Text>
+                <Text style={customStyle.touchOpacityText}> Post Review!</Text>
 
               </TouchableOpacity>
               <Button
@@ -194,10 +208,11 @@ class ViewReviews extends Component{
         </View>
     );
   }
+  }
 }
 // TouchableOpacity FLAT LIST?
 // tick box?
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar} from 'react-native';
+import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar, Image} from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating } from 'react-native-elements';
@@ -19,7 +19,7 @@ class FlatListOutput extends Component{
     constructor(props){
       super(props);
       this.state = {
-        isRight: '' ,
+        viewLocationReviews: '' ,
         locations: [],
         isLoading: true,
         location_reviews: []
@@ -28,18 +28,23 @@ class FlatListOutput extends Component{
     }
 
     componentDidMount(){
-        const loc_id = this.props.route.params.location_id;
-        this.setState({
-          isRight: loc_id
+      this.unsubscribe = this.props.navigation.addListener('focus', () => {
+        });
+      const loc_id = this.props.route.params.location_id;
+      this.setState({
+        viewLocationReviews: loc_id
         })
-        this.getData();
+      this.getData();
     }
 
+    componentWillUnmount(){
+        this.unsubscribe();
+    }
 
     getData = async () => {
       console.log("working");
       let token = await AsyncStorage.getItem('@session_token');
-      return fetch("http://10.0.2.2:3333/api/1.0.0/location/" + (this.state.isRight) ,{
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/" + (this.state.viewLocationReviews) ,{
         method: 'get',
         headers: {
               'Content-Type': 'application/json',
@@ -76,15 +81,20 @@ class FlatListOutput extends Component{
 
     const navigation = this.props.navigation;
     console.log(this.state.locations.location_name)
-
     return(
-
       <SafeAreaView style={ styles.container }>
-        <Text style={styles.resultsText}> reviews on { this.state.locations.location_name } </Text>
-        <Text style={styles.resultsText}> overall rating is: { this.state.locations.avg_overall_rating }</Text>
-        <Text style={styles.resultsText}> overall rating is: { this.state.locations.cleniness_rating }</Text>
-
-
+        <Image
+          style={styles.stretch}
+          source={require('./images/coffeeReview.jpg')}
+        />
+        <Text style={styles.titleText}> Review of { this.state.locations.location_name }</Text>
+        <View style={styles.titleText}>
+        <Text style={styles.resultsText}> Reviews on { this.state.locations.location_name }{this.state.locations.location_town} </Text>
+        <Text style={styles.resultsText}> Overall rating is: { this.state.locations.avg_overall_rating }</Text>
+        <Text style={styles.resultsText}> Price Rating: { this.state.locations.avg_price_rating } </Text>
+        <Text style={styles.resultsText}> Quality Rating Rating: { this.state.locations.avg_quality_rating } </Text>
+        <Text style={styles.resultsText}> Cleniness Rating : { this.state.locations.avg_cleniness_rating } </Text>
+        </View>
         <Button
           title="Back"
           color="#8E4162"
@@ -124,11 +134,13 @@ const styles = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     justifyContent: 'center',
     padding: 1,
-    fontSize: 50
+    fontSize: 30,
+    fontWeight: 'bold'
   },
   resultsText:{
+    textAlignVertical: 'top',
     color: '#C7E8F3',
-    fontSize: 15,
+    fontSize: 20,
     fontWeight:'bold',
   },
   ratingFields:{
@@ -145,6 +157,9 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontWeight: 'bold',
     fontSize: 25
   },
+  stretch: {
+flex:1
+  }
 
 });
 export default FlatListOutput;

@@ -14,7 +14,7 @@ start with the crea
 IF STATEMENT WITH IS LOADING IS CONSITIONAL RENDERING TALK ABOUT IT IN SCREEN CAST
 
 
-
+Editing the stars documentation https://openbase.com/js/react-native-ratings
 
 ***/
 
@@ -26,10 +26,10 @@ class ViewReviews extends Component{
         isLoading: true,
         locations: null,
         q: '',
-        overall_rating: 0,
-        price_rating: 0,
-        quality_rating: 0,
-        cleniness_rating: 0,
+        avg_overall_rating: 0,
+        avg_price_rating: 0,
+        avg_quality_rating: 0,
+        avg_cleniness_rating: 0,
         search_in: 0,
         limit: 20,
         offset: 0,
@@ -80,16 +80,18 @@ class ViewReviews extends Component{
         url += "q=" + this.state.q + "&";
       }
 
-      if (this.state.overall_rating > 0){
-        url += "overall_rating=" + this.state.overall_rating + "&";
+      if (this.state.avg_overall_rating > 0){
+        url += "overall_rating=" + this.state.avg_overall_rating + "&";
       }
-      if (this.state.price_rating > 0){
-        url += "price_rating=" + this.state.price_rating  + "&";
+      if (this.state.avg_price_rating > 0){
+        url += "price_rating=" + this.state.avg_price_rating  + "&";
       }
-      if (this.state.quality_rating > 0){
-        url += "cleniness_rating=" + this.state.quality_rating  + "&";
+      if (this.state.avg_quality_rating > 0){
+        url += "quality_rating=" + this.state.avg_quality_rating  + "&";
       }
-
+      if (this.state.avg_cleniness_rating > 0){
+        url += "cleniness_rating=" + this.state.avg_cleniness_rating  + "&";
+      }
       this.getData(url);
 
     }
@@ -102,8 +104,6 @@ class ViewReviews extends Component{
       };
       this.setState( stateObject );
     }
-
-
 
       componentWillUnmount (){
         this.unsubscribe();
@@ -120,7 +120,7 @@ class ViewReviews extends Component{
       const navigation = this.props.navigation;
         return(
           <SafeAreaView  style={styles.container}>
-          <View>
+
             <Text style={styles.titleText}>View Reviews</Text>
             <TextInput
               value={this.state.q}
@@ -130,42 +130,33 @@ class ViewReviews extends Component{
               style={styles.textInput}
             />
             <Text style={styles.ratingsTitleText}>overall_rating </Text>
-
             <AirbnbRating
               size={15}
               reviewColor= '#C7E8F3'
               reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
               defaultRating={0}
-              selectedColor="#C7E8F3"
+              selectedColor="#8E4162"
               onFinishRating={(rating) => this.ratingCompleted( rating, "avg_overall_rating")}
             />
             <Text style={styles.ratingsTitleText}>price_rating </Text>
             <AirbnbRating
-                  size={15}
-                  reviewColor= '#C7E8F3'
-                  reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
-                  defaultRating={0}
-                  selectedColor="#C7E8F3"
-                      onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
+              size={15}
+              reviewColor= '#C7E8F3'
+              reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
+              defaultRating={0}
+              selectedColor="#8E4162"
+              onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
             />
-            <Text style={styles.ratingsTitleText}>Quality_rating </Text>
+            <Text style={styles.ratingsTitleText}>quality_rating </Text>
             <AirbnbRating
-                  size={15}
-                  reviewColor= '#C7E8F3'
-                  reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
-                  defaultRating={0}
-                  selectedColor="#C7E8F3"
-                      onFinishRating={(rating) => this.ratingCompleted( rating, "avg_quality_rating")}
+              size={15}
+              reviewColor= '#C7E8F3'
+              reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
+              defaultRating={0}
+              selectedColor="#8E4162"
+              onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
             />
-            <Text style={styles.ratingsTitleText}>cleniness_rating </Text>
-            <AirbnbRating
-                  size={15}
-                  reviewColor= '#C7E8F3'
-                  reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
-                  defaultRating={0}
-                  selectedColor="#C7E8F3"
-                  onFinishRating={(rating) => this.ratingCompleted( rating, "avg_cleniness_rating")}
-              />
+
              <Button
                     style={styles.button1}
                     title="Search"
@@ -189,15 +180,13 @@ class ViewReviews extends Component{
                           onPress={() => {
                             this.props.navigation.navigate("FlatListOutput", {location_id: item.location_id},{ location_name: item.location_name })
                           }}>
-
                           <Text style={styles.touchOpacityText}> View review in detail</Text>
                         </TouchableOpacity>
-
                       </View>
                   )}
                   keyExtractor={(item, index) => item.location_id.toString()}
                   />
-            </View>
+            
           </SafeAreaView>
         );
       }

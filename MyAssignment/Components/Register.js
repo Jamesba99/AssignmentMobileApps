@@ -85,6 +85,7 @@ While navigation buttons are added to help with navigation of the app
             this.setState({EmailError:""})
         }
     }
+    
     render(){
           const navigation = this.props.navigation;
           return (

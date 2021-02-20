@@ -20,10 +20,14 @@ class HomeScreen extends Component{
 
     this.getData();
   }
+
+
 // unsubscribed to clear the memory to stop clogedge
   componentWillUnmount (){
     this.unsubscribe();
   }
+
+
   getData = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/find",{
@@ -76,37 +80,37 @@ class HomeScreen extends Component{
           alignItems: 'center',
           backgroundColor: '#41393E'
           }}>
-          <Text style={styles.text}> Loading.... </Text>
+          <Text style={customStyle.text}> Loading.... </Text>
       </View>
       );
     }else{
       return(
-          <View style={styles.container}>
-            <Text style={styles.titleText}>CoffeeDa</Text>
+          <View style={customStyle.container}>
+            <Text style={customStyle.titleText}>CoffeeDa</Text>
             <Image
-              style={styles.stretch}
+              style={customStyle.stretch}
               source={require('./images/coffee.jpg')}
             />
             <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                   onPress={() =>navigation.navigate('LeaveReviews')}>
-                <Text style={styles.buttonText}>Leave Reviews</Text>
+                <Text style={customStyle.buttonText}>Leave Reviews</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={() =>navigation.navigate('ViewReviews')}>
-                <Text style={styles.buttonText}>View Reviews</Text>
+                <Text style={customStyle.buttonText}>View Reviews</Text>
             </TouchableOpacity>
               <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={() =>navigation.navigate('SeeLocalCoffee')}
                 >
-                <Text style={styles.buttonText}>See Local coffee</Text>
+                <Text style={customStyle.buttonText}>See Local coffee</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('LogoutScreen')}>
-                <Text style={styles.buttonText}>Logout</Text>
+                style={customStyle.button1}
+                onPress={() =>navigation.navigate('UserInfo')}>
+                <Text style={customStyle.buttonText}>My Account</Text>
 
             </TouchableOpacity>
           </View>
@@ -114,7 +118,7 @@ class HomeScreen extends Component{
     }
   }
 }
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
@@ -137,6 +141,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
     width: 320,
     padding: 50,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
     margin:2

@@ -26,6 +26,7 @@ class App extends Component{
 
       <NavigationContainer>
         <Drawer.Navigator>
+        
             <Drawer.Screen  name="LoginScreen" component={Login} options={{headerShown: false}} />
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
             <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account"}} />
