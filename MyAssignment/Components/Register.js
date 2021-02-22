@@ -85,7 +85,7 @@ While navigation buttons are added to help with navigation of the app
             this.setState({EmailError:""})
         }
     }
-    
+
     render(){
           const navigation = this.props.navigation;
           return (
@@ -104,9 +104,9 @@ While navigation buttons are added to help with navigation of the app
 
                   <TextInput
                       placeholder="Enter your second name"
-                      onChangeText={(second_name) => this.setState ({second_name})}
+                      onChangeText={(last_name) => this.setState ({last_name})}
                       backgroundColor="#C7E8F3"
-                      value={this.state.second_name}
+                      value={this.state.last_name}
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
 

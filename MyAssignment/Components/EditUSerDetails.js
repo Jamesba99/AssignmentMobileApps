@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class UserInfo extends Component{
+class EditUSerDetails extends Component{
     constructor(props){
       super(props);
 
@@ -103,18 +103,8 @@ checks whether logged in.
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button1}
-                onPress={() =>navigation.navigate('EditReviews')}>
-                <Text style={styles.buttonText}>See your Reviews</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('EditUSerDetails')}>
-                <Text style={styles.buttonText}>Update Account Details</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('LogoutScreen')}>
-                <Text style={styles.buttonText}>Logout</Text>
+                onPress={() =>navigation.goBack()}>
+                <Text style={styles.buttonText}>Go Back</Text>
             </TouchableOpacity>
           </ScrollView>
         </SafeAreaView>
@@ -142,19 +132,14 @@ const styles = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center'
   },
   button1:{
-    height: 10,
+    height: 30,
     width: 340,
-    padding: 50,
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:2
-  },
-  stretch: {
-    width: 150,
-    height: 150,
-    resizeMode: 'stretch'
+    margin:1
   },
   resultsText:{
     textAlignVertical: 'top',
@@ -168,4 +153,4 @@ const styles = StyleSheet.create({ // styles the text on the screen
 
 });
 
-export default UserInfo;
+export default EditUSerDetails;

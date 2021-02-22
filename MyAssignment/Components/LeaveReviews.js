@@ -249,6 +249,10 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     marginTop: StatusBar.currentHeight || 0,
     fontSize: 15,
     fontWeight:'bold',
+    borderWidth:1,
+    borderColor:'#C7E8F3',
+    color: '#C7E8F3',
+    backgroundColor: '#8E4162'
     //justifyContent: 'center'
   },
   textInput:{

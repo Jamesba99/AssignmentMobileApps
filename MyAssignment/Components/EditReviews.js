@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
+import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class UserInfo extends Component{
+class EditReviews extends Component{
     constructor(props){
       super(props);
 
@@ -90,34 +90,20 @@ checks whether logged in.
   render(){
       const navigation = this.props.navigation; // declaring the navigation constant
       return(
-        <SafeAreaView style={ styles.container }>
-          <ScrollView>
-            <Text style={ styles.titleText }> My Account </Text>
-            <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
-            <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
-            <Text style={ styles.resultsText }> Email: { this.state.userDetails.email } </Text>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('HomeScreen')}>
-                <Text style={styles.buttonText}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('EditReviews')}>
-                <Text style={styles.buttonText}>See your Reviews</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('EditUSerDetails')}>
-                <Text style={styles.buttonText}>Update Account Details</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('LogoutScreen')}>
-                <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </SafeAreaView>
+        <View style={ styles.container }>
+          <Text style={ styles.titleText }> My Reviews </Text>
+
+          <TouchableOpacity
+              style={styles.button1}
+              onPress={() =>navigation.navigate('HomeScreen')}>
+              <Text style={styles.buttonText}>Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+              style={styles.button1}
+              onPress={() =>navigation.goBack()}>
+              <Text style={styles.buttonText}>Go Back</Text>
+          </TouchableOpacity>
+        </View>
       );
     }
 }
@@ -143,7 +129,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   },
   button1:{
     height: 10,
-    width: 340,
+    width: 320,
     padding: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -168,4 +154,4 @@ const styles = StyleSheet.create({ // styles the text on the screen
 
 });
 
-export default UserInfo;
+export default EditReviews;

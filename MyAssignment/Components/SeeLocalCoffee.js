@@ -114,6 +114,7 @@ class SeeLocalCoffee extends Component{
                 />
             </MapView>
             <Button
+             color='#8E4162'
               title="Back"
               onPress={() =>navigation.goBack()}
             />

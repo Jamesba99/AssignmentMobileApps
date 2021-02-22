@@ -13,6 +13,8 @@ import SeeLocalCoffee from './Components/SeeLocalCoffee';
 import ViewReviews from './Components/ViewReviews';
 import UserInfo from './Components/UserInfo';
 import FlatListOutput from './Components/FlatListOutput';
+import EditUSerDetails from './Components/EditUSerDetails';
+import EditReviews from './Components/EditReviews';
 //import AfterLoginScreen from './Components/AfterLoginScreen';
 //import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
 /**
@@ -26,7 +28,7 @@ class App extends Component{
 
       <NavigationContainer>
         <Drawer.Navigator>
-        
+
             <Drawer.Screen  name="LoginScreen" component={Login} options={{headerShown: false}} />
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
             <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account"}} />
@@ -36,6 +38,8 @@ class App extends Component{
             <Drawer.Screen name="SeeLocalCoffee" component={SeeLocalCoffee}/>
             <Drawer.Screen name="UserInfo" component={UserInfo}/>
             <Drawer.Screen name="FlatListOutput" component={FlatListOutput}/>
+            <Drawer.Screen name="EditUSerDetails" component={EditUSerDetails}/>
+            <Drawer.Screen name="EditReviews" component={EditReviews}/>
         </Drawer.Navigator>
       </NavigationContainer>
     );
