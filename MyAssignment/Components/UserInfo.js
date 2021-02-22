@@ -19,10 +19,7 @@ class UserInfo extends Component{
 //------------------------------------------------------------------------------
     }
     componentDidMount(){
-      this.unsubscribe = this.props.navigation.addListener('focus', () => {
 
-      });
-        this.checkLoggedIn();
         this.getData();
 
     }
@@ -143,7 +140,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   },
   button1:{
     height: 10,
-    width: 340,
+    width: '100%',
     padding: 50,
     alignItems: 'center',
     justifyContent: 'center',

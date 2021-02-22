@@ -19,14 +19,11 @@ class ViewReviews extends Component{
     }
 
     componentDidMount(){
-      this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      });
       this.getData();
-      this.checkLoggedIn();
+
     }
 
     componentWillUnmount (){
-        this.unsubscribe();
     }
 
     getData = async () => {
@@ -110,6 +107,10 @@ class ViewReviews extends Component{
             isLoading: false,
             listData: responseJson
           })
+
+            this.props.navigation.navigate('ViewReviews')
+
+
           console.log("review added", responseJson);
           ToastAndroid.show("Review has NOT been added ",ToastAndroid.SHORT);
 

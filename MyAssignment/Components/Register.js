@@ -20,7 +20,7 @@ class Register extends Component{
         }
     }
 /**
-Signup variable is made with an arrow function pointing towards the server
+Signup function is made with an arrow function pointing towards the server
 initiating the post method
 Then when data is inputted  returns a response depending on the status code
 **/

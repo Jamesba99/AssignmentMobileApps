@@ -28,72 +28,42 @@ class FlatListOutput extends Component{
     }
 
     componentDidMount(){
-      this.unsubscribe = this.props.navigation.addListener('focus', () => {
-        });
-      const loc_id = this.props.route.params.location_id;
+      const {loc_id} = this.props.route.params.location_id;
       this.setState({
         viewLocationReviews: loc_id
         })
-      this.getData();
     }
 
     componentWillUnmount(){
-        this.unsubscribe();
     }
-
-    getData = async () => {
-      console.log("working");
-      let token = await AsyncStorage.getItem('@session_token');
-      return fetch("http://10.0.2.2:3333/api/1.0.0/location/" + (this.state.viewLocationReviews) ,{
-        method: 'get',
-        headers: {
-              'Content-Type': 'application/json',
-              'X-Authorization': token
-            }
-        })
-
-    .then((response) => {
-      if (response.status = 200) {
-        return response.json();
-      }else if (response.status === 404){
-          throw 'Not found';
-      }else if (response.status === 500){
-          throw 'server error';
-      } else{
-        throw 'something else';
-      }
-    })
-    .then((responseJson) => {
-      console.log(responseJson)
-      this.setState({
-        isLoading: false,
-        locations: responseJson,
-        location_reviews: responseJson
-      })
-    })
-    .catch((err)=> {
-      console.log(err);
-      ToastAndroid.show(err,ToastAndroid.SHORT);
-    });
-  }
 
   render(){
 
     const navigation = this.props.navigation;
-    console.log(this.state.locations.location_name)
+    const {location_name} = this.props.route.params;
+    const {location_town} = this.props.route.params;
+    const {avg_overall_rating}= this.props.route.params;
+    const {avg_price_rating} = this.props.route.params;
+    const {avg_quality_rating} = this.props.route.params;
+    const {avg_cleniness_rating} = this.props.route.params;
+    const {review_body} = this.props.route.params;
+
+    console.log(review_body)
     return(
       <SafeAreaView style={ styles.container }>
         <Image
           style={styles.stretch}
           source={require('./images/coffeeReview.jpg')}
         />
-        <Text style={styles.titleText}> Review of { this.state.locations.location_name }</Text>
+        <Text style={styles.titleText}> Review of {(location_name)}</Text>
         <View style={styles.titleText}>
-        <Text style={styles.resultsText}> Reviews on { this.state.locations.location_name }{this.state.locations.location_town} </Text>
-        <Text style={styles.resultsText}> Overall rating is: { this.state.locations.avg_overall_rating }</Text>
-        <Text style={styles.resultsText}> Price Rating: { this.state.locations.avg_price_rating } </Text>
-        <Text style={styles.resultsText}> Quality Rating Rating: { this.state.locations.avg_quality_rating } </Text>
-        <Text style={styles.resultsText}> Cleniness Rating : { this.state.locations.avg_cleniness_rating } </Text>
+        <Text style={styles.resultsText}> Reviews on { (location_name )}{(location_town)} </Text>
+        <Text style={styles.resultsText}> Overall rating is: { (avg_overall_rating) }</Text>
+        <Text style={styles.resultsText}> Price Rating: { (avg_price_rating) } </Text>
+        <Text style={styles.resultsText}> Quality Rating Rating: { (avg_quality_rating) } </Text>
+        <Text style={styles.resultsText}> Review body: { (review_body) } </Text>
+
+
         </View>
         <Button
           title="Back"

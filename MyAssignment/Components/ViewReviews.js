@@ -26,6 +26,7 @@ class ViewReviews extends Component{
         isLoading: true,
         locations: null,
         q: '',
+        location_reviews: [],
         avg_overall_rating: 0,
         avg_price_rating: 0,
         avg_quality_rating: 0,
@@ -37,10 +38,8 @@ class ViewReviews extends Component{
     }
 
     componentDidMount(){
-      this.unsubscribe = this.props.navigation.addListener('focus', () => {
-        });
       this.getData("http://10.0.2.2:3333/api/1.0.0/find");
-      this.checkLoggedIn();
+
     }
 
     getData = async (url) => {
@@ -61,6 +60,7 @@ class ViewReviews extends Component{
       this.setState({
         isLoading: false,
         locations: responseJson,
+        location_reviews: responseJson.location_reviews
       })
       console.log(responseJson)
     })
@@ -106,7 +106,6 @@ class ViewReviews extends Component{
     }
 
       componentWillUnmount (){
-        this.unsubscribe();
     }
 
     checkLoggedIn = async () => {
@@ -115,21 +114,22 @@ class ViewReviews extends Component{
           this.props.navigation.navigate('LoginScreen');
         }
       };
-
+// to add review bodies need of a review inside a review
     render(){
+      console.log(this.state.location_reviews);
       const navigation = this.props.navigation;
         return(
-          <SafeAreaView  style={styles.container}>
+          <SafeAreaView  style={customSt.container}>
 
-            <Text style={styles.titleText}>View Reviews</Text>
+            <Text style={customStyle.titleText}>View Reviews</Text>
             <TextInput
               value={this.state.q}
               onChangeText={(q) => this.setState({q: q})}
               placeholder= "Enter your search criteria "
               backgroundColor="#C7E8F3"
-              style={styles.textInput}
+              style={customStyle.textInput}
             />
-            <Text style={styles.ratingsTitleText}>overall_rating </Text>
+            <Text style={customStyle.ratingsTitleText}>overall_rating </Text>
             <AirbnbRating
               size={15}
               reviewColor= '#C7E8F3'
@@ -138,7 +138,7 @@ class ViewReviews extends Component{
               selectedColor="#8E4162"
               onFinishRating={(rating) => this.ratingCompleted( rating, "avg_overall_rating")}
             />
-            <Text style={styles.ratingsTitleText}>price_rating </Text>
+            <Text style={customStyle.ratingsTitleText}>price_rating </Text>
             <AirbnbRating
               size={15}
               reviewColor= '#C7E8F3'
@@ -147,7 +147,7 @@ class ViewReviews extends Component{
               selectedColor="#8E4162"
               onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
             />
-            <Text style={styles.ratingsTitleText}>quality_rating </Text>
+            <Text style={customStyle.ratingsTitleText}>quality_rating </Text>
             <AirbnbRating
               size={15}
               reviewColor= '#C7E8F3'
@@ -158,7 +158,7 @@ class ViewReviews extends Component{
             />
 
              <Button
-                    style={styles.button1}
+                    style={customStyle.button1}
                     title="Search"
                     color="#8E4162"
                     onPress={() => {
@@ -168,32 +168,40 @@ class ViewReviews extends Component{
                 <FlatList
                   data={this.state.locations}
                   renderItem={({item}) => (
-                      <View style={styles.ratingTitleText}>
-                        <Text style={styles.resultsText}> Coffee Shop: { item.location_name }</Text>
-                        <Text style={styles.resultsText}> Coffee Shop Town: { item.location_town }</Text>
-                        <Text style={styles.resultsText}> Overall Rating: { item.avg_overall_rating } </Text>
-                        <Text style={styles.resultsText}> Price Rating: { item.avg_price_rating } </Text>
-                        <Text style={styles.resultsText}> Quality Rating Rating: { item.avg_quality_rating } </Text>
-                        <Text style={styles.resultsText}> Cleniness Rating : { item.avg_cleniness_rating } </Text>
+                      <View style={customStyle.ratingTitleText}>
+                        <Text style={customStyle.resultsText}> Coffee Shop: { item.location_name }</Text>
+                        <Text style={customStyle.resultsText}> Coffee Shop Town: { item.location_town }</Text>
+                        <Text style={customStyle.resultsText}> Overall Rating: { item.avg_overall_rating } </Text>
+                        <Text style={customStyle.resultsText}> Price Rating: { item.avg_price_rating } </Text>
+                        <Text style={customStyle.resultsText}> Quality Rating Rating: { item.avg_quality_rating } </Text>
+                        <Text style={customStyle.resultsText}> Cleniness Rating : { item.avg_cleniness_rating } </Text>
                         <TouchableOpacity
-                          style={styles.button1}
+                          style={customStyle.button1}
                           onPress={() => {
-                            this.props.navigation.navigate("FlatListOutput", {location_id: item.location_id},{ location_name: item.location_name })
+                            this.props.navigation.navigate("FlatListOutput", {
+                               location_id: item.location_id,
+                               location_name: item.location_name ,
+                               location_town: item.location_town,
+                               avg_overall_rating: item.avg_overall_rating,
+                               avg_price_rating: item.avg_price_rating,
+                               avg_quality_rating: item.avg_quality_rating,
+                               avg_cleniness_rating: item.avg_cleniness_rating,
+                               })
                           }}>
-                          <Text style={styles.touchOpacityText}> View review in detail</Text>
+                          <Text style={customStyle.touchOpacityText}> View review in detail</Text>
                         </TouchableOpacity>
                       </View>
                   )}
                   keyExtractor={(item, index) => item.location_id.toString()}
                   />
-            
+
           </SafeAreaView>
         );
       }
 }
 //    this.props.navigation.navigate('ViewReviews', {screen: "FlatListOutput"}
 //https://www.youtube.com/watch?v=GPUiY0qJTiI
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar} from 'react-native';
+import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class EditReviews extends Component{
@@ -9,9 +9,7 @@ class EditReviews extends Component{
       this.state = {
         isLoading: true,
         usr_id: '',
-        first_name: "",
-        last_name: "",
-        email: "",
+        reviews:[],
         userDeets: [],
         userDetails: ""
       };
@@ -61,7 +59,8 @@ class EditReviews extends Component{
         this.setState({
           isLoading: false,
           userDeets: responseJson,
-          userDetails: responseJson
+          userDetails: responseJson,
+          reviews: responseJson.reviews,
 
         })
       })
@@ -70,6 +69,59 @@ class EditReviews extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
+// maybe add the validation in?
+//
+//------------------------------------------------------------------------------
+
+  updateUserReview = async () => {
+      let sendVariables ={
+          overall_rating: parseInt(this.state.overall_rating),
+          price_rating: parseInt(this.state.price_rating),
+          quality_rating: parseInt(this.state.quality_rating),
+          cleniness_rating: parseInt(this.state.cleniness_rating),
+          review_body: this.rating.review_body
+        }
+      console.log(sendVariables);
+      let token = await AsyncStorage.getItem('@session_token');
+      let id = await AsyncStorage.getItem('id');
+
+      return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+ (id) , {
+        method: 'patch',
+          headers:{
+            'Content-Type': 'application/json',
+            "X-Authorization": token
+          },
+          body: JSON.stringify(sendVariables)
+      })
+      .then((response) => {
+
+        if(response.status === 200){
+            return response
+            console.log(response);
+            ToastAndroid.show(responseJson,ToastAndroid.SHORT);
+        }else if(response.status === 400){
+          throw 'Bad Request';
+        }else if(response.status === 401){
+            throw '401 Unauthorized';
+            console.log(response);
+        }else if (response.status === 403){
+            throw 'forbidden'
+            console.log(response);
+        }else if (response.status === 404){
+            throw 'Not found';
+        }else if (response.status === 500){
+            throw 'server error';
+        }
+      })
+      .then((responseJson) =>{
+        console.log(responseJson);
+        this.props.navigation.navigate("HomeScreen")
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+      }
 
 
 //------------------------------------------------------------------------------
@@ -87,27 +139,87 @@ checks whether logged in.
   the components of the file
   ***/
 // add is loading
+
+
+/**
+this will delete an entry and then direct a user back to another page (previously hopefully)
+this will update the review and send the user back
+**/
   render(){
+    console.log(this.state.reviews)
       const navigation = this.props.navigation; // declaring the navigation constant
       return(
-        <View style={ styles.container }>
-          <Text style={ styles.titleText }> My Reviews </Text>
+        <SafeAreaView style={ customStyle.container }>
+          <Text style={ customStyle.titleText }> My Reviews </Text>
+          <FlatList
+            data={ this.state.reviews }
+            renderItem={({item}) => (
+                <View style={ customStyle.ratingTitleText }>
+                  <Text style={ customStyle.buttonText }>-------------------------------------------------</Text>
+                  <Text style={ customStyle.buttonText }> { item.location.location_name }, { item.location.location_town}</Text>
+                  <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Cleniness Rating: { item.review.cleniness_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Review Body: { item.review.review_body }</Text>
+                  <Text style={ customStyle.buttonText }> Number of likes from you: { item.review.likes }</Text>
+                  <TextInput
+                      placeholder="Overall Rating"
+                      backgroundColor="#C7E8F3"
+                      style={{padding:5, borderWidth:1, margin:5}}
+                  />
+                  <TextInput
+                      placeholder="Price Rating"
+                      backgroundColor="#C7E8F3"
+                      style={{padding:5, borderWidth:1, margin:5}}
+                  />
+                  <TextInput
+                      placeholder="Quality Rating"
+                      backgroundColor="#C7E8F3"
+                      style={{padding:5, borderWidth:1, margin:5}}
+                  />
+                  <TextInput
+                      placeholder="Cleniness Rating"
+                      backgroundColor="#C7E8F3"
+                      style={{padding:5, borderWidth:1, margin:5}}
+                  />
+                  <TextInput
+                      placeholder="Review Body"
+                      backgroundColor="#C7E8F3"
+                      style={{padding:5, borderWidth:1, margin:5}}
+                  />
+                  <TouchableOpacity
+                    style={customStyle.button1}
+                    onPress={() => {
+                    }}>
+                    <Text style={customStyle.touchOpacityText}>see line 92</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.button1}
+                    onPress={() => {
+                    }}>
+                    <Text style={customStyle.touchOpacityText}>see line 93 (delete)</Text>
+                  </TouchableOpacity>
+                </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            />
 
           <TouchableOpacity
-              style={styles.button1}
+              style={customStyle.button1}
               onPress={() =>navigation.navigate('HomeScreen')}>
-              <Text style={styles.buttonText}>Home</Text>
+              <Text style={customStyle.buttonText}>Home</Text>
           </TouchableOpacity>
           <TouchableOpacity
-              style={styles.button1}
+              style={customStyle.button1}
               onPress={() =>navigation.goBack()}>
-              <Text style={styles.buttonText}>Go Back</Text>
+              <Text style={customStyle.buttonText}>Go Back</Text>
           </TouchableOpacity>
-        </View>
+        </SafeAreaView>
       );
     }
 }
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
@@ -120,22 +232,23 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontWeight:"bold"
   },
   buttonText:{
-
     color: '#C7E8F3',
-    fontSize: 25,
+    fontSize: 20,
     fontWeight:'bold',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    padding: 5
   },
   button1:{
     height: 10,
-    width: 320,
-    padding: 50,
+    width: '100%',
+    padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:2
+    margin:2,
+
   },
   stretch: {
     width: 150,
@@ -150,8 +263,15 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontWeight:'bold',
     backgroundColor: '#8E4162',
     borderColor:'#C7E8F3'
+  },
+  touchOpacityText: { // styles the text colour and style
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
   }
-
 });
 
 export default EditReviews;

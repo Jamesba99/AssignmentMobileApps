@@ -15,9 +15,7 @@ class HomeScreen extends Component{
   }
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.checkLoggedIn();
     });
-
     this.getData();
   }
 

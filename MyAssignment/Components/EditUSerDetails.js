@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
-import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
+import { Text, View, Button, ToastAndroid, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class EditUSerDetails extends Component{
     constructor(props){
       super(props);
-
+//put user detts back in
       this.state = {
         isLoading: true,
-        usr_id: '',
         first_name: "",
         last_name: "",
         email: "",
-        userDeets: [],
-        userDetails: ""
+        userEmail: "",
+        firstName: "",
+        lastName: "",
+
       };
-
-//------------------------------------------------------------------------------
     }
+//------------------------------------------------------------------------------
     componentDidMount(){
-      this.unsubscribe = this.props.navigation.addListener('focus', () => {
-
-      });
-        this.checkLoggedIn();
         this.getData();
-
     }
 
 // get data --------------------------------------------------------------------
@@ -38,8 +33,6 @@ class EditUSerDetails extends Component{
             "X-Authorization": token
           },
       })
-
-
       .then((response)=> {
         if(response.status === 200){
           return response.json()
@@ -59,18 +52,70 @@ class EditUSerDetails extends Component{
       .then((responseJson) =>{
         console.log(responseJson);
         this.setState({
-          isLoading: false,
-          userDeets: responseJson,
-          userDetails: responseJson
-
+          firstName: responseJson.first_name,
+          lastName: responseJson.last_name,
+          userEmail: responseJson.email
         })
+        console.log(this.state.firstName);
+        console.log(this.state.lastName);
+        console.log(this.state.userEmail)
       })
       .catch((error)=> {
         console.log(error);
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
+//------------------------------------------------------------------------------
+//will need to parse any data that is a number
+  updateUserDetails = async () => {
 
+    let sendVariables = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email
+    }
+
+    console.log(sendVariables)
+
+    let token = await AsyncStorage.getItem('@session_token');
+    let id = await AsyncStorage.getItem('id');
+
+    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+ (id) , {
+      method: 'patch',
+        headers:{
+          'Content-Type': 'application/json',
+          "X-Authorization": token
+        },
+        body: JSON.stringify(sendVariables)
+    })
+    .then((response) => {
+
+      if(response.status === 200){
+          return response
+          console.log(response);
+          ToastAndroid.show(responseJson,ToastAndroid.SHORT);
+      }else if(response.status === 400){
+        throw 'Bad Request';
+      }else if(response.status === 401){
+          throw '401 Unauthorized';
+          console.log(response);
+      }else if (response.status === 403){
+          throw 'forbidden'
+          console.log(response);
+      }else if (response.status === 404){
+          throw 'Not found';
+      }else if (response.status === 500){
+          throw 'server error';
+      }
+    })
+    .then((responseJson) =>{
+      console.log(responseJson);
+      this.props.navigation.navigate("HomeScreen")
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
 
 //------------------------------------------------------------------------------
 /***
@@ -82,7 +127,7 @@ checks whether logged in.
         this.props.navigation.navigate('LoginScreen');
     }
   };
-
+//------------------------------------------------------------------------------
   /***
   the components of the file
   ***/
@@ -91,11 +136,37 @@ checks whether logged in.
       const navigation = this.props.navigation; // declaring the navigation constant
       return(
         <SafeAreaView style={ styles.container }>
-          <ScrollView>
+          <View>
             <Text style={ styles.titleText }> My Account </Text>
-            <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
-            <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
-            <Text style={ styles.resultsText }> Email: { this.state.userDetails.email } </Text>
+            <Text style={ styles.resultsText }> Forename: {this.state.firstName} | Surname: {this.state.lastName} </Text>
+            <Text style={ styles.resultsText }> Email: {this.state.userEmail} </Text>
+
+            <TextInput
+                placeholder="Enter your first name"
+                onChangeText={(first_name) => this.setState ({first_name})}
+                backgroundColor="#C7E8F3"
+                value={this.state.first_name}
+                style={{padding:5, borderWidth:1, margin:5}}
+            />
+            <TextInput
+                placeholder="Enter your second name"
+                onChangeText={(last_name) => this.setState ({last_name})}
+                backgroundColor="#C7E8F3"
+                value={this.state.last_name}
+                style={{padding:5, borderWidth:1, margin:5}}
+            />
+            <TextInput
+                placeholder="Enter your email"
+                onChangeText={(email) => this.setState ({email})}
+                backgroundColor="#C7E8F3"
+                value={this.state.email}
+                style={{padding:5, borderWidth:1, margin:5}}
+            />
+            <TouchableOpacity
+                style={styles.button1}
+                onPress={()  =>this.updateUserDetails() }>
+                <Text style={styles.buttonText }> Update User Details </Text>
+            </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button1}
                 onPress={() =>navigation.navigate('HomeScreen')}>
@@ -106,7 +177,7 @@ checks whether logged in.
                 onPress={() =>navigation.goBack()}>
                 <Text style={styles.buttonText}>Go Back</Text>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
         </SafeAreaView>
       );
     }
@@ -124,7 +195,6 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontWeight:"bold"
   },
   buttonText:{
-
     color: '#C7E8F3',
     fontSize: 25,
     fontWeight:'bold',
@@ -133,7 +203,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   },
   button1:{
     height: 30,
-    width: 340,
+    width: 345,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
