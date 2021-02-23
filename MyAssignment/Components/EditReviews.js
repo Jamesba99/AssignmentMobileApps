@@ -1,6 +1,16 @@
-import React, { Component } from 'react';
-import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, TextInput} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from "react";
+import {
+  Text,
+  View,
+  Button,
+  ToastAndroid,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+  FlatList,
+  TextInput
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class EditReviews extends Component{
     constructor(props){
@@ -8,7 +18,7 @@ class EditReviews extends Component{
 
       this.state = {
         isLoading: true,
-        usr_id: '',
+        usr_id: "",
         reviews:[],
         userDeets: [],
         userDetails: "",
@@ -17,7 +27,8 @@ class EditReviews extends Component{
         quality_rating:"",
         cleniness_rating:"",
         review_body:"",
-        location_id: ''
+        location_id: "",
+        like: ""
       };
 
 //------------------------------------------------------------------------------
@@ -132,39 +143,115 @@ class EditReviews extends Component{
     }
 
 //------------------------------------------------------------------------------
-deleteReview = async () => {
+    deleteReview = async () => {
+      let token = await AsyncStorage.getItem('@session_token');
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id), {
+        method: 'delete',
+          headers:{
+            "X-Authorization": token
+          },
+        })
+        .then((response) => {
+          this.props.navigation.navigate("UserInfo")
+          if(response.status === 200){
+          ToastAndroid.show("Review Deleted",ToastAndroid.SHORT);
+          }else if(response.status === 400){
+              throw 'Bad Request';
+          }else if(response.status === 401){
+              throw '401 Unauthorized';
+              console.log(response);
+          }else if(response.status === 403){
+              throw '403 forbidden'
+              console.log(response);
+          }else if (response.status === 404){
+              throw 'Not found';
+              console.log(response);
+          }else if (response.status === 500){
+              throw 'server error';
+              console.log(response);
+          }else{
+            throw 'something went wrong';
+            console.log(response);
+          }
+      })
+    }
+//----------------like a review ------------------------------------------------
+    likeAReview = async () => {
+      let token = await AsyncStorage.getItem('@session_token');
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
+        method: 'post',
+          headers:{
+            "X-Authorization": token
+          },
+        })
+        .then((response) => {
+            if(response.status === 200){
+              return response
+              this.props.navigation.navigate('UserInfo');
+              ToastAndroid.show("A like has been added ",ToastAndroid.SHORT);
+            }else if(response.status === 400){
+                throw 'Bad Request';
+            }else if(response.status === 401){
+                throw '401 Unauthorized';
+                console.log(response);
+            }else if (response.status === 404){
+                throw 'Not found';
+            }else if (response.status === 500){
+                throw 'server error';
+            }else{
+              throw 'something went wrong';
+            }
+            })
 
-  let token = await AsyncStorage.getItem('@session_token');
-  return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id), {
-    method: 'delete',
-      headers:{
-        "X-Authorization": token
-      },
-    })
-    .then((response) => {
-      this.props.navigation.navigate("UserInfo")
-      if(response.status === 200){
-      ToastAndroid.show("Review Deleted",ToastAndroid.SHORT);
-      }else if(response.status === 400){
-          throw 'Bad Request';
-      }else if(response.status === 401){
-          throw '401 Unauthorized';
+            console.log(response)
+            .then((response) => {
+              ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
+              this.setState({
+                isLoading: false,
+                like: response
+              })
+
+            })
+            .catch((error) => {
+                console.log(error);
+                ToastAndroid.show(error,ToastAndroid.SHORT);
+            })
+    }
+//-------------unlike a review--------------------------------------------------
+    unlikeAReview = async () => {
+      let token = await AsyncStorage.getItem('@session_token');
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
+        method: 'delete',
+          headers:{
+            "X-Authorization": token
+          },
+        })
+      .then((response) => {
+        this.props.navigation.navigate("UserInfo")
+        if(response.status === 200){
+        ToastAndroid.show("Review unliked",ToastAndroid.SHORT);
+        }else if(response.status === 400){
+            throw 'Bad Request';
+        }else if(response.status === 401){
+            throw '401 Unauthorized';
+            console.log(response);
+        }else if(response.status === 403){
+            throw '403 forbidden'
+            console.log(response);
+        }else if (response.status === 404){
+            throw 'Not found';
+            console.log(response);
+        }else if (response.status === 500){
+            throw 'server error';
+            console.log(response);
+        }else{
+          throw 'something went wrong';
           console.log(response);
-      }else if(response.status === 403){
-          throw '403 forbidden'
-          console.log(response);
-      }else if (response.status === 404){
-          throw 'Not found';
-          console.log(response);
-      }else if (response.status === 500){
-          throw 'server error';
-          console.log(response);
-      }else{
-        throw 'something went wrong';
-        console.log(response);
-      }
-  })
-}
+        }
+      })
+    }
+
+
 
 
 //------------------------------------------------------------------------------
@@ -206,7 +293,7 @@ this will update the review and send the user back
                 <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
                 <Text style={ customStyle.buttonText }> Cleniness Rating: { item.review.cleniness_rating }</Text>
                 <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
-                <Text style={ customStyle.buttonText }> Number of likes from you: { item.review.likes }</Text>
+                <Text style={ customStyle.buttonText }> Number of likes: { item.review.likes }</Text>
                   <TextInput
                       placeholder="Overall Rating"
                       onChangeText={(overall_rating) => this.setState({overall_rating})}
@@ -242,6 +329,24 @@ this will update the review and send the user back
                       backgroundColor="#C7E8F3"
                       style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
+
+                  <TouchableOpacity
+                    style={customStyle.like}
+                    onPress={() => {
+                        this.likeAReview()
+                        this.setState({loc_id: item.location.location_id, rev_id: item.review.review_id})
+                    }}>
+                    <Text  style={ customStyle.likeFont}> Like!</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.unLike}
+                    onPress={() => {
+                        this.unlikeAReview()
+                        this.setState({loc_id: item.location.location_id, rev_id: item.review.review_id})
+                    }}>
+                    <Text stlye={customStyle.likeFont}> UnLike!</Text>
+                  </TouchableOpacity>
+
                   <TouchableOpacity
                     style={customStyle.button1}
                     onPress={() => {
@@ -332,6 +437,36 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     backgroundColor: '#BF9ACA'
   },
   touchOpacityEditInfo: { // styles the text colour and style
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
+  },
+  like:{
+
+    height: 10,
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#74B72E',
+    margin:2,
+
+  },
+  unLike:{
+    height: 10,
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#D21404',
+    margin:2,
+  },
+  likeFont:{
     fontSize: 20,
     fontWeight: 'bold',
     color: '#C7E8F3',

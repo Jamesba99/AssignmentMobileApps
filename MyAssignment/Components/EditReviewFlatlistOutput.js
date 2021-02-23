@@ -196,8 +196,6 @@ class EditReviewFlatlistOutput extends Component{
           }}>
           <Text style={customStyle.touchOpacityEditInfo}>Changed your mind? Delete the Review!</Text>
         </TouchableOpacity>
-
-
         <Button
           title="Back"
           color="#8E4162"
