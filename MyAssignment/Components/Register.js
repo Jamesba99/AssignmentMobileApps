@@ -134,7 +134,6 @@ While navigation buttons are added to help with navigation of the app
                       onPress={()=> this.signup()}>
                       <Text style={styles.buttonText}>Create Account!</Text>
                   </TouchableOpacity>
-
                   <Button
                       title="Back"
                       color="#8E4162"

@@ -15,6 +15,7 @@ import UserInfo from './Components/UserInfo';
 import FlatListOutput from './Components/FlatListOutput';
 import EditUSerDetails from './Components/EditUSerDetails';
 import EditReviews from './Components/EditReviews';
+import EditReviewFlatlistOutput from './Components/EditReviewFlatlistOutput'
 //import AfterLoginScreen from './Components/AfterLoginScreen';
 //import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
 /**
@@ -28,7 +29,6 @@ class App extends Component{
 
       <NavigationContainer>
         <Drawer.Navigator>
-
             <Drawer.Screen  name="LoginScreen" component={Login} options={{headerShown: false}} />
             <Drawer.Screen name="HomeScreen" component={HomeScreen} />
             <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account"}} />
@@ -40,6 +40,7 @@ class App extends Component{
             <Drawer.Screen name="FlatListOutput" component={FlatListOutput}/>
             <Drawer.Screen name="EditUSerDetails" component={EditUSerDetails}/>
             <Drawer.Screen name="EditReviews" component={EditReviews}/>
+            <Drawer.Screen name="EditReviewFlatlistOutput" component={EditReviewFlatlistOutput}/>
         </Drawer.Navigator>
       </NavigationContainer>
     );

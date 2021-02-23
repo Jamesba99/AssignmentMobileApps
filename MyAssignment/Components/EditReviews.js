@@ -11,19 +11,28 @@ class EditReviews extends Component{
         usr_id: '',
         reviews:[],
         userDeets: [],
-        userDetails: ""
+        userDetails: "",
+        overall_rating: "",
+        price_rating: "",
+        quality_rating:"",
+        cleniness_rating:"",
+        review_body:"",
+        location_id: ''
       };
 
 //------------------------------------------------------------------------------
     }
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
-
+          this.getData();
       });
         this.checkLoggedIn();
-        this.getData();
+
 
     }
+  componentWillUnmount(){
+    this.unsubscribe();
+  }
 
 // get data --------------------------------------------------------------------
     getData = async () => {
@@ -79,13 +88,13 @@ class EditReviews extends Component{
           price_rating: parseInt(this.state.price_rating),
           quality_rating: parseInt(this.state.quality_rating),
           cleniness_rating: parseInt(this.state.cleniness_rating),
-          review_body: this.rating.review_body
+          review_body: this.state.review_body
         }
       console.log(sendVariables);
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
 
-      return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+ (id) , {
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+ (this.state.loc_id)+ "/review/"+(this.state.rev_id) , {
         method: 'patch',
           headers:{
             'Content-Type': 'application/json',
@@ -120,8 +129,42 @@ class EditReviews extends Component{
       .catch((error) => {
         console.log(error)
       })
+    }
 
+//------------------------------------------------------------------------------
+deleteReview = async () => {
+
+  let token = await AsyncStorage.getItem('@session_token');
+  return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id), {
+    method: 'delete',
+      headers:{
+        "X-Authorization": token
+      },
+    })
+    .then((response) => {
+      this.props.navigation.navigate("UserInfo")
+      if(response.status === 200){
+      ToastAndroid.show("Review Deleted",ToastAndroid.SHORT);
+      }else if(response.status === 400){
+          throw 'Bad Request';
+      }else if(response.status === 401){
+          throw '401 Unauthorized';
+          console.log(response);
+      }else if(response.status === 403){
+          throw '403 forbidden'
+          console.log(response);
+      }else if (response.status === 404){
+          throw 'Not found';
+          console.log(response);
+      }else if (response.status === 500){
+          throw 'server error';
+          console.log(response);
+      }else{
+        throw 'something went wrong';
+        console.log(response);
       }
+  })
+}
 
 
 //------------------------------------------------------------------------------
@@ -154,51 +197,66 @@ this will update the review and send the user back
           <FlatList
             data={ this.state.reviews }
             renderItem={({item}) => (
-                <View style={ customStyle.ratingTitleText }>
-                  <Text style={ customStyle.buttonText }>-------------------------------------------------</Text>
-                  <Text style={ customStyle.buttonText }> { item.location.location_name }, { item.location.location_town}</Text>
-                  <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
-                  <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
-                  <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
-                  <Text style={ customStyle.buttonText }> Cleniness Rating: { item.review.cleniness_rating }</Text>
-                  <Text style={ customStyle.buttonText }> Review Body: { item.review.review_body }</Text>
-                  <Text style={ customStyle.buttonText }> Number of likes from you: { item.review.likes }</Text>
+              <View style={ customStyle.ratingTitleText }>
+                <Text style={ customStyle.buttonText }>-------------------------------------------------</Text>
+                <Text style={ customStyle.buttonText }> { item.review.review_id} </Text>
+                <Text style={ customStyle.buttonText }> { item.location.location_name }, { item.location.location_town}</Text>
+                <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
+                <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
+                <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
+                <Text style={ customStyle.buttonText }> Cleniness Rating: { item.review.cleniness_rating }</Text>
+                <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
+                <Text style={ customStyle.buttonText }> Number of likes from you: { item.review.likes }</Text>
                   <TextInput
                       placeholder="Overall Rating"
+                      onChangeText={(overall_rating) => this.setState({overall_rating})}
+                      value={ this.state.overall_rating}
                       backgroundColor="#C7E8F3"
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
                   <TextInput
                       placeholder="Price Rating"
+                      onChangeText={(price_rating) => this.setState({price_rating})}
+                      value={ this.state.price_rating}
                       backgroundColor="#C7E8F3"
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
                   <TextInput
                       placeholder="Quality Rating"
+                      onChangeText={(quality_rating) => this.setState({quality_rating})}
+                      value={ this.state.quality_rating}
                       backgroundColor="#C7E8F3"
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
                   <TextInput
                       placeholder="Cleniness Rating"
+                      onChangeText={(cleniness_rating) => this.setState({cleniness_rating})}
+                      value={ this.state.cleniness_rating}
                       backgroundColor="#C7E8F3"
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5 , width: '100%'}}
                   />
                   <TextInput
-                      placeholder="Review Body"
+                      placeholder=" review_body"
+                      onChangeText={(review_body) => this.setState({review_body})}
+                      value={ this.state.review_body}
                       backgroundColor="#C7E8F3"
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
                   <TouchableOpacity
                     style={customStyle.button1}
                     onPress={() => {
+                        this.updateUserReview()
+                        this.setState({loc_id: item.location.location_id, rev_id: item.review.review_id})
                     }}>
-                    <Text style={customStyle.touchOpacityText}>see line 92</Text>
+                    <Text style={customStyle.touchOpacityEditInfo}>Update!</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={customStyle.button1}
                     onPress={() => {
+                        this.deleteReview()
+                        this.setState({loc_id: item.location.location_id, rev_id: item.review.review_id})
                     }}>
-                    <Text style={customStyle.touchOpacityText}>see line 93 (delete)</Text>
+                    <Text style={customStyle.touchOpacityEditInfo}>Delete!</Text>
                   </TouchableOpacity>
                 </View>
             )}
@@ -265,6 +323,15 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     borderColor:'#C7E8F3'
   },
   touchOpacityText: { // styles the text colour and style
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
+    backgroundColor: '#BF9ACA'
+  },
+  touchOpacityEditInfo: { // styles the text colour and style
     fontSize: 20,
     fontWeight: 'bold',
     color: '#C7E8F3',

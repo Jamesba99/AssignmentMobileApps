@@ -107,12 +107,12 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
   },
   button1:{
     height: 60,
-    width: 300,
+    width: '100%',
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:10
+  
   },
   buttonText:{
     color: '#C7E8F3',

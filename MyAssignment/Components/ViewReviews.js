@@ -119,7 +119,7 @@ class ViewReviews extends Component{
       console.log(this.state.location_reviews);
       const navigation = this.props.navigation;
         return(
-          <SafeAreaView  style={customSt.container}>
+          <SafeAreaView  style={customStyle.container}>
 
             <Text style={customStyle.titleText}>View Reviews</Text>
             <TextInput

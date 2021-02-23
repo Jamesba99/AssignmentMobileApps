@@ -6,7 +6,6 @@ import { Rating, AirbnbRating } from 'react-native-elements';
 
 import ViewReviews from './ViewReviews'
 
-
 /**
 TO DO
 - complete the ratings page
@@ -36,7 +35,6 @@ class FlatListOutput extends Component{
 
     componentWillUnmount(){
     }
-
   render(){
 
     const navigation = this.props.navigation;
@@ -57,13 +55,11 @@ class FlatListOutput extends Component{
         />
         <Text style={styles.titleText}> Review of {(location_name)}</Text>
         <View style={styles.titleText}>
-        <Text style={styles.resultsText}> Reviews on { (location_name )}{(location_town)} </Text>
-        <Text style={styles.resultsText}> Overall rating is: { (avg_overall_rating) }</Text>
-        <Text style={styles.resultsText}> Price Rating: { (avg_price_rating) } </Text>
-        <Text style={styles.resultsText}> Quality Rating Rating: { (avg_quality_rating) } </Text>
-        <Text style={styles.resultsText}> Review body: { (review_body) } </Text>
-
-
+          <Text style={styles.resultsText}> Reviews on { (location_name )}{(location_town)} </Text>
+          <Text style={styles.resultsText}> Overall rating is: { (avg_overall_rating) }</Text>
+          <Text style={styles.resultsText}> Price Rating: { (avg_price_rating) } </Text>
+          <Text style={styles.resultsText}> Quality Rating Rating: { (avg_quality_rating) } </Text>
+          <Text style={styles.resultsText}> Review body: { (review_body) } </Text>
         </View>
         <Button
           title="Back"

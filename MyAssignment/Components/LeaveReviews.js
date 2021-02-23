@@ -144,7 +144,6 @@ class ViewReviews extends Component{
       );
     }else{
 
-
     return(
         <View style={customStyle.container}>
             <Text style={customStyle.text}>Leave a Review!</Text>
