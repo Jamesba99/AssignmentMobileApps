@@ -12,6 +12,7 @@ class UserInfo extends Component{
         first_name: "",
         last_name: "",
         email: "",
+        favourite_locations:"",
         userDeets: [],
         userDetails: ""
       };
@@ -41,7 +42,6 @@ class UserInfo extends Component{
         if(response.status === 200){
           return response.json()
           console.log(response)
-
           }else if(response.status === 400){
             throw 'Bad Request';
           }else if(response.status === 401){
@@ -58,7 +58,8 @@ class UserInfo extends Component{
         this.setState({
           isLoading: false,
           userDeets: responseJson,
-          userDetails: responseJson
+          userDetails: responseJson,
+          favourite_locations: responseJson
 
         })
       })
@@ -85,6 +86,7 @@ checks whether logged in.
   ***/
 // add is loading
   render(){
+    console.log(favourite_locations)
       const navigation = this.props.navigation; // declaring the navigation constant
       return(
         <SafeAreaView style={ styles.container }>
@@ -93,11 +95,7 @@ checks whether logged in.
             <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
             <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
             <Text style={ styles.resultsText }> Email: { this.state.userDetails.email } </Text>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('HomeScreen')}>
-                <Text style={styles.buttonText}>Home</Text>
-            </TouchableOpacity>
+            <Text style={ styles.resultsText }> Favourite Location(s): { this.state.favourite_locations } </Text>
             <TouchableOpacity
                 style={styles.button1}
                 onPress={() =>navigation.navigate('EditReviews')}>
@@ -107,6 +105,16 @@ checks whether logged in.
                 style={styles.button1}
                 onPress={() =>navigation.navigate('EditUSerDetails')}>
                 <Text style={styles.buttonText}>Update Account Details</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.button1}
+                onPress={() =>navigation.navigate('FavouriteAlocation')}>
+                <Text style={styles.buttonText}>Edit Favorite Locations</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={styles.button1}
+                onPress={() =>navigation.navigate('HomeScreen')}>
+                <Text style={styles.buttonText}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.button1}
@@ -131,7 +139,6 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontWeight:"bold"
   },
   buttonText:{
-
     color: '#C7E8F3',
     fontSize: 25,
     fontWeight:'bold',
@@ -139,7 +146,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center'
   },
   button1:{
-    height: 10,
+    height: 1,
     width: '100%',
     padding: 50,
     alignItems: 'center',

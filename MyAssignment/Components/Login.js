@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity,Image } from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -56,6 +56,10 @@ class LoginScreen extends Component {
                   <Text style={ customStyle.text }>      Welcome to</Text>
                   <Text style={ customStyle.text }>CoffeeDa Reviews!</Text>
                   <Text style={customStyle.text}>    Login to begin </Text>
+                  <Image
+                      style={customStyle.stretch}
+                      source={require('./images/coffeeReview.jpg')}
+                  />
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState({email})}
@@ -112,13 +116,18 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-  
+
   },
   buttonText:{
     color: '#C7E8F3',
     fontSize: 15,
     fontWeight:'bold',
     //justifyContent: 'center'
+  },
+  stretch: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'stretch'
   }
 });
 export default LoginScreen;

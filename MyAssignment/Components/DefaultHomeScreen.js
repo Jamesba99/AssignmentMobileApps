@@ -130,7 +130,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
   },
   buttonText:{
     color: '#C7E8F3',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight:'bold',
     //justifyContent: 'center'
   },

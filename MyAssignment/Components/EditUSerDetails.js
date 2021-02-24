@@ -55,12 +55,12 @@ class EditUSerDetails extends Component{
           firstName: responseJson.first_name,
           lastName: responseJson.last_name,
           userEmail: responseJson.email
-        })
+        });
         console.log(this.state.firstName);
         console.log(this.state.lastName);
-        console.log(this.state.userEmail)
+        console.log(this.state.userEmail);
       })
-      .catch((error)=> {
+      .catch((error)=>{
         console.log(error);
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })

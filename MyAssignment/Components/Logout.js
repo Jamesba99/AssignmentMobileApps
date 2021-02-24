@@ -37,19 +37,22 @@ class LogoutScreen extends Component {
     const navigation = this.props.navigation;
       return(
         <SafeAreaView style={styles.container}>
-          <ScrollView>
+          <Text style={ styles.titleText }> Are You Sure  </Text>
+          <Text style={ styles.titleText }> You Want To  </Text>
+          <Text style={ styles.titleText }> Logout? </Text>
             <TouchableOpacity
               style={styles.button1}
               onPress={() => this.logout()}
               >
               <Text style={styles.buttonText}>Logout!</Text>
             </TouchableOpacity>
-          <Button
-              title="Back"
-              color="#8E4162"
-              onPress={() =>navigation.goBack()}
-            />
-          </ScrollView>
+            <TouchableOpacity
+              style={styles.button1}
+              onPress={() => navigation.goBack()}
+              >
+              <Text style={styles.buttonText}>No - Back!</Text>
+            </TouchableOpacity>
+
         </SafeAreaView>
       );
   }
@@ -63,6 +66,11 @@ const styles = StyleSheet.create({ // styles the text on the screen
     justifyContent: 'space-between',
     backgroundColor: '#41393E'
   },
+  titleText: { // styles the text colour and style
+    color: '#C7E8F3',
+    fontSize: 50,
+    fontWeight:"bold"
+  },
   text: { // styles the text colour and style
     color: '#C7E8F3',
     fontSize: 50,
@@ -75,8 +83,8 @@ const styles = StyleSheet.create({ // styles the text on the screen
     margin:5
   },
   button1:{
-    height: 60,
-    width: 300,
+    height: 100,
+    width: '100%',
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
   },
   buttonText:{
     color: '#C7E8F3',
-    fontSize: 15,
+    fontSize: 30,
     fontWeight:'bold',
     justifyContent: 'center'
   }

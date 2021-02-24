@@ -143,7 +143,6 @@ class ViewReviews extends Component{
       </View>
       );
     }else{
-
     return(
         <View style={customStyle.container}>
             <Text style={customStyle.text}>Leave a Review!</Text>
@@ -197,14 +196,12 @@ class ViewReviews extends Component{
                 style={customStyle.button1}
                 onPress={()=> this.addReviews()}>
                 <Text style={customStyle.touchOpacityText}> Post Review!</Text>
-
               </TouchableOpacity>
-              <Button
-                title="Back"
-                color="#8E4162"
-                fontColor= "Black"
-                onPress={() =>navigation.goBack()}
-              />
+              <TouchableOpacity
+                style={customStyle.button1}
+                onPress={()=> navigation.goBack()}>
+                <Text style={customStyle.touchOpacityText}> Back </Text>
+              </TouchableOpacity>
         </View>
     );
   }
@@ -220,7 +217,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     backgroundColor: '#41393E'
   },
   text: { // styles the text colour and style
-    flex: 1,
+
     color: '#C7E8F3',
     alignItems: 'center',
     justifyContent: 'center',
@@ -236,7 +233,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
   },
   button1:{
     height: 60,
-    width: 300,
+    width: '100%',
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
@@ -256,6 +253,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     //justifyContent: 'center'
   },
   textInput:{
+    width: '100%',
     padding:5,
     borderWidth:1,
     margin:5

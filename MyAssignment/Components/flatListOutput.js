@@ -6,13 +6,6 @@ import { Rating, AirbnbRating } from 'react-native-elements';
 
 import ViewReviews from './ViewReviews'
 
-/**
-TO DO
-- complete the ratings page
--format the page
-https://www.youtube.com/watch?v=GPUiY0qJTiI
-// make a stack nav page that appears on the next with results
-***/
 
 class FlatListOutput extends Component{
     constructor(props){
@@ -21,58 +14,169 @@ class FlatListOutput extends Component{
         viewLocationReviews: '' ,
         locations: [],
         isLoading: true,
-        location_reviews: []
-
+        location_reviews: null,
+        location_id: "",
+        locationReviews: null,
+        like:""
       }
     }
-
+//------------------------------------------------------------------------------
     componentDidMount(){
-      const {loc_id} = this.props.route.params.location_id;
-      this.setState({
-        viewLocationReviews: loc_id
-        })
-    }
 
+    }
+//------------------------------------------------------------------------------
     componentWillUnmount(){
     }
-  render(){
+    //----------------like a review ------------------------------------------------
+        likeAReview = async () => {
+          let token = await AsyncStorage.getItem('@session_token');
+          return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
+            method: 'post',
+              headers:{
+                "X-Authorization": token
+              },
+            })
+            .then((response) => {
+                  this.props.navigation.navigate('ViewReviews');
+                if(response.status === 200){
+                  ToastAndroid.show("A like has been added ",ToastAndroid.SHORT);
+                  return response
+                }else if(response.status === 400){
+                    throw 'Bad Request';
+                }else if(response.status === 401){
+                    throw '401 Unauthorized';
+                    console.log(response);
+                }else if (response.status === 404){
+                    throw 'Not found';
+                }else if (response.status === 500){
+                    throw 'server error';
+                }else{
+                  throw 'something went wrong';
+                }
+                })
 
+                console.log(response)
+                .then((response) => {
+                  ToastAndroid.show("Like has been added ",ToastAndroid.SHORT);
+                  this.setState({
+                    isLoading: false,
+                    like: response
+                  })
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                    ToastAndroid.show(error,ToastAndroid.SHORT);
+                })
+        }
+//-------------unlike a review--------------------------------------------------
+        unlikeAReview = async () => {
+          let token = await AsyncStorage.getItem('@session_token');
+          return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
+            method: 'delete',
+              headers:{
+                "X-Authorization": token
+              },
+            })
+          .then((response) => {
+            this.props.navigation.navigate('ViewReviews');
+            if(response.status === 200){
+            ToastAndroid.show("Review unliked",ToastAndroid.SHORT);
+            }else if(response.status === 400){
+                throw 'Bad Request';
+            }else if(response.status === 401){
+                throw '401 Unauthorized';
+                console.log(response);
+            }else if(response.status === 403){
+                throw '403 forbidden'
+                console.log(response);
+            }else if (response.status === 404){
+                throw 'Not found';
+                console.log(response);
+            }else if (response.status === 500){
+                throw 'server error';
+                console.log(response);
+            }else{
+              throw 'something went wrong';
+              console.log(response);
+            }
+          })
+        }
+
+//------------------------------------------------------------------------------
+  render(){
     const navigation = this.props.navigation;
+    const {location_reviews} = this.props.route.params
     const {location_name} = this.props.route.params;
     const {location_town} = this.props.route.params;
     const {avg_overall_rating}= this.props.route.params;
     const {avg_price_rating} = this.props.route.params;
     const {avg_quality_rating} = this.props.route.params;
-    const {avg_cleniness_rating} = this.props.route.params;
+    const {avg_clenliness_rating} = this.props.route.params;
     const {review_body} = this.props.route.params;
+    const {quality_rating} = this.props.route.params;
+    const { location_id }= this.props.route.params;
 
-    console.log(review_body)
     return(
       <SafeAreaView style={ styles.container }>
-        <Image
-          style={styles.stretch}
-          source={require('./images/coffeeReview.jpg')}
-        />
-        <Text style={styles.titleText}> Review of {(location_name)}</Text>
-        <View style={styles.titleText}>
-          <Text style={styles.resultsText}> Reviews on { (location_name )}{(location_town)} </Text>
+          <Text style={styles.titleText}> Review of {(location_name)}</Text>
+          <Text style={styles.titleText}> {(location_town)} </Text>
           <Text style={styles.resultsText}> Overall rating is: { (avg_overall_rating) }</Text>
           <Text style={styles.resultsText}> Price Rating: { (avg_price_rating) } </Text>
-          <Text style={styles.resultsText}> Quality Rating Rating: { (avg_quality_rating) } </Text>
-          <Text style={styles.resultsText}> Review body: { (review_body) } </Text>
-        </View>
-        <Button
-          title="Back"
-          color="#8E4162"
-          fontColor= "Black"
-          onPress={() =>navigation.goBack()}
-        />
+          <Text style={styles.resultsText}> Quality Rating: { (avg_quality_rating) } </Text>
+          <Text style={styles.resultsText}> Clenliness Rating: { (avg_clenliness_rating) } </Text>
+          <Text style={styles.resultsText}> ----------------------- </Text>
+          <FlatList
+            data={location_reviews}
+            renderItem={({item}) => (
+              <View style={ styles.flatListView }>
+                <Text style={styles.resultsText}> -------------</Text>
+                <Text style={ styles.resultsText }> User { item.review_id }'s Review: </Text>
+                <Text style={ styles.resultsText }> Number of Likes : { item.likes } </Text>
+                <Text style={ styles.resultsText }> Overall Rating : { item.review_overallrating } </Text>
+                <Text style={ styles.resultsText }> Price Rating : { item.review_pricerating } </Text>
+                <Text style={ styles.resultsText }> Quality Rating : { item.review_qualityrating } </Text>
+                <Text style={ styles.resultsText }> Clenliness Rating : { item.review_clenlinessrating } </Text>
+                <Text style={ styles.resultsText }> Review : {item.review_body} </Text>
+                <TouchableOpacity
+                  style={styles.like}
+                  onPress={() => {
+                    this.likeAReview()
+                    this.setState({
+                      loc_id: location_id,
+                      rev_id: item.review_id
+                    })
+                  }}>
+                  <Text style={ styles.unlikeFont}> Like!</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.unLike}
+                  onPress={() => {
+                    this.unlikeAReview()
+                    this.setState({
+                      loc_id: location_id,
+                      rev_id: item.review_id
+                    })
+                  }}>
+                  <Text style={ styles.unlikeFont}> Unlike!</Text>
+                </TouchableOpacity>
+
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <TouchableOpacity
+              style={styles.button1}
+              onPress={() =>navigation.goBack()}>
+              <Text style={styles.buttonText}>Go Back</Text>
+          </TouchableOpacity>
+
+
       </SafeAreaView>
     );
   }
 }
 
-//https://www.youtube.com/watch?v=GPUiY0qJTiI
 const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
@@ -95,7 +199,7 @@ const styles = StyleSheet.create({ // styles the text on the screen
     margin:5
   },
   titleText: { // styles the text colour and style
-    flex: 1,
+  //  flex: 1,
     color: '#C7E8F3',
     alignItems: 'center',
     justifyContent: 'center',
@@ -124,8 +228,63 @@ const styles = StyleSheet.create({ // styles the text on the screen
     fontSize: 25
   },
   stretch: {
-flex:1
-  }
+    flex:1
+  },
+  buttonText:{
+    color: '#C7E8F3',
+    fontSize: 20,
+    fontWeight:'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5
+  },
+  button1:{
+    height: 10,
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#8E4162',
+    margin:2,
+  },
+  unLike:{
+    height: 10,
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#D21404',
+    margin:2,
+  },
+  like:{
+    height: 10,
+    width: '100%',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 10,
+    borderColor: '#74B72E',
+    margin:2,
+  },
+  likeFont:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
+  },
+  unlikeFont:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
+  },
+
 
 });
 export default FlatListOutput;
