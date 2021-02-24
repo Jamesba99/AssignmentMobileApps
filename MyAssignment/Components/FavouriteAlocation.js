@@ -11,34 +11,41 @@ import {
   TextInput
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+//All imports for this screen
 class FavouriteAlocation extends Component{
+  //builds the props contructor while also declaring the variables
+
     constructor(props){
       super(props);
-
       this.state = {
         isLoading: true,
         location_id: "",
         listData:[],
         favourite_locations:""
       };
-
-//------------------------------------------------------------------------------
     }
+//------------------------------------------------------------------------------
+//componentDidMount allows everything in the function to be done in the backgeround
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
 
       });
         this.getData();
         this.checkLoggedIn();
-
-
     }
+    // unsubscribed to clear the memory to stop clogedge
   componentWillUnmount(){
     this.unsubscribe();
   }
 
-// get data --------------------------------------------------------------------
+// --------get data ------------------------------------------------------------
+/**
+ GetData will find all the location information of all the coffee shops
+ Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
+ Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is obrained
+ if another response is returned a else if to the correct response will return
+ finally responseJson is then set to the correct format needed for this screen
+**/
   getData = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     let id = await AsyncStorage.getItem('id');
@@ -76,7 +83,14 @@ class FavouriteAlocation extends Component{
       ToastAndroid.show(error,ToastAndroid.SHORT);
     })
   }
-//------------------------------------------------------------------------------
+//-----------------Favourite a location-----------------------------------------
+/**
+favourite a location will use a network request to post a location as the users favourite
+Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
+Once the data has been pulled from /location/loc_id/favourite the .then will use the response and if 200 it will return the response
+if another response is returned a else if to the correct response will return
+finally response is then set to the correct format needed for this screen
+**/
   favouriteALocation = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/favourite",{
@@ -118,6 +132,13 @@ class FavouriteAlocation extends Component{
     })
   }
 //------------------------------------------------------------------------------
+/**
+unfavourite a location will use a network request to delete a location as the users favourites
+Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
+Once the data has been pulled from /location/loc_id/favourite the .then will use the response and if 200 it will return the response
+if another response is returned a else if to the correct response will return
+finally responseJson is then set to the correct format needed for this screen
+**/
   unFavouriteALocation = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/favourite", {
@@ -174,6 +195,20 @@ this will update the review and send the user back
   render(){
 
       const navigation = this.props.navigation; // declaring the navigation constant
+      if(this.state.isLoading){
+        return(
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#41393E'
+            }}>
+            <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+        </View>
+        );
+      }else{
       return(
         <SafeAreaView style={ customStyle.container }>
           <Text style={ customStyle.titleText }> Favourite a  </Text>
@@ -222,6 +257,7 @@ this will update the review and send the user back
         </SafeAreaView>
       );
     }
+  }
 }
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{

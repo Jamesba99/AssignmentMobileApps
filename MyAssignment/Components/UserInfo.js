@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+//All imports for this screen
 class UserInfo extends Component{
+  //builds the props contructor while also declaring the variables
+
     constructor(props){
       super(props);
-
       this.state = {
         isLoading: true,
         usr_id: '',
@@ -16,16 +17,27 @@ class UserInfo extends Component{
         userDeets: [],
         userDetails: ""
       };
-
+}
 //------------------------------------------------------------------------------
-    }
-    componentDidMount(){
+//componentDidMount allows everything in the function to be done in the backgeround
+  componentDidMount(){
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+          this.getData();
+      });
 
-        this.getData();
-
-    }
-
-// get data --------------------------------------------------------------------
+  }
+// unsubscribed to clear the memory to stop clogedge
+  componentWillUnmount (){
+    this.unsubscribe();
+}
+//---------get data ------------------------------------------------------------
+/**
+ GetData will find all the location information of all the coffee shops
+ Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
+ Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is obrained
+ if another response is returned a else if to the correct response will return
+ finally responseJson is then set to the correct format needed for this screen
+**/
     getData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
@@ -66,12 +78,8 @@ class UserInfo extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
-
-
-//------------------------------------------------------------------------------
-/***
-checks whether logged in.
-***/
+//-------------Checked Logged in------------------------------------------------
+// checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
@@ -79,13 +87,28 @@ checks whether logged in.
     }
   };
 
-  /***
-  the components of the file
-  ***/
-// add is loading
+  /**
+  Render function which allows customisation on the screen
+  starts off with conditional rendering to help if a slow network request to stop the user thinking the app has froze
+  once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
+  **/
   render(){
     console.log()
       const navigation = this.props.navigation; // declaring the navigation constant
+      if(this.state.isLoading){
+        return(
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#41393E'
+            }}>
+            <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+        </View>
+        );
+      }else{
       return(
         <SafeAreaView style={ styles.container }>
 
@@ -128,13 +151,13 @@ checks whether logged in.
                   onPress={() =>navigation.navigate('LogoutScreen')}>
                   <Text style={styles.buttonText}>Logout</Text>
               </TouchableOpacity>
-
-
-
         </SafeAreaView>
       );
     }
+  }
 }
+// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+
 const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

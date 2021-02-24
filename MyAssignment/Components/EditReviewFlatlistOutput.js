@@ -142,7 +142,20 @@ class EditReviewFlatlistOutput extends Component{
     const { location_id } = this.props.route.params.location_id;
     const { review_id } = this.props.route.params.review_id;
 
-
+    if(this.state.isLoading){
+      return(
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#41393E'
+          }}>
+          <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+      </View>
+      );
+    }else{
     return(
       <SafeAreaView style={ customStyle.container }>
         <Text style={ customStyle.titleText}> Your Review of {( location_name )}, {(location_town)}  </Text>
@@ -204,6 +217,7 @@ class EditReviewFlatlistOutput extends Component{
         />
       </SafeAreaView>
     );
+  }
   }
 }
 

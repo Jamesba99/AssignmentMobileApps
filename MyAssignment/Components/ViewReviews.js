@@ -36,10 +36,17 @@ class ViewReviews extends Component{
         offset: 0,
       }
     }
-
     componentDidMount(){
+      this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      });
       this.getData("http://10.0.2.2:3333/api/1.0.0/find");
 
+    }
+
+
+  // unsubscribed to clear the memory to stop clogedge
+    componentWillUnmount (){
+      this.unsubscribe();
     }
 
     getData = async (url) => {
@@ -71,10 +78,6 @@ class ViewReviews extends Component{
   }
     search = () => {
       let url = "http://10.0.2.2:3333/api/1.0.0/find?"
-
-    //  console.log("Q = ");
-    //  console.log("overall rating =");
-    //  console.log(this.state.overall_rating);
 
       if(this.state.q != ''){
         url += "q=" + this.state.q + "&";
@@ -118,8 +121,21 @@ class ViewReviews extends Component{
     render(){
       console.log(this.state.location_reviews);
       const navigation = this.props.navigation;
+      if(this.state.isLoading){
         return(
-
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#41393E'
+            }}>
+            <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+        </View>
+        );
+      }else{
+        return(
           <SafeAreaView  style={customStyle.container}>
             <View>
                 <Text style={customStyle.titleText}>View Reviews</Text>
@@ -202,6 +218,7 @@ class ViewReviews extends Component{
             </SafeAreaView>
         );
       }
+    }
 }
 //    this.props.navigation.navigate('ViewReviews', {screen: "FlatListOutput"}
 //https://www.youtube.com/watch?v=GPUiY0qJTiI

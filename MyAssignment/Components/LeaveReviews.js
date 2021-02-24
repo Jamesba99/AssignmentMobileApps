@@ -19,11 +19,14 @@ class ViewReviews extends Component{
     }
 
     componentDidMount(){
+      this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      });
       this.getData();
-
     }
-
+  
+  // unsubscribed to clear the memory to stop clogedge
     componentWillUnmount (){
+      this.unsubscribe();
     }
 
     getData = async () => {
@@ -83,6 +86,7 @@ class ViewReviews extends Component{
     console.log(token)
     .then((response) => {
         if(response.status === 201){
+          this.props.navigation.navigate('ViewReviews')
             ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
           return response.json()
           ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
@@ -108,7 +112,7 @@ class ViewReviews extends Component{
             listData: responseJson
           })
 
-            this.props.navigation.navigate('ViewReviews')
+
 
 
           console.log("review added", responseJson);

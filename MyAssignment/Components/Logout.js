@@ -7,6 +7,13 @@ class LogoutScreen extends Component {
   constructor(props){
       super(props);
   }
+  componentDidMount(){
+    this.unsubscribe = this.props.navigation.addListener('focus', () => {
+    });
+  }
+  componentWillUnmount(){
+    this.unsubscribe()
+  }
 
   logout = async () => {
     let token = await AsyncStorage.getItem('@session_token');

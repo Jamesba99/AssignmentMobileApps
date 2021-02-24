@@ -21,12 +21,16 @@ class FlatListOutput extends Component{
       }
     }
 //------------------------------------------------------------------------------
-    componentDidMount(){
-
-    }
+componentDidMount(){
+  this.unsubscribe = this.props.navigation.addListener('focus', () => {
+  });
+  
+}
+// unsubscribed to clear the memory to stop clogedge
 //------------------------------------------------------------------------------
-    componentWillUnmount(){
-    }
+componentWillUnmount (){
+  this.unsubscribe();
+}
     //----------------like a review ------------------------------------------------
         likeAReview = async () => {
           let token = await AsyncStorage.getItem('@session_token');

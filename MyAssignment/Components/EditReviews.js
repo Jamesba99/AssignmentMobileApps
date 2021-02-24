@@ -273,6 +273,20 @@ this will update the review and send the user back
   render(){
     console.log(this.state.reviews)
       const navigation = this.props.navigation; // declaring the navigation constant
+      if(this.state.isLoading){
+        return(
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#41393E'
+            }}>
+            <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+        </View>
+        );
+      }else{
       return(
         <SafeAreaView style={ customStyle.container }>
           <Text style={ customStyle.titleText }> My Reviews </Text>
@@ -386,6 +400,7 @@ this will update the review and send the user back
           </TouchableOpacity>
         </SafeAreaView>
       );
+    }
     }
 }
 const customStyle = StyleSheet.create({ // styles the text on the screen
