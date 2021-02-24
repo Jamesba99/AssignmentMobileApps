@@ -30,18 +30,16 @@ class UserInfo extends Component{
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
 
-      return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+ (id), {
+      return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+(id), {
           method: 'get',
           headers:{
             "X-Authorization": token
           },
       })
-
-
       .then((response)=> {
         if(response.status === 200){
           return response.json()
-          console.log(response)
+          console.log()
           }else if(response.status === 400){
             throw 'Bad Request';
           }else if(response.status === 401){
@@ -54,16 +52,16 @@ class UserInfo extends Component{
           }
       })
       .then((responseJson) =>{
-        console.log(responseJson);
         this.setState({
           isLoading: false,
           userDeets: responseJson,
           userDetails: responseJson,
-          favourite_locations: responseJson
+          favourite_locations: responseJson.favourite_locations
 
         })
+        console.log();
       })
-      .catch((error)=> {
+      .catch((error) => {
         console.log(error);
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
@@ -86,42 +84,53 @@ checks whether logged in.
   ***/
 // add is loading
   render(){
-    console.log(favourite_locations)
+    console.log()
       const navigation = this.props.navigation; // declaring the navigation constant
       return(
         <SafeAreaView style={ styles.container }>
-          <ScrollView>
+
             <Text style={ styles.titleText }> My Account </Text>
             <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
             <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
             <Text style={ styles.resultsText }> Email: { this.state.userDetails.email } </Text>
-            <Text style={ styles.resultsText }> Favourite Location(s): { this.state.favourite_locations } </Text>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('EditReviews')}>
-                <Text style={styles.buttonText}>See your Reviews</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('EditUSerDetails')}>
-                <Text style={styles.buttonText}>Update Account Details</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('FavouriteAlocation')}>
-                <Text style={styles.buttonText}>Edit Favorite Locations</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('HomeScreen')}>
-                <Text style={styles.buttonText}>Home</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.button1}
-                onPress={() =>navigation.navigate('LogoutScreen')}>
-                <Text style={styles.buttonText}>Logout</Text>
-            </TouchableOpacity>
-          </ScrollView>
+            <Text style={ styles.resultsText }> Favourite Locations: </Text>
+            <FlatList
+              data={ this.state.favourite_locations }
+              renderItem={({item}) => (
+                <View style={ styles.ratingTitleText }>
+                  <Text style={ styles.buttonText }> { item.location_name }, { item.location_town}</Text>
+                </View>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              />
+              <TouchableOpacity
+                  style={styles.button1}
+                  onPress={() =>navigation.navigate('EditReviews')}>
+                  <Text style={styles.buttonText}>See your Reviews</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.button1}
+                  onPress={() =>navigation.navigate('EditUSerDetails')}>
+                  <Text style={styles.buttonText}>Update Account Details</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.button1}
+                  onPress={() =>navigation.navigate('FavouriteAlocation')}>
+                  <Text style={styles.buttonText}>Edit Favorite Locations</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.button1}
+                  onPress={() =>navigation.navigate('HomeScreen')}>
+                  <Text style={styles.buttonText}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.button1}
+                  onPress={() =>navigation.navigate('LogoutScreen')}>
+                  <Text style={styles.buttonText}>Logout</Text>
+              </TouchableOpacity>
+
+
+
         </SafeAreaView>
       );
     }
@@ -140,20 +149,20 @@ const styles = StyleSheet.create({ // styles the text on the screen
   },
   buttonText:{
     color: '#C7E8F3',
-    fontSize: 25,
+    fontSize: 20,
     fontWeight:'bold',
     justifyContent: 'center',
     alignItems: 'center'
   },
   button1:{
-    height: 1,
+    height: 0.001,
     width: '100%',
-    padding: 50,
+    padding: 30,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:2
+
   },
   stretch: {
     width: 150,

@@ -41,7 +41,8 @@ class FavouriteAlocation extends Component{
 // get data --------------------------------------------------------------------
   getData = async () => {
     let token = await AsyncStorage.getItem('@session_token');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/find", {
+    let id = await AsyncStorage.getItem('id');
+    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+(id), {
         method: 'get',
         headers: {
           "X-Authorization": token
@@ -66,8 +67,9 @@ class FavouriteAlocation extends Component{
       console.log(responseJson);
       this.setState({
         isLoading: false,
-        listData: responseJson
-      })
+        listData: responseJson,
+        favourite_locations: responseJson.favourite_locations
+      });
     })
     .catch((error)=> {
       console.log(error);
@@ -89,7 +91,7 @@ class FavouriteAlocation extends Component{
       this.props.navigation.navigate("UserInfo")
       if(response.status === 200){
         ToastAndroid.show("location has been Favourited ",ToastAndroid.SHORT);
-        return response.json()
+        return response
       }else if(response.status === 400){
           throw 'Bad Request';
       }else if(response.status === 401){
@@ -107,10 +109,9 @@ class FavouriteAlocation extends Component{
       ToastAndroid.show("Location Favourited ",ToastAndroid.SHORT);
       this.setState({
           isLoading: false,
-          favourite_locations: responseJson
+          favourite_locations: response
       })
       console.log(favourite_locations)
-
     })
     .catch((error) => {
       console.log(error);
@@ -128,7 +129,7 @@ class FavouriteAlocation extends Component{
       .then((response) => {
         this.props.navigation.navigate("UserInfo")
         if(response.status === 200){
-        ToastAndroid.show("Review Deleted",ToastAndroid.SHORT);
+        ToastAndroid.show("Removed Favourite",ToastAndroid.SHORT);
         }else if(response.status === 400){
             throw 'Bad Request';
         }else if(response.status === 401){
@@ -149,7 +150,6 @@ class FavouriteAlocation extends Component{
         }
     })
   }
-
 
 /***
 checks whether logged in.
@@ -180,7 +180,7 @@ this will update the review and send the user back
           <Text style={ customStyle.titleText }> Location </Text>
           <Text style={ customStyle.titleText }> ---------------- </Text>
           <FlatList
-            data={ this.state.listData }
+            data={ this.state.favourite_locations }
             renderItem={({item}) => (
               <View style={ customStyle.ratingTitleText }>
                 <Text style={ customStyle.buttonText }> { item.location_name }, { item.location_town}</Text>

@@ -201,8 +201,7 @@ class EditReviews extends Component{
             }else{
               throw 'something went wrong';
             }
-            })
-
+          })
             console.log(response)
             .then((response) => {
               ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
