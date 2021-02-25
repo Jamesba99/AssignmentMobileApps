@@ -47,7 +47,7 @@ class ViewPhotos extends Component{
               throw '401 Unauthorized';
               console.log(response);
           }else if (response.status === 404){
-              throw 'Not found';
+              throw 'No Photo was found';
           }else if (response.status === 500){
               throw 'server error';
           }
@@ -66,8 +66,38 @@ class ViewPhotos extends Component{
     }
 //-------------------delete Photo-----------------------------------------------
     deletePhoto = async () => {
-
+      let token = await AsyncStorage.getItem('@session_token');
+      return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/photo", {
+        method: 'delete',
+          headers:{
+            "X-Authorization": token
+          },
+        })
+        .then((response) => {
+          this.props.navigation.navigate("EditReviews")
+          if(response.status === 200){
+          ToastAndroid.show("Photo Deleted",ToastAndroid.SHORT);
+          }else if(response.status === 400){
+              throw 'Bad Request';
+          }else if(response.status === 401){
+              throw '401 Unauthorized';
+              console.log(response);
+          }else if(response.status === 403){
+              throw '403 forbidden'
+              console.log(response);
+          }else if (response.status === 404){
+              throw 'Not found';
+              console.log(response);
+          }else if (response.status === 500){
+              throw 'server error';
+              console.log(response);
+          }else{
+            throw 'something went wrong';
+            console.log(response);
+          }
+      })
     }
+
 
 //------------------------------------------------------------------------------
 /***
@@ -108,6 +138,8 @@ console.log(this.state.reviews)
 **/
   render(){
 
+    const { review_id } = this.props.route.params;
+    const { location_id} = this.props.route.params;
     const { location_town } = this.props.route.params;
     const { location_name } = this.props.route.params;
     const { overall_rating }= this.props.route.params;
@@ -143,8 +175,8 @@ console.log(this.state.reviews)
             onPress={() => {
               this.deletePhoto()
               this.setState({
-                loc_id: item.location.location_id,
-                rev_id: item.review.review_id
+                loc_id: location_id,
+                rev_id: review_id
               })
             }}>
             <Text style={ customStyle.touchOpacityText}> Delete This Photo!</Text>
@@ -165,7 +197,7 @@ console.log(this.state.reviews)
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
-    )
+    );
   }
 }
 const customStyle = StyleSheet.create({ // styles the text on the screen
@@ -200,7 +232,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 10,
-  
+    borderColor: '#8E4162',
   },
   stretch: {
     width: 150,
@@ -223,7 +255,6 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     justifyContent: 'center',
     padding: 1,
-    backgroundColor: '#BF9ACA'
   },
   touchOpacityEditInfo: { // styles the text colour and style
     fontSize: 20,
