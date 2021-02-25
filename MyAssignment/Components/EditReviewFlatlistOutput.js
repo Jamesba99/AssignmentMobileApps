@@ -2,21 +2,17 @@ import React, { Component } from 'react';
 import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar, Image} from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//All import variables for this screen
 
 import EditReviews from './EditReviews';
+// imports the contents of editReviews to help display props and data from the previous screen
 
 
-
-
-/**
-TO DO
-- complete the ratings page
--format the page
-https://www.youtube.com/watch?v=GPUiY0qJTiI
-// make a stack nav page that appears on the next with results
-***/
-
+// the class acts a function to recieve props for the screen
+// this screen will be the screen that allows the user to view the reviews in depth
 class EditReviewFlatlistOutput extends Component{
+
+  //builds the props contructor while also declaring the variables
     constructor(props){
       super(props);
       this.state = {
@@ -33,15 +29,27 @@ class EditReviewFlatlistOutput extends Component{
         review_body:""
       }
     }
+//------------------------------------------------------------------------------
+/**
+componentDidMount allows everything in the function to be done in the background
+this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+- sure they don't get access to this screen while not logged in
+**/
     componentDidMount(){
+      this.unsubscribe = this.props.navigation.addListener('focus', () => {
+        this.checkLoggedIn();
+        });
 
-
-
-    }
-
-    componentWillUnmount(){
-    }
+      }
+// unsubscribed to clear the memory to stop clogedge by calling the unsubscribe funtion in component did mount
+      componentWillUnmount (){
+        this.unsubscribe();
+      }
 //-------------------------------------update review----------------------------
+/**
+UpdateUserReview is a funtion that will update the user when the correct button and credentials are entered
+location_id and review_id is transfered from edit reviews
+**/
     updateUserReview = async () => {
       const { location_id } = this.props.route.params.location_id;
       const { review_id } = this.props.route.params.review_id;

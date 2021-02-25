@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import React, { Component } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+//all screen imports - allows navigation between screens
 import HomeScreen from './Components/DefaultHomeScreen';
 import Register from './Components/Register';
 import Login from './Components/Login';
@@ -18,10 +18,12 @@ import EditReviews from './Components/EditReviews';
 import FavouriteAlocation from './Components/FavouriteAlocation'
 import CameraScreen from "./Components/CameraScreen"
 import ViewPhotos from "./Components/ViewPhotos"
-//import AfterLoginScreen from './Components/AfterLoginScreen';
-//import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
+
 /**
-Stack screen can then add options which will change what the top panel will say
+Drawer navigation is used because it allows fast changing of screens
+while also allowing stack screen caperbilities bringing the best of both navigation to the app
+'options={' allows a different name to appear on the drawer rather than the name of the class
+export app will then export whats on this page onto the emulator
 **/
 const Drawer = createDrawerNavigator();
 
@@ -31,7 +33,7 @@ class App extends Component{
 
       <NavigationContainer>
         <Drawer.Navigator>
-            <Drawer.Screen  name="LoginScreen" component={Login} options={{headerShown: false}} />
+            <Drawer.Screen name="LoginScreen" component={Login} options={{headerShown: false}} />
             <Drawer.Screen name="HomeScreen" component={HomeScreen}options={{title:"Home Screen!"}} />
             <Drawer.Screen name="Register" component={Register} options={{title:"Register for an account!"}} />
             <Drawer.Screen name="LogoutScreen" component={LogoutScreen}options={{title:"Logout!"}}/>

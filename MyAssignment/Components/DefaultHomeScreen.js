@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SeeLocalCoffee from './SeeLocalCoffee';
-//All imports for this screen
+//All import variables for this screen
+
+// the class acts a function to recieve props for the screen
+// this is the homescreen for the app - will be shown after logging in
 class HomeScreen extends Component{
+
 //builds the props contructor while also declaring the variables
   constructor(props){
     super(props);
@@ -13,10 +17,16 @@ class HomeScreen extends Component{
     }
   }
 //------------------------------------------------------------------------------
-//componentDidMount allows everything in the function to be done in the backgeround
+/** 
+componentDidMount allows everything in the function to be done in the background
+this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+- sure they don't get access to this screen while not logged in
+**/
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.checkLoggedIn();
     });
+
     this.getData();
   }
 // unsubscribed to clear the memory to stop clogedge
@@ -42,8 +52,7 @@ class HomeScreen extends Component{
           if(response.status === 200){
               return response.json()
           }else if(response.status === 401){
-              ToastAndroid.show("you are not logged in" ,ToastAndroid.SHORT);
-              this.props.navigation.navigate("Login");
+
           }else{
               throw 'Something went wrong';
           }
@@ -66,6 +75,7 @@ class HomeScreen extends Component{
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
         this.props.navigation.navigate('LoginScreen');
+        ToastAndroid.show("You are not logged in!",ToastAndroid.SHORT);
     }
   };
   /**
@@ -124,14 +134,14 @@ class HomeScreen extends Component{
   }
 }
 // style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
-const customStyle = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({
   container:{
     flex: 1,
     alignItems: 'center',
     //justifyContent: 'center',
     backgroundColor: '#41393E'
   },
-  titleText: { // styles the text colour and style
+  titleText: {
     color: '#C7E8F3',
     fontSize: 50,
     fontWeight:"bold"
