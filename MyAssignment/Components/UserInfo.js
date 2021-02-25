@@ -51,7 +51,6 @@ class UserInfo extends Component{
       .then((response)=> {
         if(response.status === 200){
           return response.json()
-          console.log()
           }else if(response.status === 400){
             throw 'Bad Request';
           }else if(response.status === 401){
@@ -111,7 +110,6 @@ class UserInfo extends Component{
       }else{
       return(
         <SafeAreaView style={ styles.container }>
-
             <Text style={ styles.titleText }> My Account </Text>
             <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
             <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>

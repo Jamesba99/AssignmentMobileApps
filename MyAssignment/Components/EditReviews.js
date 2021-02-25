@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,TextInput} from "react-native";
+import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,TextInput, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RNCamera } from 'react-native-camera';
 
@@ -200,7 +200,6 @@ class EditReviews extends Component{
                 isLoading: false,
                 like: response
               })
-
             })
             .catch((error) => {
                 console.log(error);
@@ -288,14 +287,66 @@ this will update the review and send the user back
             renderItem={({item}) => (
               <View style={ customStyle.ratingTitleText }>
                 <Text style={ customStyle.buttonText }>-------------------------------------------------</Text>
-                <Text style={ customStyle.buttonText }> { item.review.review_id} </Text>
-                <Text style={ customStyle.buttonText }> { item.location.location_name }, { item.location.location_town}</Text>
-                <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
-                <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
-                <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
-                <Text style={ customStyle.buttonText }> Clenliness Rating: { item.review.clenliness_rating }</Text>
-                <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
-                <Text style={ customStyle.buttonText }> Number of likes: { item.review.likes }</Text>
+                  <Text style={ customStyle.buttonText }> { item.review.review_id} </Text>
+                  <Text style={ customStyle.buttonText }> { item.location.location_name }, { item.location.location_town}</Text>
+                  <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Clenliness Rating: { item.review.clenliness_rating }</Text>
+                  <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
+                  <Text style={ customStyle.buttonText }> Number of likes: { item.review.likes }</Text>
+                  <Text style={ customStyle.buttonText }> Photo: { item.location.photo_path }</Text>
+                  <TouchableOpacity
+                    style={customStyle.like}
+                    onPress={() => {
+                        this.likeAReview()
+                        this.setState({
+                          loc_id: item.location.location_id,
+                          rev_id: item.review.review_id
+                        })
+                    }}>
+                    <Text  style={ customStyle.likeFont}> Like!</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.unLike}
+                    onPress={() => {
+                      this.unlikeAReview()
+                      this.setState({
+                        loc_id: item.location.location_id,
+                        rev_id: item.review.review_id
+                      })
+                    }}>
+                    <Text style={ customStyle.unlikeFont}> Unlike!</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.button1}
+                    onPress={() =>{
+                        this.props.navigation.navigate("CameraScreen", {
+                          review_id: item.review.review_id,
+                          location_id: item.location.location_id
+                        })
+                      }}>
+                    <Text style={ customStyle.touchOpacityEditInfo}> Add A Photo!</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.button1}
+                    onPress={() =>{
+                      this.props.navigation.navigate("ViewPhotos",{
+                        location_town: item.location.location_town,
+                        location_name: item.location.location_name,
+                        review_id: item.review.review_id,
+                        location_id: item.location.location_id,
+                        overall_rating: item.review.overall_rating ,
+                        price_rating: item.review.price_rating ,
+                        quality_rating: item.review.quality_rating ,
+                        clenliness_rating: item.review.clenliness_rating ,
+                        review_body: item.review.review_body
+                        })
+                      }}>
+                    <Text style={ customStyle.touchOpacityEditInfo}> View Photo for this Review</Text>
+                  </TouchableOpacity>
+                  <Text style={ customStyle.buttonText }>-------------------------------------------------</Text>
+                  <Text style={ customStyle.buttonText }>Not Satisfied? Update this Review!</Text>
                   <TextInput
                       placeholder="Overall Rating"
                       onChangeText={(overall_rating) => this.setState({overall_rating})}
@@ -331,55 +382,6 @@ this will update the review and send the user back
                       backgroundColor="#C7E8F3"
                       style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
-
-                  <TouchableOpacity
-                    style={customStyle.like}
-                    onPress={() => {
-                        this.likeAReview()
-                        this.setState({
-                          loc_id: item.location.location_id,
-                          rev_id: item.review.review_id
-                        })
-                    }}>
-                    <Text  style={ customStyle.likeFont}> Like!</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={customStyle.unLike}
-                    onPress={() => {
-                      this.unlikeAReview()
-                      this.setState({
-                        loc_id: item.location.location_id,
-                        rev_id: item.review.review_id
-                      })
-                    }}>
-                    <Text style={ customStyle.unlikeFont}> Unlike!</Text>
-
-
-
-
-
-
-
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={customStyle.button1}
-                    onPress={() =>{
-                        this.props.navigation.navigate("CameraScreen", {
-                          review_id: item.review.review_id,
-                          location_id: item.location.location_id
-                        })
-                      }}>
-                    <Text style={ customStyle.touchOpacityEditInfo}> Go to Camera!</Text>
-                  </TouchableOpacity>
-
-
-
-
-
-
-
-
-
                   <TouchableOpacity
                     style={customStyle.button1}
                     onPress={() => {

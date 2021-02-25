@@ -23,7 +23,7 @@ class ViewReviews extends Component{
       });
       this.getData();
     }
-  
+
   // unsubscribed to clear the memory to stop clogedge
     componentWillUnmount (){
       this.unsubscribe();
@@ -55,6 +55,8 @@ class ViewReviews extends Component{
       .then((responseJson) =>{
         console.log(responseJson);
         this.setState({
+
+          
           isLoading: false,
           listData: responseJson
         })

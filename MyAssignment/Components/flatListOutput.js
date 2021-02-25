@@ -110,7 +110,7 @@ componentWillUnmount (){
 //------------------------------------------------------------------------------
   render(){
     const navigation = this.props.navigation;
-    const {location_reviews} = this.props.route.params
+    const {location_reviews} = this.props.route.params;
     const {location_name} = this.props.route.params;
     const {location_town} = this.props.route.params;
     const {avg_overall_rating}= this.props.route.params;

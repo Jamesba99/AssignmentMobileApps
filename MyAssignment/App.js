@@ -17,6 +17,7 @@ import EditUSerDetails from './Components/EditUSerDetails';
 import EditReviews from './Components/EditReviews';
 import FavouriteAlocation from './Components/FavouriteAlocation'
 import CameraScreen from "./Components/CameraScreen"
+import ViewPhotos from "./Components/ViewPhotos"
 //import AfterLoginScreen from './Components/AfterLoginScreen';
 //import CoffeeRewviewHomePage from './Components/InApp/CoffeeRewviewHomePage'
 /**
@@ -43,6 +44,7 @@ class App extends Component{
             <Drawer.Screen name="EditReviews" component={EditReviews}options={{title:"Remove this screen from being shown"}}/>
             <Drawer.Screen name="FavouriteAlocation" component={FavouriteAlocation}options={{title:"Remove this screen from being shown"}}/>
             <Drawer.Screen name="CameraScreen" component={CameraScreen}options={{title:"Remove this screen from being shown"}}/>
+            <Drawer.Screen name="ViewPhotos" component={ViewPhotos}options={{title:"Remove this screen from being shown"}}/>
         </Drawer.Navigator>
       </NavigationContainer>
     );

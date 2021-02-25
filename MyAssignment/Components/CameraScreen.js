@@ -11,8 +11,6 @@ class CameraScreen extends Component{
 
       this.state = {
         isLoading: true,
-        loc_id: '',
-        rev_id: ''
       };
 
 //------------------------------------------------------------------------------
@@ -20,11 +18,17 @@ class CameraScreen extends Component{
     componentDidMount(){
         this.checkLoggedIn();
     }
-/**
 
+//----------------post A photo--------------------------------------------------
+/**
+PostPhoto will send the recently taken photo to the server
+Firstly makes the constants location_id and review_id by bringing them from the previous screens props
+The authentication token is pulled from async storage to show the server that the user is logged in
+The post request is sent with a content type image/jpeg to tell the server that an image is being sent
+Then there is responses with 200 meaning the photo has succsessfully been posted
+With other responses being caught and printed to the user to keep them infomormed with whats going on
 **/
-//-----------------------------------------------------------------------------
-  sendToServer = async (data) => {
+  postPhoto = async (data) => {
     let token = await AsyncStorage.getItem('@session_token');
     const { location_id } = this.props.route.params;
     const { review_id } = this.props.route.params;
@@ -61,17 +65,21 @@ class CameraScreen extends Component{
 
   }
 //-----------------take Picture-------------------------------------------------
+/**
+when the button is pressed the take picture is function is called
+Sets to constants to set quality and prepare the data of the photo
+once the data and options has a value in it postPhoto function is called the data of the photo is passed across
+**/
   takePicture = async() => {
     if(this.camera){
 
       const options = { quality:0.5, base64:true }
       const data = await this.camera.takePictureAsync(options)
 
-      this.sendToServer(data);
+      this.postPhoto(data);
       console.log(data.uri);
     }
   }
-
 
 //------------------------------------------------------------------------------
 /***
@@ -86,27 +94,7 @@ checks whether logged in.
 
   /***
   the components of the file
-  ***/
-// add is loading
-
-
-/**
-console.log(this.state.reviews)
-  const navigation = this.props.navigation; // declaring the navigation constant
-  if(this.state.isLoading){
-    return(
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#41393E'
-        }}>
-        <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
-    </View>
-);
-**/
+  **/
   render(){
 
       return(
