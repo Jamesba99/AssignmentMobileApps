@@ -1,16 +1,7 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  Button,
-  ToastAndroid,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  TextInput
-} from "react-native";
+import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,TextInput} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RNCamera } from 'react-native-camera';
 
 class EditReviews extends Component{
     constructor(props){
@@ -25,7 +16,7 @@ class EditReviews extends Component{
         overall_rating: "",
         price_rating: "",
         quality_rating:"",
-        cleniness_rating:"",
+        clenliness_rating:"",
         review_body:"",
         location_id: "",
         like: ""
@@ -98,7 +89,7 @@ class EditReviews extends Component{
           overall_rating: parseInt(this.state.overall_rating),
           price_rating: parseInt(this.state.price_rating),
           quality_rating: parseInt(this.state.quality_rating),
-          cleniness_rating: parseInt(this.state.cleniness_rating),
+          clenliness_rating: parseInt(this.state.clenliness_rating),
           review_body: this.state.review_body
         }
       console.log(sendVariables);
@@ -249,6 +240,8 @@ class EditReviews extends Component{
         }
       })
     }
+
+
 //------------------------------------------------------------------------------
 /***
 checks whether logged in.
@@ -300,7 +293,7 @@ this will update the review and send the user back
                 <Text style={ customStyle.buttonText }> Overall Rating: { item.review.overall_rating }</Text>
                 <Text style={ customStyle.buttonText }> Price Rating: { item.review.price_rating }</Text>
                 <Text style={ customStyle.buttonText }> Quality Rating: { item.review.quality_rating }</Text>
-                <Text style={ customStyle.buttonText }> Cleniness Rating: { item.review.cleniness_rating }</Text>
+                <Text style={ customStyle.buttonText }> Clenliness Rating: { item.review.clenliness_rating }</Text>
                 <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
                 <Text style={ customStyle.buttonText }> Number of likes: { item.review.likes }</Text>
                   <TextInput
@@ -325,9 +318,9 @@ this will update the review and send the user back
                       style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
                   />
                   <TextInput
-                      placeholder="Cleniness Rating"
+                      placeholder="clenliness Rating"
                       onChangeText={(clenliness_rating) => this.setState({clenliness_rating})}
-                      value={ this.state.cleniness_rating}
+                      value={ this.state.clenliness_rating}
                       backgroundColor="#C7E8F3"
                       style={{padding:5, borderWidth:1, margin:5 , width: '100%'}}
                   />
@@ -360,7 +353,32 @@ this will update the review and send the user back
                       })
                     }}>
                     <Text style={ customStyle.unlikeFont}> Unlike!</Text>
+
+
+
+
+
+
+
                   </TouchableOpacity>
+                  <TouchableOpacity
+                    style={customStyle.button1}
+                    onPress={() =>{
+                        this.props.navigation.navigate("CameraScreen", {
+                          review_id: item.review.review_id,
+                          location_id: item.location.location_id
+                        })
+                      }}>
+                    <Text style={ customStyle.touchOpacityEditInfo}> Go to Camera!</Text>
+                  </TouchableOpacity>
+
+
+
+
+
+
+
+
 
                   <TouchableOpacity
                     style={customStyle.button1}
@@ -502,6 +520,11 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     justifyContent: 'center',
     padding: 1,
   },
+  preview: {
+    flex:1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  }
 });
 
 export default EditReviews;

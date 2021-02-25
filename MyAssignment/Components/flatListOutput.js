@@ -4,7 +4,7 @@ import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating } from 'react-native-elements';
 
-import ViewReviews from './ViewReviews'
+import ViewReviews from './ViewReviews';
 
 
 class FlatListOutput extends Component{
@@ -24,7 +24,7 @@ class FlatListOutput extends Component{
 componentDidMount(){
   this.unsubscribe = this.props.navigation.addListener('focus', () => {
   });
-  
+
 }
 // unsubscribed to clear the memory to stop clogedge
 //------------------------------------------------------------------------------
