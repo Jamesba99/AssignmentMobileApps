@@ -6,7 +6,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class LoginScreen extends Component {
     constructor(props){
         super(props);
-
         this.state={
             email: "",
             password: "",
