@@ -41,7 +41,7 @@ this.checkedloggedIn will call the function check logged in as the user opens th
     }
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
-          this.getData();
+          this.getUserData();
       });
         this.checkLoggedIn();
     }
@@ -52,13 +52,13 @@ this.checkedloggedIn will call the function check logged in as the user opens th
     this.unsubscribe();
   }
 /**
-GetData will find all the reviews by the user
+getUserData will find all the reviews by the user
 ID and Token is pulled from async storage to help complete the get network request and prove that the user is logged in
 Once the data has been pulled from /user/id the response is transferred into JSON as long as there is a 200 response
 if another response is returned a else if to the correct response will return with a toast explaining why
 finally responseJson is then set to the required format and and applied to a variable in state
 **/
-    getData = async () => {
+    getUserData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
 

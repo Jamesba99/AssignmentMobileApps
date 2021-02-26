@@ -19,6 +19,7 @@ class EditUSerDetails extends Component{
         userEmail: "",
         firstName: "",
         lastName: "",
+        password: ""
 
       };
     }
@@ -27,7 +28,8 @@ componentDidMount allows everything in the function to be done in the background
 **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
-          this.getData();
+          this.getUserData();
+          this.checkedLoggedIn()
     });
 
     }
@@ -36,14 +38,14 @@ componentDidMount allows everything in the function to be done in the background
     this.unsubscribe();
     }
 /**
-GetData will get all the user information
+getUserData will get all the user information
 ID and Token is pulled from async storage to help complete the get network request and prove that the user is logged in
 Once the data has been pulled from /user/id the response is transferred into JSON as long as there is a 200 response
 If another response is returned (400,401,404,500) a else if to the correct response will return with a toast explaining why
 Finally responseJson is then set to the required format and and applied to a variable in state
 Any errors are toasted to the user
 **/
-    getData = async () => {
+    getUserData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
 
@@ -75,7 +77,8 @@ Any errors are toasted to the user
           isLoading:false,
           firstName: responseJson.first_name,
           lastName: responseJson.last_name,
-          userEmail: responseJson.email
+          userEmail: responseJson.email,
+          password: responseJson.password
         });
         console.log(this.state.firstName);
         console.log(this.state.lastName);
@@ -100,7 +103,8 @@ With other responses (400,401,404,500) being caught and printed to the user to k
     let sendVariables = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      email: this.state.email
+      email: this.state.email,
+      password: this.state.password
     }
 
     console.log(sendVariables)
@@ -153,6 +157,13 @@ checks if the user is logged in if not will not allow the user to use drawer nav
         this.props.navigation.navigate('LoginScreen');
     }
   };
+  checkLoggedIn = async () => {
+  const value = await AsyncStorage.getItem('@session_token');
+  if (value == null) {
+      this.props.navigation.navigate('LoginScreen');
+      ToastAndroid.show("You are not logged in!",ToastAndroid.SHORT);
+  }
+};
 /**
 Render function which allows customisation on the screen
 once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
@@ -175,11 +186,11 @@ When the correct button is pressed the function which is part of that button wil
         );
       }else{
       return(
-        <SafeAreaView style={ styles.container }>
+        <SafeAreaView style={ customStyle.container }>
           <View>
-            <Text style={ styles.titleText }> My Account </Text>
-            <Text style={ styles.resultsText }> Forename: {this.state.firstName} | Surname: {this.state.lastName} </Text>
-            <Text style={ styles.resultsText }> Email: {this.state.userEmail} </Text>
+            <Text style={ customStyle.titleText }> My Account </Text>
+            <Text style={ customStyle.resultsText }> Forename: {this.state.firstName} | Surname: {this.state.lastName} </Text>
+            <Text style={ customStyle.resultsText }> Email: {this.state.userEmail} </Text>
 
             <TextInput
                 placeholder="Enter your first name"
@@ -202,20 +213,28 @@ When the correct button is pressed the function which is part of that button wil
                 value={this.state.email}
                 style={{padding:5, borderWidth:1, margin:5}}
             />
+            <TextInput
+                placeholder="Enter a Password"
+                onChangeText={(password) => this.setState ({password})}
+                backgroundColor="#C7E8F3"
+                secureTextEntry
+                value={this.state.password}
+                style={{padding:5, borderWidth:1, margin:5}}
+            />
             <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={()  =>this.updateUserDetails() }>
-                <Text style={styles.buttonText }> Update User Details </Text>
+                <Text style={customStyle.buttonText }> Update User Details </Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={() =>navigation.navigate('HomeScreen')}>
-                <Text style={styles.buttonText}>Home</Text>
+                <Text style={customStyle.buttonText}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={styles.button1}
+                style={customStyle.button1}
                 onPress={() =>navigation.goBack()}>
-                <Text style={styles.buttonText}>Go Back</Text>
+                <Text style={customStyle.buttonText}>Go Back</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -226,7 +245,7 @@ When the correct button is pressed the function which is part of that button wil
 /**
 style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 **/
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

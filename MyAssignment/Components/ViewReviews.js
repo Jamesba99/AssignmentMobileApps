@@ -67,10 +67,18 @@ class ViewReviews extends Component{
     .then((response) => {
       if (response.status = 200) {
         return response.json();
-      } else {
-        throw 'Error Please add the rest';
+      }else if(response.status === 400){
+        throw 'Bad Request';
+      }else if(response.status === 401){
+          throw '401 Unauthorized';
+          console.log(response);
+      }else if (response.status === 404){
+          throw 'Not found';
+      }else if (response.status === 500){
+          throw 'server error';
       }
     })
+
     .then((responseJson) => {
       this.setState({
         isLoading: false,
@@ -84,15 +92,14 @@ class ViewReviews extends Component{
       ToastAndroid.show(err,ToastAndroid.SHORT);
     })
   }
-
   /**
-  The search function sets the url set a custom query in the network request
+  The querySearch function sets the url set a custom query in the network request
   starts off with setting q being the query additon to the network request
   then a series of if statements run saying if the star rating (that comes later) is set higher than one it will only-
   -show results with states set number or higher
   with the use of '&' which chains allowing more search criteria
   **/
-    search = () => {
+    querySearch = () => {
       let url = "http://10.0.2.2:3333/api/1.0.0/find?"
 
       if(this.state.q != ''){
@@ -134,7 +141,7 @@ class ViewReviews extends Component{
       starts off with conditional rendering to help if a slow network request to stop the user thinking the app has froze
       once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
       Also the use of AirB&b stars allow a custom prop that could be used instead of inputting an a number in a text field
-      then a search button which initiates the search function
+      then a search button which initiates the querySearch function
       **/
     render(){
       console.log(this.state.location_reviews);
@@ -193,7 +200,7 @@ class ViewReviews extends Component{
                 />
                   <TouchableOpacity
                       style={customStyle.button1}
-                      onPress={() =>this.search()}>
+                      onPress={() =>this.querySearch()}>
                       <Text style={customStyle.touchOpacityText}>Search</Text>
                   </TouchableOpacity>
                   <FlatList

@@ -33,7 +33,7 @@ class LogoutScreen extends Component {
   If they match a 200 response is returned the user has succesfully logged out and sent to the login screen
   If another response is returned the error is caught and a toast is displayed why
   **/
-  logout = async () => {
+  logoutUser = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     await AsyncStorage.removeItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/user/logout",{
@@ -70,7 +70,7 @@ class LogoutScreen extends Component {
           <Text style={ customStyle.titleText }> Logout? </Text>
             <TouchableOpacity
               style={customStyle.button1}
-              onPress={() => this.logout()}
+              onPress={() => this.logoutUser()}
               >
               <Text style={customStyle.buttonText}>Logout!</Text>
             </TouchableOpacity>

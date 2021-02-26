@@ -37,7 +37,7 @@ class ViewReviews extends Component{
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
       });
-      this.getData();
+      this.getFindInformation();
     }
 
   // unsubscribed to clear the memory to stop clogage
@@ -45,12 +45,12 @@ class ViewReviews extends Component{
       this.unsubscribe();
     }
 /**
-GetData will find all the reviews by the user
+getFindInformation will find all the reviews by the user
 Once the data has been pulled from /find the response is transferred into JSON as long as there is a 200 response
 If another response is returned a else if to the corrasponding response will return with a toast explaining why
 Finally responseJson is then set to the required format and and applied to a variable in state
 **/
-    getData = async () => {
+    getFindInformation = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/find", {
           method: 'get',

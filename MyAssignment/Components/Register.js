@@ -20,14 +20,14 @@ class Register extends Component{
         }
     }
 /**
-Signup function is made with an arrow function pointing towards the server
+userSignup function is made with an arrow function pointing towards the server
 initiating the post method
 Then if the server responds with 200 meaning the post review has succsessfully been liked sending the user back to userInfopage-
 -while being toasted that the like has been added
 With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
 
 **/
-    signup = () => {
+    userSignup = () => {
       return fetch("http://10.0.2.2:3333/api/1.0.0/user",{
           method: 'post',
           headers:{
@@ -95,9 +95,9 @@ also makes sure that the fields are not empty
     render(){
           const navigation = this.props.navigation;
           return (
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={customStyles.container}>
               <ScrollView>
-                  <Text style={styles.text}>RegisterScreen</Text>
+                  <Text style={customStyles.text}>RegisterScreen</Text>
                   <TextInput
                       placeholder="Enter your first name"
                       onChangeText={(first_name) => this.setState ({first_name})}
@@ -106,7 +106,7 @@ also makes sure that the fields are not empty
                       value={this.state.first_name}
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
-                  <Text style={styles.errorMessage}> {this.state.first_nameError}</Text>
+                  <Text style={customStyles.errorMessage}> {this.state.first_nameError}</Text>
 
                   <TextInput
                       placeholder="Enter your second name"
@@ -124,7 +124,7 @@ also makes sure that the fields are not empty
                       value={this.state.email}
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
-                  <Text style={styles.errorMessage}> {this.state.EmailError}</Text>
+                  <Text style={customStyles.errorMessage}> {this.state.EmailError}</Text>
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState ({password})}
@@ -134,11 +134,11 @@ also makes sure that the fields are not empty
                     //secureTextEntry
                       style={{padding:5, borderWidth:1, margin:5}}
                   />
-                  <Text style={styles.errorMessage}> {this.state.error}</Text>
+                  <Text style={customStyles.errorMessage}> {this.state.error}</Text>
                   <TouchableOpacity
-                      style={styles.button1}
-                      onPress={()=> this.signup()}>
-                      <Text style={styles.buttonText}>Create Account!</Text>
+                      style={customStyles.button1}
+                      onPress={()=> this.userSignup()}>
+                      <Text style={customStyles.buttonText}>Create Account!</Text>
                   </TouchableOpacity>
                   <Button
                       title="Back"
@@ -151,7 +151,7 @@ also makes sure that the fields are not empty
     }
 }
 
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

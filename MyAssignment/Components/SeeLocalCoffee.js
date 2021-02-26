@@ -40,7 +40,6 @@ class SeeLocalCoffee extends Component{
   componentWillUnmount (){
       this.unsubscribe();
   }
-
   constructor(props){
     super(props);
     this.state = {
@@ -55,7 +54,8 @@ class SeeLocalCoffee extends Component{
     }
   //  this.findCoordinates = this.findCoordinates.bind(this);
   }
-
+// get data
+// another to plot the shops
   findCoordinates= () => {
       console.log("state", this.state);
       if(!this.state.locationPermission){
@@ -96,10 +96,10 @@ class SeeLocalCoffee extends Component{
   render(){
     const navigation = this.props.navigation;
       return(
-        <View style={styles.map}>
+        <View style={customStyles.map}>
           <MapView
             provider={PROVIDER_GOOGLE}
-            style={styles.map}
+            style={customStyles.map}
             region={{
               latitude: this.state.myLocation.latitude,
               longitude: this.state.myLocation.longitude,
@@ -123,7 +123,7 @@ class SeeLocalCoffee extends Component{
       );
   }
 }
-const styles = StyleSheet.create({
+const customStyles = StyleSheet.create({
 
    container: {
     // ...StyleSheet.absoluteFillObject,

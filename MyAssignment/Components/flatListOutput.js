@@ -36,7 +36,7 @@ class FlatListOutput extends Component{
   **/
 componentDidMount(){
   this.unsubscribe = this.props.navigation.addListener('focus', () => {
-      this.getData();
+      this.getLocationData();
   });
 
 }
@@ -47,7 +47,7 @@ componentWillUnmount (){
   this.unsubscribe();
 }
 
-  getData = async () => {
+  getLocationData = async () => {
     const { location_id } = this.props.route.params;
     let token = await AsyncStorage.getItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(location_id), {
@@ -192,31 +192,31 @@ Constants are made for all the props that are being used on this screen they are
     const { location_id }= this.props.route.params;
 
     return(
-      <SafeAreaView style={ styles.container }>
-          <Text style={styles.titleText}> Review of { this.state.getLocation.location_name }</Text>
-          <Text style={styles.titleText}> { this.state.getLocation.location_town } </Text>
-          <Text style={styles.resultsText}> Overall rating is: { this.state.getLocation.avg_overall_rating }</Text>
-          <Text style={styles.resultsText}> Price Rating: { this.state.getLocation.avg_price_rating} </Text>
-          <Text style={styles.resultsText}> Quality Rating: { this.state.getLocation.avg_quality_rating } </Text>
-          <Text style={styles.resultsText}> Clenliness Rating: { this.state.getLocation.avg_clenliness_rating } </Text>
-          <Text style={styles.resultsText}> Latitude: { this.state.getLocation.latitude } </Text>
-          <Text style={styles.resultsText}> Longitude: { this.state.getLocation.longitude } </Text>
+      <SafeAreaView style={ customStyle.container }>
+          <Text style={customStyle.titleText}> Review of { this.state.getLocation.location_name }</Text>
+          <Text style={customStyle.titleText}> { this.state.getLocation.location_town } </Text>
+          <Text style={customStyle.resultsText}> Overall rating is: { this.state.getLocation.avg_overall_rating }</Text>
+          <Text style={customStyle.resultsText}> Price Rating: { this.state.getLocation.avg_price_rating} </Text>
+          <Text style={customStyle.resultsText}> Quality Rating: { this.state.getLocation.avg_quality_rating } </Text>
+          <Text style={customStyle.resultsText}> Clenliness Rating: { this.state.getLocation.avg_clenliness_rating } </Text>
+          <Text style={customStyle.resultsText}> Latitude: { this.state.getLocation.latitude } </Text>
+          <Text style={customStyle.resultsText}> Longitude: { this.state.getLocation.longitude } </Text>
 
-          <Text style={styles.resultsText}> ----------------------- </Text>
+          <Text style={customStyle.resultsText}> ----------------------- </Text>
           <FlatList
             data={location_reviews}
             renderItem={({item}) => (
-              <View style={ styles.flatListView }>
-                <Text style={styles.resultsText}> -------------</Text>
-                <Text style={ styles.resultsText }> User { item.review_id }'s Review: </Text>
-                <Text style={ styles.resultsText }> Number of Likes : { item.likes } </Text>
-                <Text style={ styles.resultsText }> Overall Rating : { item.review_overallrating } </Text>
-                <Text style={ styles.resultsText }> Price Rating : { item.review_pricerating } </Text>
-                <Text style={ styles.resultsText }> Quality Rating : { item.review_qualityrating } </Text>
-                <Text style={ styles.resultsText }> Clenliness Rating : { item.review_clenlinessrating } </Text>
-                <Text style={ styles.resultsText }> Review : {item.review_body} </Text>
+              <View style={ customStyle.flatListView }>
+                <Text style={customStyle.resultsText}> -------------</Text>
+                <Text style={ customStyle.resultsText }> User { item.review_id }'s Review: </Text>
+                <Text style={ customStyle.resultsText }> Number of Likes : { item.likes } </Text>
+                <Text style={ customStyle.resultsText }> Overall Rating : { item.review_overallrating } </Text>
+                <Text style={ customStyle.resultsText }> Price Rating : { item.review_pricerating } </Text>
+                <Text style={ customStyle.resultsText }> Quality Rating : { item.review_qualityrating } </Text>
+                <Text style={ customStyle.resultsText }> Clenliness Rating : { item.review_clenlinessrating } </Text>
+                <Text style={ customStyle.resultsText }> Review : {item.review_body} </Text>
                 <TouchableOpacity
-                  style={styles.like}
+                  style={customStyle.like}
                   onPress={() => {
                     this.likeAReview()
                     this.setState({
@@ -224,10 +224,10 @@ Constants are made for all the props that are being used on this screen they are
                       rev_id: item.review_id
                     })
                   }}>
-                  <Text style={ styles.unlikeFont}> Like!</Text>
+                  <Text style={ customStyle.unlikeFont}> Like!</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={styles.unLike}
+                  style={customStyle.unLike}
                   onPress={() => {
                     this.unlikeAReview()
                     this.setState({
@@ -235,23 +235,23 @@ Constants are made for all the props that are being used on this screen they are
                       rev_id: item.review_id
                     })
                   }}>
-                  <Text style={ styles.unlikeFont}> Unlike!</Text>
+                  <Text style={ customStyle.unlikeFont}> Unlike!</Text>
                 </TouchableOpacity>
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
           />
           <TouchableOpacity
-              style={styles.button1}
+              style={customStyle.button1}
               onPress={() =>navigation.goBack()}>
-              <Text style={styles.buttonText}>Go Back</Text>
+              <Text style={customStyle.buttonText}>Go Back</Text>
           </TouchableOpacity>
       </SafeAreaView>
     );
   }
 }
 // style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

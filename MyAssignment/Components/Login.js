@@ -29,7 +29,7 @@ if they match a 200 response is returned
 if another response is returned the error is caught and a toast is displayed why
 Once a 200 has returned the ID and session token is uploaded to AsyncStorage and the user is sent to the next screen 'homescreen'
 **/
-    login = async () => {
+    loginUser = async () => {
         return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
             method: 'post',
             headers: {
@@ -94,7 +94,7 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
                   />
                   <TouchableOpacity
                       style={customStyle.button1}
-                        onPress={() => this.login()}>
+                        onPress={() => this.loginUser()}>
                       <Text style={customStyle.buttonText}>Login!</Text>
                   </TouchableOpacity>
                   <TouchableOpacity

@@ -22,7 +22,7 @@ class UserInfo extends Component{
 //componentDidMount allows everything in the function to be done in the backgeround
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
-          this.getData();
+          this.getUserData();
       });
 
   }
@@ -32,13 +32,13 @@ class UserInfo extends Component{
 }
 //---------get data ------------------------------------------------------------
 /**
- GetData will find all the location information of all the coffee shops
+ getUserData will find all the location information of all the coffee shops
  Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
  Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is obrained
  if another response is returned a else if to the correct response will return
  finally responseJson is then set to the correct format needed for this screen
 **/
-    getData = async () => {
+    getUserData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
 
@@ -109,45 +109,45 @@ class UserInfo extends Component{
         );
       }else{
       return(
-        <SafeAreaView style={ styles.container }>
-            <Text style={ styles.titleText }> My Account </Text>
-            <Text style={ styles.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
-            <Text style={ styles.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
-            <Text style={ styles.resultsText }> Email: { this.state.userDetails.email } </Text>
-            <Text style={ styles.resultsText }> Favourite Locations: </Text>
+        <SafeAreaView style={ customStyle.container }>
+            <Text style={ customStyle.titleText }> My Account </Text>
+            <Text style={ customStyle.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
+            <Text style={ customStyle.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
+            <Text style={ customStyle.resultsText }> Email: { this.state.userDetails.email } </Text>
+            <Text style={ customStyle.resultsText }> Favourite Locations: </Text>
             <FlatList
               data={ this.state.favourite_locations }
               renderItem={({item}) => (
-                <View style={ styles.ratingTitleText }>
-                  <Text style={ styles.buttonText }> { item.location_name }, { item.location_town}</Text>
+                <View style={ customStyle.ratingTitleText }>
+                  <Text style={ customStyle.buttonText }> { item.location_name }, { item.location_town}</Text>
                 </View>
               )}
               keyExtractor={(item, index) => index.toString()}
               />
               <TouchableOpacity
-                  style={styles.button1}
+                  style={customStyle.button1}
                   onPress={() =>navigation.navigate('EditReviews')}>
-                  <Text style={styles.buttonText}>See your Reviews</Text>
+                  <Text style={customStyle.buttonText}>See your Reviews</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                  style={styles.button1}
+                  style={customStyle.button1}
                   onPress={() =>navigation.navigate('EditUSerDetails')}>
-                  <Text style={styles.buttonText}>Update Account Details</Text>
+                  <Text style={customStyle.buttonText}>Update Account Details</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                  style={styles.button1}
+                  style={customStyle.button1}
                   onPress={() =>navigation.navigate('FavouriteAlocation')}>
-                  <Text style={styles.buttonText}>Edit Favorite Locations</Text>
+                  <Text style={customStyle.buttonText}>Edit Favorite Locations</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                  style={styles.button1}
+                  style={customStyle.button1}
                   onPress={() =>navigation.navigate('HomeScreen')}>
-                  <Text style={styles.buttonText}>Home</Text>
+                  <Text style={customStyle.buttonText}>Home</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                  style={styles.button1}
+                  style={customStyle.button1}
                   onPress={() =>navigation.navigate('LogoutScreen')}>
-                  <Text style={styles.buttonText}>Logout</Text>
+                  <Text style={customStyle.buttonText}>Logout</Text>
               </TouchableOpacity>
         </SafeAreaView>
       );
@@ -156,7 +156,7 @@ class UserInfo extends Component{
 }
 // style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

@@ -28,9 +28,8 @@ class FavouriteAlocation extends Component{
     **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
-
+        this.getUserData();
       });
-        this.getData();
         this.checkLoggedIn();
     }
     // unsubscribed to clear the memory to stop clogedge
@@ -40,16 +39,16 @@ class FavouriteAlocation extends Component{
 
 // --------get data ------------------------------------------------------------
 /**
- GetData will find all the location information of all the coffee shops
+ getUserData will find all the location information of all the coffee shops
  Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
  Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is obrained
  if another response is returned a else if to the correct response will return
  finally responseJson is then set to the correct format needed for this screen
 **/
-  getData = async () => {
+  getUserData = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     let id = await AsyncStorage.getItem('id');
-    return fetch("http://10.0.2.2:3333/api/1.0.0/user/"+(id), {
+    return fetch("http://10.0.2.2:3333/api/1.0.0/find", {
         method: 'get',
         headers: {
           "X-Authorization": token
@@ -75,7 +74,7 @@ class FavouriteAlocation extends Component{
       this.setState({
         isLoading: false,
         listData: responseJson,
-        favourite_locations: responseJson.favourite_locations
+
       });
     })
     .catch((error)=> {
@@ -193,7 +192,6 @@ this will delete an entry and then direct a user back to another page (previousl
 this will update the review and send the user back
 **/
   render(){
-
       const navigation = this.props.navigation; // declaring the navigation constant
       if(this.state.isLoading){
         return(
@@ -215,7 +213,7 @@ this will update the review and send the user back
           <Text style={ customStyle.titleText }> Location </Text>
           <Text style={ customStyle.titleText }> ---------------- </Text>
           <FlatList
-            data={ this.state.favourite_locations }
+            data={ this.state.listData }
             renderItem={({item}) => (
               <View style={ customStyle.ratingTitleText }>
                 <Text style={ customStyle.buttonText }> { item.location_name }, { item.location_town}</Text>
@@ -223,6 +221,7 @@ this will update the review and send the user back
                   style={customStyle.favouriteTouch}
                   onPress={() => {
                     this.favouriteALocation()
+                    ToastAndroid.show("location has been Favourited ",ToastAndroid.SHORT);
                     this.setState({
                         loc_id: item.location_id
                     })
@@ -233,6 +232,7 @@ this will update the review and send the user back
                   style={customStyle.unfavouriteTouch}
                   onPress={() => {
                     this.unFavouriteALocation()
+                    ToastAndroid.show("Removed Favourite",ToastAndroid.SHORT);
                     this.setState({
                       loc_id: item.location_id
                     })
