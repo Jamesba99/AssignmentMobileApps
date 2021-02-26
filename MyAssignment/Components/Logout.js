@@ -2,19 +2,37 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity } from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+/**
+All import variables for this screen
+**/
 
+/**
+ this is the logout for the app - will be shown after if the user wants to logout
+**/
 class LogoutScreen extends Component {
   constructor(props){
       super(props);
   }
+  /**
+  componentDidMount allows everything in the function to be done in the background
+  **/
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
     });
   }
+  /**
+  unsubscribed to clear the memory to stop clogage
+  **/
   componentWillUnmount(){
     this.unsubscribe()
   }
-
+  /**
+  Logout function will log the user out of the server and then take the user to the login screen 'loginscreen'
+  A network request is posted to tell the server to log the user out by firstly getting the session token-
+  -then removing it from Async storage
+  If they match a 200 response is returned the user has succesfully logged out and sent to the login screen
+  If another response is returned the error is caught and a toast is displayed why
+  **/
   logout = async () => {
     let token = await AsyncStorage.getItem('@session_token');
     await AsyncStorage.removeItem('@session_token');
@@ -30,7 +48,6 @@ class LogoutScreen extends Component {
         this.props.navigation.navigate("LoginScreen");
       }else if(response.status === 401){
           ToastAndroid.show("you werent logged in", ToastAndroid.SHORT);
-          this.props.navigation.navigate("LoginScreen");
       }else{
           throw 'Something went wrong';
       }
@@ -40,33 +57,36 @@ class LogoutScreen extends Component {
       ToastAndroid.show(error,ToastAndroid.SHORT);
     })
   }
+  /**
+  Render function which allows customisation on the screen
+  once the screen content has loaded the user will have to click a TouchableOpacity logout button to initiate the logout function
+  **/
   render(){
     const navigation = this.props.navigation;
       return(
-        <SafeAreaView style={styles.container}>
-          <Text style={ styles.titleText }> Are You Sure  </Text>
-          <Text style={ styles.titleText }> You Want To  </Text>
-          <Text style={ styles.titleText }> Logout? </Text>
+        <SafeAreaView style={customStyle.container}>
+          <Text style={ customStyle.titleText }> Are You Sure  </Text>
+          <Text style={ customStyle.titleText }> You Want To  </Text>
+          <Text style={ customStyle.titleText }> Logout? </Text>
             <TouchableOpacity
-              style={styles.button1}
+              style={customStyle.button1}
               onPress={() => this.logout()}
               >
-              <Text style={styles.buttonText}>Logout!</Text>
+              <Text style={customStyle.buttonText}>Logout!</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.button1}
+              style={customStyle.button1}
               onPress={() => navigation.goBack()}
               >
-              <Text style={styles.buttonText}>No - Back!</Text>
+              <Text style={customStyle.buttonText}>No - Back!</Text>
             </TouchableOpacity>
-
         </SafeAreaView>
       );
   }
 
 
 }
-const styles = StyleSheet.create({ // styles the text on the screen
+const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',

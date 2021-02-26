@@ -2,8 +2,20 @@ import React, { Component } from 'react';
 import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, StatusBar} from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// watch networking lecture past 1 hr
+
+/**
+All import variables for this screen
+**/
+
+/**
+ this is the edit reviews screen  for the app - will allow the user to edit and delete reviews
+**/
+
 class ViewReviews extends Component{
+  /**
+  builds the props contructor while also declaring the variables needed for this screen
+  sets the loading as true for later use
+  **/
     constructor(props){
       super(props);
       this.state = {
@@ -14,21 +26,30 @@ class ViewReviews extends Component{
         clenliness_rating: "",
         review_body: "",
         isLoading: true,
-        listData: []
+        listData: [],
+        reviewError: "",
+        nameValidate: "",
       };
     }
-
+    /**
+    componentDidMount allows everything in the function to be done in the background
+    **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
       });
       this.getData();
     }
 
-  // unsubscribed to clear the memory to stop clogedge
+  // unsubscribed to clear the memory to stop clogage
     componentWillUnmount (){
       this.unsubscribe();
     }
-
+/**
+GetData will find all the reviews by the user
+Once the data has been pulled from /find the response is transferred into JSON as long as there is a 200 response
+If another response is returned a else if to the corrasponding response will return with a toast explaining why
+Finally responseJson is then set to the required format and and applied to a variable in state
+**/
     getData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/find", {
@@ -55,8 +76,6 @@ class ViewReviews extends Component{
       .then((responseJson) =>{
         console.log(responseJson);
         this.setState({
-
-          
           isLoading: false,
           listData: responseJson
         })
@@ -66,9 +85,17 @@ class ViewReviews extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
+/**
+addReviews is a funtion that will add a new review to the server
+Token is pulled from async storage to help complete the post network request and prove that the user is logged in
+let variables is created to parse the data to correct format
+the post request is sent to the server to /review to show that the user has liked that review
+Then if the server responds with 201 meaning the review has been left while being toasted that the like has been added
+With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
 
   addReviews = async () => {
-    let to_send = {
+    let sendVariables = {
       overall_rating: parseInt(this.state.overall_rating),
       price_rating: parseInt(this.state.price_rating),
       quality_rating: parseInt(this.state.quality_rating),
@@ -83,7 +110,7 @@ class ViewReviews extends Component{
             'Content-Type': 'application/json',
             'X-Authorization': token
       },
-      body: JSON.stringify(to_send)
+      body: JSON.stringify(sendVariables)
     })
     console.log(token)
     .then((response) => {
@@ -113,10 +140,6 @@ class ViewReviews extends Component{
             isLoading: false,
             listData: responseJson
           })
-
-
-
-
           console.log("review added", responseJson);
           ToastAndroid.show("Review has NOT been added ",ToastAndroid.SHORT);
 
@@ -126,6 +149,9 @@ class ViewReviews extends Component{
             ToastAndroid.show(error,ToastAndroid.SHORT);
         })
   }
+  /***
+  checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
+  ***/
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
@@ -133,8 +159,18 @@ class ViewReviews extends Component{
     }
   };
 
+
+  /**
+  Render function which allows customisation on the screen
+  Once the correct fields are entered the information entered is set to state then the add review button will call the LeaveReviews function
+  An if state ment will start off with conditional rendering will show the user a loading prompt to show the page is loading then-
+  - once it has loaded the contents of the page will be displayed
+  **/
+
+
   render(){
     const navigation = this.props.navigation;
+
     if(this.state.isLoading){
       return(
       <View
@@ -152,13 +188,15 @@ class ViewReviews extends Component{
     return(
         <View style={customStyle.container}>
             <Text style={customStyle.text}>Leave a Review!</Text>
+            <Text style={customStyle.titleText}>-----------------------------</Text>
+            <Text style={customStyle.titleText}>Click a cafe to Review</Text>
               <FlatList
                 data = {this.state.listData}
                 renderItem = {({item}) => (
                   <TouchableOpacity
                     onPress={() => this.setState({loc_id: item.location_id})}
                     >
-                    <Text style={customStyle.buttonText}> entry: {item.location_id} is {item.location_name}</Text>
+                    <Text style={customStyle.buttonText}> Cafe: {item.location_id} is {item.location_name}</Text>
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item,index) => index.toString()}
@@ -193,14 +231,22 @@ class ViewReviews extends Component{
               />
               <TextInput
                 placeholder= "What was good/bad about this coffee (review body)"
-                onChangeText={(review_body) => this.setState ({review_body})}
+                onChangeText={(review_body) => this.validate(review_body, "review_body")}
+
                 backgroundColor="#C7E8F3"
                 value={this.state.review_body}
                 style ={customStyle.textInput}
+
               />
+
               <TouchableOpacity
                 style={customStyle.button1}
-                onPress={()=> this.addReviews()}>
+                onPress={()=> {
+                  this.addReviews()
+
+                  ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
+                  this.props.navigation.navigate("ViewReviews")
+                }}>
                 <Text style={customStyle.touchOpacityText}> Post Review!</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -213,8 +259,7 @@ class ViewReviews extends Component{
   }
   }
 }
-// TouchableOpacity FLAT LIST?
-// tick box?
+// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
@@ -222,13 +267,20 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     justifyContent: 'center',
     backgroundColor: '#41393E'
   },
-  text: { // styles the text colour and style
-
+  text: {
     color: '#C7E8F3',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 1,
     fontSize: 50,
+    fontWeight: 'bold'
+  },
+  titleText: {
+    color: '#C7E8F3',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1,
+    fontSize: 35,
     fontWeight: 'bold'
   },
   textInput:{
@@ -249,11 +301,10 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     color: '#C7E8F3',
   //  alignItems: 'center',
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-    fontSize: 15,
+    marginTop: StatusBar.currentHeight || 1,
+    width: '100%',
+    fontSize: 30,
     fontWeight:'bold',
-    borderWidth:1,
-    borderColor:'#C7E8F3',
     color: '#C7E8F3',
     backgroundColor: '#8E4162'
     //justifyContent: 'center'

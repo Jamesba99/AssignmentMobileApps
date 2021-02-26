@@ -85,8 +85,6 @@ once the data and options has a value in it postPhoto function is called the dat
       console.log(data.uri);
     }
   }
-
-  //-------------Checked Logged in------------------------------------------------
   // checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
     checkLoggedIn = async () => {
       const value = await AsyncStorage.getItem('@session_token');
@@ -114,7 +112,11 @@ a button which calls the take picture function initiates the process of taking t
             style={ customStyle.preview }
             captureAudio={ false }
             />
-          <Button title= "Take photo" onPress={() => {this.takePicture()}}/>
+          <Button
+          title= "Take photo"
+          color= "#8E4162"
+          fontWeight = 'bold'
+          onPress={() => {this.takePicture()}}/>
         </View>
       );
     }

@@ -1,20 +1,17 @@
 import React, { Component } from "react";
-import {
-  Text,
-  View,
-  Button,
-  ToastAndroid,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  TextInput
-} from "react-native";
+import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,TextInput} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-//All imports for this screen
+/**
+All import variables for this screen
+**/
+/**
+ this is the favourite location screen for the app - will allow the user to favourite and unfavourite a location
+**/
 class FavouriteAlocation extends Component{
-  //builds the props contructor while also declaring the variables
-
+  /**
+  builds the props contructor while also declaring the variables needed for this screen
+  sets the loading as true for later use
+  **/
     constructor(props){
       super(props);
       this.state = {
@@ -24,8 +21,11 @@ class FavouriteAlocation extends Component{
         favourite_locations:""
       };
     }
-//------------------------------------------------------------------------------
-//componentDidMount allows everything in the function to be done in the backgeround
+    /**
+    componentDidMount allows everything in the function to be done in the background
+    this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+    - sure they don't get access to this screen while not logged in
+    **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
 

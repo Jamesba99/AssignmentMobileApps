@@ -4,34 +4,93 @@ import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating } from 'react-native-elements';
 
+/**
+All import variables for this screen
+**/
+/**
+ this is the flatlistout screen  for the app - will allow the user to to view a review for a cafe in full showing all the reviews
+ imports the contents of editReviews to help display props and data from the previous screen
+**/
 import ViewReviews from './ViewReviews';
 
-
+//builds the props contructor while also declaring the variables
 class FlatListOutput extends Component{
     constructor(props){
       super(props);
       this.state = {
-        viewLocationReviews: '' ,
+        viewLocationReviews: "" ,
         locations: [],
         isLoading: true,
         location_reviews: null,
         location_id: "",
         locationReviews: null,
-        like:""
+        like:"",
+        getLocation: ""
       }
     }
-//------------------------------------------------------------------------------
+
+  /**
+  componentDidMount allows everything in the function to be done in the background
+  this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+  - sure they don't get access to this screen while not logged in
+  **/
 componentDidMount(){
   this.unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getData();
   });
 
 }
-// unsubscribed to clear the memory to stop clogedge
-//------------------------------------------------------------------------------
+/**
+unsubscribed to clear the memory to stop clogage
+**/
 componentWillUnmount (){
   this.unsubscribe();
 }
-    //----------------like a review ------------------------------------------------
+
+  getData = async () => {
+    const { location_id } = this.props.route.params;
+    let token = await AsyncStorage.getItem('@session_token');
+    return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(location_id), {
+        method: 'get',
+        headers: {
+          "X-Authorization": token
+        },
+    })
+    .then((response)=> {
+      if(response.status === 200){
+        return response.json()
+        console.log(response)
+        }else if(response.status === 400){
+          throw 'Bad Request';
+        }else if(response.status === 401){
+            throw '401 Unauthorized';
+            console.log(response);
+        }else if (response.status === 404){
+            throw 'Not found';
+        }else if (response.status === 500){
+            throw 'server error';
+        }
+    })
+    .then((responseJson) =>{
+      console.log(responseJson);
+      this.setState({
+        isLoading: false,
+        getLocation: responseJson
+      })
+    })
+    .catch((error)=> {
+      console.log(error);
+      ToastAndroid.show(error,ToastAndroid.SHORT);
+    })
+  }
+/**
+likeAReview is a funtion that will post a like for a review
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the post request is sent to the server to /like to show that the user has liked that review
+Then if the server responds with 200 meaning the post review has succsessfully been liked sending the user back to ViewReviews-
+-while being toasted that the like has been added
+With other responses (400,401,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
         likeAReview = async () => {
           let token = await AsyncStorage.getItem('@session_token');
           return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
@@ -73,7 +132,14 @@ componentWillUnmount (){
                     ToastAndroid.show(error,ToastAndroid.SHORT);
                 })
         }
-//-------------unlike a review--------------------------------------------------
+        /**
+        unLikeAReview is a funtion that will delete a like for a review
+        Then the session token is pulled from async storage to make sure the server knows the user is logged in
+        the delete request is sent to the server to /like to show that the user would like to unliked that review
+        Then if the server responds with 200 meaning the post review has succsessfully been unliked sending the user back to userInfopage-
+        -while being toasted that the like has been removed
+        With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+        **/
         unlikeAReview = async () => {
           let token = await AsyncStorage.getItem('@session_token');
           return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
@@ -107,7 +173,11 @@ componentWillUnmount (){
           })
         }
 
-//------------------------------------------------------------------------------
+/**
+Render function which allows customisation on the screen
+Constants are made for all the props that are being used on this screen they are made by using route.params which-
+- brings the variable from the previous screen 'ViewReviews'
+**/
   render(){
     const navigation = this.props.navigation;
     const {location_reviews} = this.props.route.params;
@@ -123,12 +193,15 @@ componentWillUnmount (){
 
     return(
       <SafeAreaView style={ styles.container }>
-          <Text style={styles.titleText}> Review of {(location_name)}</Text>
-          <Text style={styles.titleText}> {(location_town)} </Text>
-          <Text style={styles.resultsText}> Overall rating is: { (avg_overall_rating) }</Text>
-          <Text style={styles.resultsText}> Price Rating: { (avg_price_rating) } </Text>
-          <Text style={styles.resultsText}> Quality Rating: { (avg_quality_rating) } </Text>
-          <Text style={styles.resultsText}> Clenliness Rating: { (avg_clenliness_rating) } </Text>
+          <Text style={styles.titleText}> Review of { this.state.getLocation.location_name }</Text>
+          <Text style={styles.titleText}> { this.state.getLocation.location_town } </Text>
+          <Text style={styles.resultsText}> Overall rating is: { this.state.getLocation.avg_overall_rating }</Text>
+          <Text style={styles.resultsText}> Price Rating: { this.state.getLocation.avg_price_rating} </Text>
+          <Text style={styles.resultsText}> Quality Rating: { this.state.getLocation.avg_quality_rating } </Text>
+          <Text style={styles.resultsText}> Clenliness Rating: { this.state.getLocation.avg_clenliness_rating } </Text>
+          <Text style={styles.resultsText}> Latitude: { this.state.getLocation.latitude } </Text>
+          <Text style={styles.resultsText}> Longitude: { this.state.getLocation.longitude } </Text>
+
           <Text style={styles.resultsText}> ----------------------- </Text>
           <FlatList
             data={location_reviews}
@@ -164,7 +237,6 @@ componentWillUnmount (){
                   }}>
                   <Text style={ styles.unlikeFont}> Unlike!</Text>
                 </TouchableOpacity>
-
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -174,13 +246,11 @@ componentWillUnmount (){
               onPress={() =>navigation.goBack()}>
               <Text style={styles.buttonText}>Go Back</Text>
           </TouchableOpacity>
-
-
       </SafeAreaView>
     );
   }
 }
-
+// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

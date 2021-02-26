@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { Text, View, Button, ToastAndroid, TextInput, SafeAreaView, TouchableOpacity, StyleSheet, Alert, FlatList, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//All import variables for this screen
 
+
+// the class acts a function to recieve props for the screen
+// this screen will be the screen that allows the user to edit their user details
 class EditUSerDetails extends Component{
+
+  //builds the props contructor while also declaring the variables
     constructor(props){
       super(props);
-//put user detts back in
       this.state = {
         isLoading: true,
         first_name: "",
@@ -17,19 +22,27 @@ class EditUSerDetails extends Component{
 
       };
     }
-//------------------------------------------------------------------------------
-
+/**
+componentDidMount allows everything in the function to be done in the background
+**/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
+          this.getData();
     });
-      this.getData();
+
     }
-    // unsubscribed to clear the memory to stop clogedge
+    // unsubscribed to clear the memory to stop clogage
     componentWillUnmount (){
     this.unsubscribe();
     }
-
-// get data --------------------------------------------------------------------
+/**
+GetData will get all the user information
+ID and Token is pulled from async storage to help complete the get network request and prove that the user is logged in
+Once the data has been pulled from /user/id the response is transferred into JSON as long as there is a 200 response
+If another response is returned (400,401,404,500) a else if to the correct response will return with a toast explaining why
+Finally responseJson is then set to the required format and and applied to a variable in state
+Any errors are toasted to the user
+**/
     getData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
@@ -73,8 +86,15 @@ class EditUSerDetails extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
-//------------------------------------------------------------------------------
-//will need to parse any data that is a number
+
+/**
+UpdateUserDetails is a funtion that will update the users details when the correct button and credentials are entered
+ID and Token is pulled from async storage to help complete the patch network request and prove that the user is logged in
+let variables is created to parse the data to correct format
+the patch request is sent to the server while stringyifing the sendVariables variable
+Then there is responses with 200 meaning the updated review has succsessfully been patched and the user is sent to the homescreen
+With other responses (400,401,404,500) being caught and printed to the user to keep them infomormed with whats going on
+**/
   updateUserDetails = async () => {
 
     let sendVariables = {
@@ -124,10 +144,8 @@ class EditUSerDetails extends Component{
       console.log(error)
     })
   }
-
-//------------------------------------------------------------------------------
 /***
-checks whether logged in.
+checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
 ***/
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
@@ -135,11 +153,11 @@ checks whether logged in.
         this.props.navigation.navigate('LoginScreen');
     }
   };
-//------------------------------------------------------------------------------
-  /***
-  the components of the file
-  ***/
-// add is loading
+/**
+Render function which allows customisation on the screen
+once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
+When the correct button is pressed the function which is part of that button will be called
+**/
   render(){
       const navigation = this.props.navigation; // declaring the navigation constant
       if(this.state.isLoading){
@@ -205,6 +223,9 @@ checks whether logged in.
     }
     }
 }
+/**
+style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+**/
 const styles = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

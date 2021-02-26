@@ -2,28 +2,44 @@ import React, { Component } from "react";
 import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,FlatList,TextInput,Image, ScrollView} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RNCamera } from 'react-native-camera';
+//All import variables for this screen
 
 import EditReviews from './EditReviews';
+// imports the contents of editReviews to help display props and data from the previous screen
 
+// the class acts a function to recieve props for the screen
+// this screen will be the screen that allows the user to view the reviews in depth
 class ViewPhotos extends Component{
+
+  //builds the props contructor while also declaring the variables
     constructor(props){
       super(props);
-
       this.state = {
         isLoading: true,
         review_id: "",
         location_id: "",
         image: null
       };
-
-//------------------------------------------------------------------------------
+/**
+componentDidMount allows everything in the function to be done in the background
+this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+- sure they don't get access to this screen while not logged in
+**/
     }
     componentDidMount(){
         this.checkLoggedIn();
         this.getPhotos();
     }
 
-//-------------------get photos-------------------------------------------------
+/**
+getPhoto is a funtion that will get the photos from the reviews that were taken on the camera
+location_id and review_id is transfered from edit reviews
+Then the session token is pulled from async storage to make sure that the server knows the user is logged in
+Once the data has been pulled from /photo the response is transferred into JSON as long as there is a 200 response
+if another response is returned (400,401,403,404,500)a else if to the correct response will return with a toast explaining why
+finally responseJson is then set to the required format and and applied to a variable in state
+
+**/
     getPhotos = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       const { review_id } = this.props.route.params;
@@ -35,12 +51,10 @@ class ViewPhotos extends Component{
             "X-Authorization": token
           },
       })
-
       .then((response)=> {
         if(response.status === 200){
           return response
           console.log()
-
           }else if(response.status === 400){
             throw 'Bad Request';
           }else if(response.status === 401){
@@ -64,7 +78,13 @@ class ViewPhotos extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
-//-------------------delete Photo-----------------------------------------------
+/**
+deletePhoto is a funtion that will delete the users photo from their review
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the delete request is sent to the server showing that this photo has been  to be deleted and redirected to editReviews
+Then there is responses with 200 meaning the deleted review has succsessfully been deleted sending the user back to editReviews
+With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
     deletePhoto = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/photo", {
@@ -97,45 +117,21 @@ class ViewPhotos extends Component{
           }
       })
     }
-
-
-//------------------------------------------------------------------------------
-/***
-checks whether logged in.
-
-***/
+  /***
+  checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
+  ***/
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
         this.props.navigation.navigate('LoginScreen');
     }
   };
-
-  /***
-  the components of the file
-  ***/
-// add is loading
-
-
-/**
-
-
-console.log(this.state.reviews)
-  const navigation = this.props.navigation; // declaring the navigation constant
-  if(this.state.isLoading){
-    return(
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#41393E'
-        }}>
-        <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
-    </View>
-);
-**/
+  /**
+  Render function which allows customisation on the screen
+  Constants are made for all the props that are being used on this screen they are made by using route.params which-
+  - brings the variable from the previous screen 'editReviews'
+  the delete photo button will set the ID to tell the server to assign that ID to the request
+  **/
   render(){
 
     const { review_id } = this.props.route.params;
@@ -200,6 +196,7 @@ console.log(this.state.reviews)
     );
   }
 }
+// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

@@ -29,7 +29,6 @@ class EditReviewFlatlistOutput extends Component{
         review_body:""
       }
     }
-//------------------------------------------------------------------------------
 /**
 componentDidMount allows everything in the function to be done in the background
 this.checkedloggedIn will call the function check logged in as the user opens the app to make-
@@ -47,8 +46,13 @@ this.checkedloggedIn will call the function check logged in as the user opens th
       }
 //-------------------------------------update review----------------------------
 /**
-UpdateUserReview is a funtion that will update the user when the correct button and credentials are entered
+UpdateUserReview is a funtion that will update the users review when the correct button and credentials are entered
 location_id and review_id is transfered from edit reviews
+let variables is created to parse the data to correct format
+Then the session token and user ID is pulled from async storage
+the patch request is sent to the server while stringyifing the sendVariables variable
+Then there is responses with 200 meaning the updated review has succsessfully been patched
+With other responses being caught and printed to the user to keep them infomormed with whats going on
 **/
     updateUserReview = async () => {
       const { location_id } = this.props.route.params.location_id;
@@ -102,9 +106,14 @@ location_id and review_id is transfered from edit reviews
           console.log(error)
         })
       }
-//------------------------------------------------------------------------------
+/**
+deleteReview is a funtion that will delete the users review when the correct button is pressed
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the delete request is sent to the server showing that this review needs to be deleted
+Then there is responses with 200 meaning the deleted review has succsessfully been deleted sending the user back to user page
+With other responses being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
   deleteReview = async () => {
-
     let token = await AsyncStorage.getItem('@session_token');
     return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(rev_id), {
       method: 'delete',
@@ -136,108 +145,113 @@ location_id and review_id is transfered from edit reviews
         }
     })
   }
+  /**
+  Render function which allows customisation on the screen
+  Constants are made for all the props that are being used on this screen they are made by using route.params which-
+  - brings the variable from the previous screen 'editReviews'
+  An if state ment will start off with conditional rendering will show the user a loading prompt to show the page is loading then-
+  - once it has loaded the contents of the page will be displayed
+  **/
+    render(){
+      const navigation = this.props.navigation;
+      const { overall_rating} = this.props.route.params;
+      const { price_rating }= this.props.route.params;
+      const { quality_rating } = this.props.route.params;
+      const { cleniness_rating } = this.props.route.params;
+      const { review_body } = this.props.route.params;
+      const { location_town } = this.props.route.params;
+      const { location_name } = this.props.route.params;
+      const { location_id } = this.props.route.params.location_id;
+      const { review_id } = this.props.route.params.review_id;
 
-  render(){
-
-    const navigation = this.props.navigation;
-    const { overall_rating} = this.props.route.params;
-    const { price_rating }= this.props.route.params;
-    const { quality_rating } = this.props.route.params;
-    const { cleniness_rating } = this.props.route.params;
-    const { review_body } = this.props.route.params;
-    const { location_town } = this.props.route.params;
-    const { location_name } = this.props.route.params;
-    const { location_id } = this.props.route.params.location_id;
-    const { review_id } = this.props.route.params.review_id;
-
-    if(this.state.isLoading){
+      if(this.state.isLoading){
+        return(
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#41393E'
+            }}>
+            <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+        </View>
+        );
+      }else{
       return(
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#41393E'
-          }}>
-          <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
-      </View>
+        <SafeAreaView style={ customStyle.container }>
+          <Text style={ customStyle.titleText}> Your Review of {( location_name )}, {(location_town)}  </Text>
+          <Text style={ customStyle.titleText}> Please Enter Your Updated Review: </Text>
+          <TextInput
+              placeholder="Overall Rating"
+              onChangeText={(overall_rating) => this.setState({overall_rating})}
+              value={ this.state.overall_rating}
+              backgroundColor="#C7E8F3"
+              style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
+          />
+          <TextInput
+              placeholder="Price Rating"
+              onChangeText={(price_rating) => this.setState({price_rating})}
+              value={ this.state.price_rating}
+              backgroundColor="#C7E8F3"
+              style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
+          />
+          <TextInput
+              placeholder="Quality Rating"
+              onChangeText={(quality_rating) => this.setState({quality_rating})}
+              value={ this.state.quality_rating}
+              backgroundColor="#C7E8F3"
+              style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
+          />
+          <TextInput
+              placeholder="Cleniness Rating"
+              onChangeText={(cleniness_rating) => this.setState({cleniness_rating})}
+              value={ this.state.cleniness_rating}
+              backgroundColor="#C7E8F3"
+              style={{padding:5, borderWidth:1, margin:5 , width: '100%'}}
+          />
+          <TextInput
+              placeholder=" review_body"
+              onChangeText={(review_body) => this.setState({review_body})}
+              value={ this.state.review_body}
+              backgroundColor="#C7E8F3"
+              style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
+          />
+          <TouchableOpacity
+            style={customStyle.button1}
+            onPress={() => {
+                this.updateUserReview()
+            }}>
+            <Text style={customStyle.touchOpacityEditInfo}>Update!</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={customStyle.button1}
+            onPress={() => {
+                this.deleteReview()
+            }}>
+            <Text style={customStyle.touchOpacityEditInfo}>Changed your mind? Delete the Review!</Text>
+          </TouchableOpacity>
+          <Button
+            title="Back"
+            color="#8E4162"
+            fontColor= "Black"
+            onPress={() =>navigation.goBack()}
+          />
+        </SafeAreaView>
       );
-    }else{
-    return(
-      <SafeAreaView style={ customStyle.container }>
-        <Text style={ customStyle.titleText}> Your Review of {( location_name )}, {(location_town)}  </Text>
-        <Text style={ customStyle.titleText}> Please Enter Your Updated Review: </Text>
-        <TextInput
-            placeholder="Overall Rating"
-            onChangeText={(overall_rating) => this.setState({overall_rating})}
-            value={ this.state.overall_rating}
-            backgroundColor="#C7E8F3"
-            style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
-        />
-        <TextInput
-            placeholder="Price Rating"
-            onChangeText={(price_rating) => this.setState({price_rating})}
-            value={ this.state.price_rating}
-            backgroundColor="#C7E8F3"
-            style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
-        />
-        <TextInput
-            placeholder="Quality Rating"
-            onChangeText={(quality_rating) => this.setState({quality_rating})}
-            value={ this.state.quality_rating}
-            backgroundColor="#C7E8F3"
-            style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
-        />
-        <TextInput
-            placeholder="Cleniness Rating"
-            onChangeText={(cleniness_rating) => this.setState({cleniness_rating})}
-            value={ this.state.cleniness_rating}
-            backgroundColor="#C7E8F3"
-            style={{padding:5, borderWidth:1, margin:5 , width: '100%'}}
-        />
-        <TextInput
-            placeholder=" review_body"
-            onChangeText={(review_body) => this.setState({review_body})}
-            value={ this.state.review_body}
-            backgroundColor="#C7E8F3"
-            style={{padding:5, borderWidth:1, margin:5, width: '100%'}}
-        />
-        <TouchableOpacity
-          style={customStyle.button1}
-          onPress={() => {
-              this.updateUserReview()
-          }}>
-          <Text style={customStyle.touchOpacityEditInfo}>Update!</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={customStyle.button1}
-          onPress={() => {
-              this.deleteReview()
-          }}>
-          <Text style={customStyle.touchOpacityEditInfo}>Changed your mind? Delete the Review!</Text>
-        </TouchableOpacity>
-        <Button
-          title="Back"
-          color="#8E4162"
-          fontColor= "Black"
-          onPress={() =>navigation.goBack()}
-        />
-      </SafeAreaView>
-    );
-  }
-  }
+    }
+    }
 }
 
-//https://www.youtube.com/watch?v=GPUiY0qJTiI
-const customStyle = StyleSheet.create({ // styles the text on the screen
+// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+const customStyle = StyleSheet.create({
   container:{
     flex: 1,
     alignItems: 'center',
     //justifyContent: 'center',
     backgroundColor: '#41393E'
   },
-  titleText: { // styles the text colour and style
+  titleText: {
     color: '#C7E8F3',
     fontSize: 20,
     fontWeight:"bold"

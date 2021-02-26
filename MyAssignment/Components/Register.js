@@ -22,10 +22,12 @@ class Register extends Component{
 /**
 Signup function is made with an arrow function pointing towards the server
 initiating the post method
-Then when data is inputted  returns a response depending on the status code
+Then if the server responds with 200 meaning the post review has succsessfully been liked sending the user back to userInfopage-
+-while being toasted that the like has been added
+With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+
 **/
     signup = () => {
-      //validation here - make sure the email is valid etc
       return fetch("http://10.0.2.2:3333/api/1.0.0/user",{
           method: 'post',
           headers:{
@@ -55,11 +57,11 @@ Then when data is inputted  returns a response depending on the status code
     /**
 creates the input boxes and the input area of them
 While navigation buttons are added to help with navigation of the app
-    **/
-/**
- validator to make sure the gaps are filled
 **/
-// to create a letter only when numbers pop up it fails
+/**
+creates a letter only when numbers pop up it throws an error
+also makes sure that the fields are not empty
+**/
     submit(){
       let rjx=/^[a-zA-z]+$/;
       let isValid=rjx.test(this.state.first_name)
@@ -85,7 +87,11 @@ While navigation buttons are added to help with navigation of the app
             this.setState({EmailError:""})
         }
     }
-
+    /**
+    Render function which allows customisation on the screen
+    This render has four input boxes where the user enters a email, first name , second name and a password then setting it to state
+    Once the credentials are entered the login button is pressed which calls the login funtion
+    **/
     render(){
           const navigation = this.props.navigation;
           return (

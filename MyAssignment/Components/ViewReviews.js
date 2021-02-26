@@ -3,23 +3,18 @@ import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, Style
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating, RatingProps } from 'react-native-elements';
-
-//import FlatListOutput from './FlatListOutput';
 /**
-TO DO tomorrow:
-start with the crea
+All import variables for this screen
+**/
 
 
-
-IF STATEMENT WITH IS LOADING IS CONSITIONAL RENDERING TALK ABOUT IT IN SCREEN CAST
-
-
-Editing the stars documentation https://openbase.com/js/react-native-ratings
-
-***/
-
-
+/**
+ this is the ViewReviews for the app - will be shown after the user navigates from home to this screen
+**/
 class ViewReviews extends Component{
+  /**
+  builds the props contructor while also declaring the variables
+  **/
     constructor(props){
       super(props);
       this.state = {
@@ -36,19 +31,32 @@ class ViewReviews extends Component{
         offset: 0,
       }
     }
+    /**
+    componentDidMount allows everything in the function to be done in the background
+    this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+    - sure they don't get access to this screen while not logged in
+    **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
+        this.checkLoggedIn();
       });
       this.getData("http://10.0.2.2:3333/api/1.0.0/find");
 
     }
 
 
-  // unsubscribed to clear the memory to stop clogedge
+  // unsubscribed to clear the memory to stop clogage
     componentWillUnmount (){
       this.unsubscribe();
     }
+    /**
+     GetData will find all the location information of all the coffee shops
+     Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
+     Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is returned
+     if another response is returned a else if to the correct response will return with a toast explaining why
+     finally responseJson is then set to the required format and and applied to a variable in state
 
+    **/
     getData = async (url) => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch(url, {
@@ -76,13 +84,20 @@ class ViewReviews extends Component{
       ToastAndroid.show(err,ToastAndroid.SHORT);
     })
   }
+
+  /**
+  The search function sets the url set a custom query in the network request
+  starts off with setting q being the query additon to the network request
+  then a series of if statements run saying if the star rating (that comes later) is set higher than one it will only-
+  -show results with states set number or higher
+  with the use of '&' which chains allowing more search criteria
+  **/
     search = () => {
       let url = "http://10.0.2.2:3333/api/1.0.0/find?"
 
       if(this.state.q != ''){
         url += "q=" + this.state.q + "&";
       }
-
       if (this.state.avg_overall_rating > 0){
         url += "overall_rating=" + this.state.avg_overall_rating + "&";
       }
@@ -96,9 +111,7 @@ class ViewReviews extends Component{
         url += "clenliness_rating=" + this.state.avg_clenliness_rating  + "&";
       }
       this.getData(url);
-
     }
-
     ratingCompleted(rating, name){
       let stateObject = () => {
         let returnObj = {};
@@ -107,17 +120,22 @@ class ViewReviews extends Component{
       };
       this.setState( stateObject );
     }
-
-      componentWillUnmount (){
-    }
-
+    /***
+    checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
+    ***/
     checkLoggedIn = async () => {
       const value = await AsyncStorage.getItem('@session_token');
       if (value == null) {
           this.props.navigation.navigate('LoginScreen');
         }
       };
-// to add review bodies need of a review inside a review
+      /**
+      Render function which allows customisation on the screen
+      starts off with conditional rendering to help if a slow network request to stop the user thinking the app has froze
+      once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
+      Also the use of AirB&b stars allow a custom prop that could be used instead of inputting an a number in a text field
+      then a search button which initiates the search function
+      **/
     render(){
       console.log(this.state.location_reviews);
       const navigation = this.props.navigation;
@@ -220,8 +238,9 @@ class ViewReviews extends Component{
       }
     }
 }
-//    this.props.navigation.navigate('ViewReviews', {screen: "FlatListOutput"}
-//https://www.youtube.com/watch?v=GPUiY0qJTiI
+/**
+style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+**/
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

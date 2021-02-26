@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SeeLocalCoffee from './SeeLocalCoffee';
-//All import variables for this screen
+/**
+All import variables for this screen
+**/
 
-// the class acts a function to recieve props for the screen
-// this is the homescreen for the app - will be shown after logging in
+
+/**
+ this is the homescreen for the app - will be shown after logging in
+**/
 class HomeScreen extends Component{
-
-//builds the props contructor while also declaring the variables
+/**
+builds the props contructor while also declaring the variables
+**/
   constructor(props){
     super(props);
     this.state = {
@@ -16,8 +21,8 @@ class HomeScreen extends Component{
       listData: []
     }
   }
-//------------------------------------------------------------------------------
-/** 
+
+/**
 componentDidMount allows everything in the function to be done in the background
 this.checkedloggedIn will call the function check logged in as the user opens the app to make-
 - sure they don't get access to this screen while not logged in
@@ -29,17 +34,18 @@ this.checkedloggedIn will call the function check logged in as the user opens th
 
     this.getData();
   }
-// unsubscribed to clear the memory to stop clogedge
+/**
+unsubscribed to clear the memory to stop clogage
+**/
   componentWillUnmount (){
     this.unsubscribe();
   }
-//--------------getData---------------------------------------------------------
 /**
  GetData will find all the location information of all the coffee shops
  Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
- Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is obrained
- if another response is returned a else if to the correct response will return
- finally responseJson is then set to the correct format needed for this screen
+ Once the data has been pulled from /find the response is transfered into JSON format as long as a 200 response is returned
+ if another response is returned a else if to the correct response will return with a toast explaining why
+ finally responseJson is then set to the required format and and applied to a variable in state
 **/
   getData = async () => {
     const value = await AsyncStorage.getItem('@session_token');
@@ -69,9 +75,10 @@ this.checkedloggedIn will call the function check logged in as the user opens th
           ToastAndroid.show(error,ToastAndroid.SHORT);
       })
   }
-//-------------Checked Logged in------------------------------------------------
-// checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
-  checkLoggedIn = async () => {
+  /***
+  checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
+  ***/
+    checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
         this.props.navigation.navigate('LoginScreen');
@@ -133,7 +140,9 @@ this.checkedloggedIn will call the function check logged in as the user opens th
     }
   }
 }
-// style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+/**
+style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+**/
 const customStyle = StyleSheet.create({
   container:{
     flex: 1,

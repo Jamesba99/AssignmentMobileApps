@@ -2,8 +2,18 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Button, ToastAndroid, SafeAreaView, TouchableOpacity,Image } from 'react-native';
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+/**
+All import variables for this screen
+**/
 
+/**
+the class acts a function to recieve props for the screen
+ this is the loginscreen for the app - will be first screen a user sees
+**/
 class LoginScreen extends Component {
+  /**
+  builds the props contructor while also declaring the variables
+  **/
     constructor(props){
         super(props);
         this.state={
@@ -12,11 +22,14 @@ class LoginScreen extends Component {
             id: []
         }
     }
-
-
+/**
+Login function will log the user in to the server and then take the user to the next screen 'homescreen'
+Once the user has entered the credentials in the server then checks whether those credentials match the servers
+if they match a 200 response is returned
+if another response is returned the error is caught and a toast is displayed why
+Once a 200 has returned the ID and session token is uploaded to AsyncStorage and the user is sent to the next screen 'homescreen'
+**/
     login = async () => {
-      //valadation is created here
-
         return fetch("http://10.0.2.2:3333/api/1.0.0/user/login", {
             method: 'post',
             headers: {
@@ -47,7 +60,11 @@ class LoginScreen extends Component {
               ToastAndroid.show(error,ToastAndroid.SHORT);
           })
     }
-
+    /**
+    Render function which allows customisation on the screen
+    This render has two input boxes where the user enters a username and a password and then when entered it is set to state
+    Once the credentials are entered the login button is pressed which calls the login funtion
+    **/
     render(){
         const navigation = this.props.navigation;
         return(
@@ -91,6 +108,9 @@ class LoginScreen extends Component {
     }
 
 }
+/**
+style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+**/
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,

@@ -3,10 +3,20 @@ import {Text,View,Button,ToastAndroid,SafeAreaView,TouchableOpacity,StyleSheet,F
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RNCamera } from 'react-native-camera';
 
+/**
+All import variables for this screen
+**/
+
+/**
+ this is the edit reviews screen  for the app - will allow the user to edit and delete reviews
+**/
 class EditReviews extends Component{
+  /**
+  builds the props contructor while also declaring the variables needed for this screen
+  sets the loading as true for later use
+  **/
     constructor(props){
       super(props);
-
       this.state = {
         isLoading: true,
         usr_id: "",
@@ -22,21 +32,32 @@ class EditReviews extends Component{
         like: ""
       };
 
-//------------------------------------------------------------------------------
+
+/**
+componentDidMount allows everything in the function to be done in the background
+this.checkedloggedIn will call the function check logged in as the user opens the app to make-
+- sure they don't get access to this screen while not logged in
+**/
     }
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
           this.getData();
       });
         this.checkLoggedIn();
-
-
     }
+    /**
+    unsubscribed to clear the memory to stop clogage
+    **/
   componentWillUnmount(){
     this.unsubscribe();
   }
-
-// get data --------------------------------------------------------------------
+/**
+GetData will find all the reviews by the user
+ID and Token is pulled from async storage to help complete the get network request and prove that the user is logged in
+Once the data has been pulled from /user/id the response is transferred into JSON as long as there is a 200 response
+if another response is returned a else if to the correct response will return with a toast explaining why
+finally responseJson is then set to the required format and and applied to a variable in state
+**/
     getData = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       let id = await AsyncStorage.getItem('id');
@@ -80,9 +101,15 @@ class EditReviews extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
-// maybe add the validation in?
-//
-//------------------------------------------------------------------------------
+
+/**
+UpdateUserReview is a funtion that will update the users review when the correct button and credentials are entered
+ID and Token is pulled from async storage to help complete the patch network request and prove that the user is logged in
+let variables is created to parse the data to correct format
+the patch request is sent to the server while stringyifing the sendVariables variable
+Then there is responses with 200 meaning the updated review has succsessfully been patched and the user is sent to the homescreen
+With other responses being caught and printed to the user to keep them infomormed with whats going on
+**/
 
   updateUserReview = async () => {
       let sendVariables ={
@@ -132,8 +159,13 @@ class EditReviews extends Component{
         console.log(error);
       })
     }
-
-//------------------------------------------------------------------------------
+/**
+deleteReview is a funtion that will delete the users review when the correct button is pressed
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the delete request is sent to the server showing that this review needs to be deleted
+Then there is responses with 200 meaning the deleted review has succsessfully been deleted sending the user back to userInfopage
+With other responses being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
     deleteReview = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id), {
@@ -166,7 +198,14 @@ class EditReviews extends Component{
           }
       })
     }
-//----------------like a review ------------------------------------------------
+/**
+likeAReview is a funtion that will post a like for a review
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the post request is sent to the server to /like to show that the user has liked that review
+Then if the server responds with 200 meaning the post review has succsessfully been liked sending the user back to userInfopage-
+-while being toasted that the like has been added
+With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
     likeAReview = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
@@ -206,7 +245,14 @@ class EditReviews extends Component{
                 ToastAndroid.show(error,ToastAndroid.SHORT);
             })
     }
-//-------------unlike a review--------------------------------------------------
+/**
+unLikeAReview is a funtion that will delete a like for a review
+Then the session token is pulled from async storage to make sure the server knows the user is logged in
+the delete request is sent to the server to /like to show that the user would like to unliked that review
+Then if the server responds with 200 meaning the post review has succsessfully been unliked sending the user back to userInfopage-
+-while being toasted that the like has been removed
+With other responses (400,401,403,404,500) being caught and printed and toasted to the user to keep them infomormed with whats going on
+**/
     unlikeAReview = async () => {
       let token = await AsyncStorage.getItem('@session_token');
       return fetch("http://10.0.2.2:3333/api/1.0.0/location/"+(this.state.loc_id)+"/review/"+(this.state.rev_id)+"/like", {
@@ -241,9 +287,8 @@ class EditReviews extends Component{
     }
 
 
-//------------------------------------------------------------------------------
 /***
-checks whether logged in.
+checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
 ***/
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
@@ -252,15 +297,10 @@ checks whether logged in.
     }
   };
 
-  /***
-  the components of the file
-  ***/
-// add is loading
-
-
 /**
-this will delete an entry and then direct a user back to another page (previously hopefully)
-this will update the review and send the user back
+Render function which allows customisation on the screen
+once the screen content has loaded the use of TouchableOpacity allows the user to navigate to other pages
+When the correct button is pressed the function which is part of that button will be called
 **/
   render(){
     console.log(this.state.reviews)
@@ -423,6 +463,9 @@ this will update the review and send the user back
     }
     }
 }
+/**
+style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
+**/
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
