@@ -39,7 +39,7 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
           if(response.status === 201){
             return response.json()
           }else if(response.status === 400){
-              throw 'Failed Validation';
+              throw 'Email already on the system ';
           }else{
             throw 'Something went wrong';
           }

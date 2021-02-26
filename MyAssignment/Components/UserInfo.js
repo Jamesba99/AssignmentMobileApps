@@ -71,7 +71,7 @@ class UserInfo extends Component{
       })
       .catch((error) => {
         console.log(error);
-        ToastAndroid.show(error,ToastAndroid.SHORT);
+        ToastAndroid.show("You are not logged in!",ToastAndroid.SHORT);
       })
     }
 // checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page

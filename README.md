@@ -1,42 +1,59 @@
-Mobile application development 'Coffeeda' Assignment
+# Mobile application development 'Coffida' Assignment
+
 James Brito Alvarado - 18012469
-GitHub repository (Version Control):
-OneDrive: (if bigger than 100mbs)
-Screen Cast: In folder
-Chosen Style Guide: JS Standard
-# Assignment
-James Brito Alvarado - 18012469
-what is the application
-## heading
-- bullet points
-*hasjdh* bold
+
+**GitHub repository (Version Control):**
+
+**OneDrive: (if bigger than 100mbs)**
+
+**Screen Cast: In folder**
+
+**Chosen Style Guide: JS Standard**
+
+## What is this Application?
+
 The Mobile application development 'CoffiDa' Assignment, is an react native application that would communicate with the RESTful API ‘CoffiDa’ to help review the best local coffee spots.
 
-Endpoints
 
+## EndPoints
 In the application all functionality endpoints are achieved (as shown in the screencast) these include:
 
 •	Log in
+
 •	Logout
+
 •	Sign up
-•	Get user info
+
+•	Get user info 
+
 •	Update user info
+
 •	Add a new review
+
 •	Update review
+
 •	Delete a review
+
 •	Get a photo review
+
 •	Add a photo
+
 •	Delete a photo
+
 •	Like a review
+
 •	Remove a like
+
 •	Get location info
+
 •	Favourite a location
+
 •	Unfavourite a location
+
 •	Find locations
 
-As well, as also plotting the coffee shop locations and the users location on Google Maps
 
-Version Control
+## Version control
 
 When creating and starting this project I made sure that Version control was used from the beginning (as seen in the commits section of the github repository). I kept up to using version control by using using Atom’s in-built Git interface. By using version control allowed me to do:
 
@@ -46,6 +63,6 @@ When creating and starting this project I made sure that Version control was use
 
 •Finally, it allowed me to easily transfer between machines without having to worry if this version is the most recent version.
 
-Style guide
 
+## Style Guide
 During my assignment I was using a style guide. The style guide I chose was the JS standard because it would best match how I like to code. As my Atom was my main text editor, I could download the package from the packages area of the Atom which would then act as a linter for my work.

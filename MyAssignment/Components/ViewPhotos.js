@@ -185,7 +185,7 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
           <TouchableOpacity
             style={customStyle.button1}
             onPress={() => {
-                this.props.navigation.navigate("DefaultHomeScreen")
+                this.props.navigation.navigate("HomeScreen")
             }}>
             <Text style={ customStyle.touchOpacityText}> Home </Text>
           </TouchableOpacity>

@@ -70,7 +70,7 @@ class LogoutScreen extends Component {
           <Text style={ customStyle.titleText }> CoffiDa Reviews  </Text>
           <Text style={customStyle.titleText}> ---------------------- </Text>
           <Text style={ customStyle.titleText }> Are You Sure You Want</Text>
-          <Text style={ customStyle.titleText }>     To Logout? </Text>
+          <Text style={ customStyle.titleText }>         To Logout? </Text>
             <TouchableOpacity
               style={customStyle.button1}
               onPress={() => this.logoutUser()}

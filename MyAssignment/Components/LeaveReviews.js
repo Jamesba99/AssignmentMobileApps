@@ -245,7 +245,7 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
                   this.addReviews()
 
                   ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
-                  this.props.navigation.navigate("DefaultHomeScreen")
+                  this.props.navigation.navigate("HomeScreen")
                 }}>
                 <Text style={customStyle.touchOpacityText}> Post Review!</Text>
               </TouchableOpacity>

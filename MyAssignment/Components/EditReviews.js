@@ -134,7 +134,7 @@ With other responses being caught and printed to the user to keep them infomorme
         if(response.status === 200){
             return response
             console.log(response);
-            ToastAndroid.show(responseJson,ToastAndroid.SHORT);
+            ToastAndroid.show("Review updated",ToastAndroid.SHORT);
         }else if(response.status === 400){
           throw 'Bad Request';
         }else if(response.status === 401){
@@ -290,6 +290,7 @@ checks if the user is logged in if not will not allow the user to use drawer nav
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
         this.props.navigation.navigate('LoginScreen');
+          ToastAndroid.show("You are not logged in!",ToastAndroid.SHORT);
     }
   };
 
@@ -426,6 +427,7 @@ When the correct button is pressed the function which is part of that button wil
                     style={customStyle.button1}
                     onPress={() => {
                         this.updateUserReview()
+                        ToastAndroid.show("Review updated",ToastAndroid.SHORT);
                         this.setState({
                           loc_id: item.location.location_id,
                            rev_id: item.review.review_id

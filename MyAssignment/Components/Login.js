@@ -47,15 +47,12 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
                   throw 'Something went wrong';
               }
           })
-
           .then(async (responseJson) => {
               console.log(responseJson);
               await AsyncStorage.setItem('@session_token', responseJson.token);
               await AsyncStorage.setItem('id', responseJson.id.toString());
               this.props.navigation.navigate("HomeScreen");
           })
-
-
           .catch((error) => {
               console.log(error);
               ToastAndroid.show(error,ToastAndroid.SHORT);

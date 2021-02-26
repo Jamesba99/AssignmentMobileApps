@@ -55,7 +55,6 @@ With other responses being caught and printed to the user to keep them infomorme
           throw 'Bad Request';
       }else if(response.status === 401){
           throw '401 Unauthorized';
-          console.log(response);
       }else if (response.status === 404){
           throw 'Not found';
       }else if (response.status === 500){
