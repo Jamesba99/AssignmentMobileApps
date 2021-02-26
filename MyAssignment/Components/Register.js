@@ -62,25 +62,34 @@ While navigation buttons are added to help with navigation of the app
 creates a letter only when numbers pop up it throws an error
 also makes sure that the fields are not empty
 **/
-    submit(){
+    checkFirstName(){
       let rjx=/^[a-zA-z]+$/;
       let isValid=rjx.test(this.state.first_name)
-      console.warn(isValid)
-
       if(!isValid)
       {
-        this.setState({first_nameError:"name can not be number"})
+        this.setState({first_nameError:"name cannot be number"})
       }
       else
       {
           this.setState({first_nameError:""})
       }
     }
-
+    checkLastName(){
+      let rjx=/^[a-zA-z]+$/;
+      let isValid=rjx.test(this.state.last_name)
+      if(!isValid)
+      {
+        this.setState({last_nameError:"name cannot be number"})
+      }
+      else
+      {
+          this.setState({last_nameError:""})
+      }
+    }
     emailValidator(){
         if(this.state.email=="")
         {
-          this.setState({EmailError:"email can not be empty"})
+          this.setState({EmailError:"email cannot be empty"})
         }
         else
         {
@@ -91,48 +100,54 @@ also makes sure that the fields are not empty
     Render function which allows customisation on the screen
     This render has four input boxes where the user enters a email, first name , second name and a password then setting it to state
     Once the credentials are entered the login button is pressed which calls the login funtion
+    Also has a validater checking if the user has entered the correct format of just letters or just numbers
     **/
     render(){
           const navigation = this.props.navigation;
           return (
             <SafeAreaView style={customStyles.container}>
               <ScrollView>
-                  <Text style={customStyles.text}>RegisterScreen</Text>
+                  <Text style={customStyles.text}>  Register Now!</Text>
+                  <Text style={customStyles.text}>------------------</Text>
+                  <Text style={customStyles.subText}>Enter a First Name:</Text>
                   <TextInput
                       placeholder="Enter your first name"
                       onChangeText={(first_name) => this.setState ({first_name})}
                       backgroundColor="#C7E8F3"
-                      onBlur={()=>this.submit()}
+                      onBlur={()=>this.checkFirstName()}
                       value={this.state.first_name}
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={customStyles.textInput}
                   />
                   <Text style={customStyles.errorMessage}> {this.state.first_nameError}</Text>
-
+                  <Text style={customStyles.subText}>Enter a Last Name:</Text>
                   <TextInput
                       placeholder="Enter your second name"
                       onChangeText={(last_name) => this.setState ({last_name})}
                       backgroundColor="#C7E8F3"
+                      onBlur={()=>this.checkLastName()}
                       value={this.state.last_name}
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={customStyles.textInput}
                   />
-
+                  <Text style={customStyles.errorMessage}> {this.state.last_nameError}</Text>
+                  <Text style={customStyles.subText}>Enter a Email:</Text>
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState ({email})}
                       onBlur={()=>this.emailValidator()}
                       backgroundColor="#C7E8F3"
                       value={this.state.email}
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      style={customStyles.textInput}
                   />
                   <Text style={customStyles.errorMessage}> {this.state.EmailError}</Text>
+                  <Text style={customStyles.subText}>Enter a Password:</Text>
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState ({password})}
                       backgroundColor="#C7E8F3"
                       value={this.state.password}
                       minLength={5}
-                    //secureTextEntry
-                      style={{padding:5, borderWidth:1, margin:5}}
+                      secureTextEntry
+                      style={customStyles.textInput}
                   />
                   <Text style={customStyles.errorMessage}> {this.state.error}</Text>
                   <TouchableOpacity
@@ -140,11 +155,11 @@ also makes sure that the fields are not empty
                       onPress={()=> this.userSignup()}>
                       <Text style={customStyles.buttonText}>Create Account!</Text>
                   </TouchableOpacity>
-                  <Button
-                      title="Back"
-                      color="#8E4162"
-                      onPress={() =>navigation.goBack()}
-                  />
+                  <TouchableOpacity
+                      style={customStyles.button1}
+                      onPress={()=> navigation.goBack()}>
+                      <Text style={customStyles.buttonText}>Go Back!</Text>
+                  </TouchableOpacity>
               </ScrollView>
             </SafeAreaView>
         )
@@ -160,21 +175,30 @@ const customStyles = StyleSheet.create({ // styles the text on the screen
   },
   text: { // styles the text colour and style
     color: '#C7E8F3',
-    fontSize: 25
+    fontSize: 40,
+    fontWeight:"bold",
+    justifyContent: 'center'
+  },
+  subText: { // styles the text colour and style
+    color: '#C7E8F3',
+    fontSize: 20,
+    fontWeight:"bold",
+    justifyContent: 'center'
   },
   textInput:{
     padding:5,
     borderWidth:1,
-    margin:5
+    margin: 1,
+    width: '100%'
   },
   button1:{
     height: 60,
-    width: 300,
+    width: '100%',
     padding: 10,
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:10
+
   },
   buttonText:{
     color: '#C7E8F3',
@@ -183,7 +207,7 @@ const customStyles = StyleSheet.create({ // styles the text on the screen
     //justifyContent: 'center'
   },
   errorMessage:{
-  color: 'black',
+  color: 'white',
   marginLeft: 20
  }
 });

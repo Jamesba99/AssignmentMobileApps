@@ -29,7 +29,7 @@ componentDidMount allows everything in the function to be done in the background
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
           this.getUserData();
-          this.checkedLoggedIn()
+          this.checkLoggedIn()
     });
 
     }
@@ -151,12 +151,6 @@ With other responses (400,401,404,500) being caught and printed to the user to k
 /***
 checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
 ***/
-  checkLoggedIn = async () => {
-    const value = await AsyncStorage.getItem('@session_token');
-    if (value == null) {
-        this.props.navigation.navigate('LoginScreen');
-    }
-  };
   checkLoggedIn = async () => {
   const value = await AsyncStorage.getItem('@session_token');
   if (value == null) {

@@ -4,7 +4,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //All imports for this screen
 class UserInfo extends Component{
   //builds the props contructor while also declaring the variables
-
     constructor(props){
       super(props);
       this.state = {
@@ -18,19 +17,17 @@ class UserInfo extends Component{
         userDetails: ""
       };
 }
-//------------------------------------------------------------------------------
 //componentDidMount allows everything in the function to be done in the backgeround
   componentDidMount(){
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
           this.getUserData();
+          this.checkLoggedIn();
       });
-
   }
 // unsubscribed to clear the memory to stop clogedge
   componentWillUnmount (){
     this.unsubscribe();
 }
-//---------get data ------------------------------------------------------------
 /**
  getUserData will find all the location information of all the coffee shops
  Also the X-Authorization token is taken from async storage to prove to the server that the user is logged in
@@ -77,7 +74,6 @@ class UserInfo extends Component{
         ToastAndroid.show(error,ToastAndroid.SHORT);
       })
     }
-//-------------Checked Logged in------------------------------------------------
 // checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
@@ -111,6 +107,7 @@ class UserInfo extends Component{
       return(
         <SafeAreaView style={ customStyle.container }>
             <Text style={ customStyle.titleText }> My Account </Text>
+            <Text style={customStyle.titleText}> ----------------- </Text>
             <Text style={ customStyle.resultsText }> User reference number: { this.state.userDetails.user_id} </Text>
             <Text style={ customStyle.resultsText }> Forename: { this.state.userDetails.first_name } | Surname: { this.state.userDetails.last_name } </Text>
             <Text style={ customStyle.resultsText }> Email: { this.state.userDetails.email } </Text>
@@ -155,12 +152,10 @@ class UserInfo extends Component{
   }
 }
 // style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
-
 const customStyle = StyleSheet.create({ // styles the text on the screen
   container:{
     flex: 1,
     alignItems: 'center',
-    //justifyContent: 'center',
     backgroundColor: '#41393E'
   },
   titleText: { // styles the text colour and style

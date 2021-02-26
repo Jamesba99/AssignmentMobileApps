@@ -19,7 +19,8 @@ class LoginScreen extends Component {
         this.state={
             email: "",
             password: "",
-            id: []
+            id: [],
+            EmailError:"",
         }
     }
 /**
@@ -61,6 +62,20 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
           })
     }
     /**
+    creates a letter only validation when numbers pop up it throws an error
+    also makes sure that the fields are not empty
+    **/
+    emailValidator(){
+        if(this.state.email=="")
+        {
+          this.setState({EmailError:"email cannot be empty"})
+        }
+        else
+        {
+            this.setState({EmailError:""})
+        }
+    }
+    /**
     Render function which allows customisation on the screen
     This render has two input boxes where the user enters a username and a password and then when entered it is set to state
     Once the credentials are entered the login button is pressed which calls the login funtion
@@ -71,19 +86,24 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
             <SafeAreaView style={customStyle.container}>
               <ScrollView>
                   <Text style={ customStyle.text }>      Welcome to</Text>
-                  <Text style={ customStyle.text }>CoffeeDa Reviews!</Text>
+                  <Text style={ customStyle.text }>CoffiDa Reviews!</Text>
                   <Text style={customStyle.text}>    Login to begin </Text>
+                    <Text style={customStyle.text}> ----------------- </Text>
                   <Image
                       style={customStyle.stretch}
                       source={require('./images/coffeeReview.jpg')}
                   />
+                  <Text style={customStyle.subText}>Enter a Email:</Text>
                   <TextInput
                       placeholder="Enter your email"
                       onChangeText={(email) => this.setState({email})}
                       backgroundColor= '#C7E8F3'
                       value={this.state.email}
+                      onBlur={()=>this.emailValidator()}
                       style={customStyle.textInput}
                   />
+                  <Text style={customStyle.errorMessage}> {this.state.EmailError}</Text>
+                  <Text style={customStyle.subText}>Enter a Password:</Text>
                   <TextInput
                       placeholder="Enter your password"
                       onChangeText={(password) => this.setState({password})}
@@ -92,6 +112,7 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
                       secureTextEntry
                       style={customStyle.textInput}
                   />
+                  <Text>     </Text>
                   <TouchableOpacity
                       style={customStyle.button1}
                         onPress={() => this.loginUser()}>
@@ -106,7 +127,6 @@ Once a 200 has returned the ID and session token is uploaded to AsyncStorage and
               </SafeAreaView>
         );
     }
-
 }
 /**
 style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
@@ -130,13 +150,21 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     margin:5
   },
   button1:{
-    height: 60,
-    width: '100%',
-    padding: 10,
-    alignItems: 'center',
-    borderWidth: 10,
-    borderColor: '#8E4162',
-
+      height: 10,
+      width: '100%',
+      padding: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 10,
+      borderColor: '#8E4162',
+      margin:2,
+      fontSize: 20
+  },
+  subText: { // styles the text colour and style
+    color: '#C7E8F3',
+    fontSize: 20,
+    fontWeight:"bold",
+    justifyContent: 'center'
   },
   buttonText:{
     color: '#C7E8F3',
@@ -144,9 +172,13 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     fontWeight:'bold',
     //justifyContent: 'center'
   },
+  errorMessage:{
+  color: 'white',
+  marginLeft: 20
+  },
   stretch: {
     width: '100%',
-    height: 200,
+    height: 150,
     resizeMode: 'stretch'
   }
 });

@@ -181,12 +181,6 @@ checks whether logged in.
     }
   };
 
-  /***
-  the components of the file
-  ***/
-// add is loading
-
-
 /**
 this will delete an entry and then direct a user back to another page (previously hopefully)
 this will update the review and send the user back

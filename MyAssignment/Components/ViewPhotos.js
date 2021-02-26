@@ -20,17 +20,22 @@ class ViewPhotos extends Component{
         location_id: "",
         image: null
       };
+    }
 /**
 componentDidMount allows everything in the function to be done in the background
 this.checkedloggedIn will call the function check logged in as the user opens the app to make-
 - sure they don't get access to this screen while not logged in
 **/
-    }
-    componentDidMount(){
-        this.checkLoggedIn();
-        this.getPhotos();
-    }
-
+      componentDidMount(){
+        this.unsubscribe = this.props.navigation.addListener('focus', () => {
+            this.checkLoggedIn();
+            this.getPhotos();
+          });
+      }
+  // unsubscribed to clear the memory to stop clogage
+    componentWillUnmount (){
+    this.unsubscribe();
+  }
 /**
 getPhoto is a funtion that will get the photos from the reviews that were taken on the camera
 location_id and review_id is transfered from edit reviews
@@ -162,7 +167,7 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
           <Text style={ customStyle.buttonText }> Photo Attached of Review:</Text>
           <View style={{ margin: 50 }}>
             <Image
-              style={customStyle.Logo}
+              style={customStyle.logo}
               source={{uri: this.state.image}}
             />
           </View>
@@ -261,7 +266,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     justifyContent: 'center',
     padding: 1,
   },
-  Logo: {
+  logo: {
     flex:1,
     alignItems: 'center',
     justifyContent: 'center',

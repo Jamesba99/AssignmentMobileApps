@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, TouchableOpacity, ToastAndroid, Image,SafeAreaView,ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SeeLocalCoffee from './SeeLocalCoffee';
 /**
 All import variables for this screen
 **/
-
-
 /**
  this is the homescreen for the app - will be shown after logging in
 **/
@@ -21,7 +19,6 @@ builds the props contructor while also declaring the variables
       listData: []
     }
   }
-
 /**
 componentDidMount allows everything in the function to be done in the background
 this.checkedloggedIn will call the function check logged in as the user opens the app to make-
@@ -107,35 +104,42 @@ unsubscribed to clear the memory to stop clogage
       );
     }else{
       return(
-          <View style={customStyle.container}>
-            <Text style={customStyle.titleText}>CoffeeDa</Text>
-            <Image
-              style={customStyle.stretch}
-              source={require('./images/coffee.jpg')}
-            />
-            <TouchableOpacity
-                style={customStyle.button1}
-                  onPress={() =>navigation.navigate('LeaveReviews')}>
-                <Text style={customStyle.buttonText}>Leave Reviews</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={customStyle.button1}
-                onPress={() =>navigation.navigate('ViewReviews')}>
-                <Text style={customStyle.buttonText}>View Reviews</Text>
-            </TouchableOpacity>
+          <SafeAreaView style={customStyle.container}>
+            <ScrollView>
+              <Text style={customStyle.titleText}>CoffiDa Reviews</Text>
+              <Text style={customStyle.titleText}> ----------------- </Text>
+              <Image
+                style={customStyle.stretch}
+                source={require('./images/coffee.jpg')}
+              />
               <TouchableOpacity
-                style={customStyle.button1}
-                onPress={() =>navigation.navigate('SeeLocalCoffee')}
-                >
-                <Text style={customStyle.buttonText}>See Local coffee</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={customStyle.button1}
-                onPress={() =>navigation.navigate('UserInfo')}>
-                <Text style={customStyle.buttonText}>My Account</Text>
-
-            </TouchableOpacity>
-          </View>
+                  style={customStyle.button1}
+                    onPress={() =>navigation.navigate('LeaveReviews')}>
+                  <Text style={customStyle.buttonText}>Leave Reviews</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={customStyle.button1}
+                  onPress={() =>navigation.navigate('ViewReviews')}>
+                  <Text style={customStyle.buttonText}>View Reviews</Text>
+              </TouchableOpacity>
+                <TouchableOpacity
+                  style={customStyle.button1}
+                  onPress={() =>navigation.navigate('SeeLocalCoffee')}
+                  >
+                  <Text style={customStyle.buttonText}>See Local coffee</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={customStyle.button1}
+                  onPress={() =>navigation.navigate('UserInfo')}>
+                  <Text style={customStyle.buttonText}>My Account</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={customStyle.button1}
+                  onPress={() =>navigation.navigate('LogoutScreen')}>
+                  <Text style={customStyle.buttonText}>Logout</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </SafeAreaView>
       );
     }
   }
@@ -147,8 +151,8 @@ const customStyle = StyleSheet.create({
   container:{
     flex: 1,
     alignItems: 'center',
-    //justifyContent: 'center',
-    backgroundColor: '#41393E'
+    justifyContent: 'center',
+    backgroundColor: '#41393E',
   },
   titleText: {
     color: '#C7E8F3',
@@ -172,11 +176,10 @@ const customStyle = StyleSheet.create({
     margin:2
   },
   stretch: {
-    width: 150,
-    height: 150,
+    width: '100%',
+    height: 250,
     resizeMode: 'stretch'
   }
-
 });
 
 export default HomeScreen;

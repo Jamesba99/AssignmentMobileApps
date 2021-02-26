@@ -6,8 +6,6 @@ import { Rating, AirbnbRating, RatingProps } from 'react-native-elements';
 /**
 All import variables for this screen
 **/
-
-
 /**
  this is the ViewReviews for the app - will be shown after the user navigates from home to this screen
 **/
@@ -41,10 +39,7 @@ class ViewReviews extends Component{
         this.checkLoggedIn();
       });
       this.getData("http://10.0.2.2:3333/api/1.0.0/find");
-
     }
-
-
   // unsubscribed to clear the memory to stop clogage
     componentWillUnmount (){
       this.unsubscribe();
@@ -164,6 +159,7 @@ class ViewReviews extends Component{
           <SafeAreaView  style={customStyle.container}>
             <View>
                 <Text style={customStyle.titleText}>View Reviews</Text>
+                <Text style={customStyle.titleText}> ---------------- </Text>
                 <TextInput
                   value={this.state.q}
                   onChangeText={(q) => this.setState({q: q})}
@@ -171,7 +167,7 @@ class ViewReviews extends Component{
                   backgroundColor="#C7E8F3"
                   style={customStyle.textInput}
                 />
-                <Text style={customStyle.ratingsTitleText}>overall_rating </Text>
+                <Text style={customStyle.ratingsTitleText}>Overall Rating </Text>
                 <AirbnbRating
                   size={15}
                   reviewColor= '#C7E8F3'
@@ -180,7 +176,7 @@ class ViewReviews extends Component{
                   selectedColor="#8E4162"
                   onFinishRating={(rating) => this.ratingCompleted( rating, "avg_overall_rating")}
                 />
-                <Text style={customStyle.ratingsTitleText}>price_rating </Text>
+                <Text style={customStyle.ratingsTitleText}>Price Rating </Text>
                 <AirbnbRating
                   size={15}
                   reviewColor= '#C7E8F3'
@@ -189,7 +185,7 @@ class ViewReviews extends Component{
                   selectedColor="#8E4162"
                   onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
                 />
-                <Text style={customStyle.ratingsTitleText}>quality_rating </Text>
+                <Text style={customStyle.ratingsTitleText}>Quality Rating </Text>
                 <AirbnbRating
                   size={15}
                   reviewColor= '#C7E8F3'
@@ -197,6 +193,15 @@ class ViewReviews extends Component{
                   defaultRating={0}
                   selectedColor="#8E4162"
                   onFinishRating={(rating) => this.ratingCompleted( rating, "avg_price_rating")}
+                />
+                <Text style={customStyle.ratingsTitleText}>Clenliness Rating </Text>
+                <AirbnbRating
+                  size={15}
+                  reviewColor= '#C7E8F3'
+                  reviews={["Awful!", "Bad", "OK", "Good", "Only the Best Results!"]}
+                  defaultRating={0}
+                  selectedColor="#8E4162"
+                  onFinishRating={(rating) => this.ratingCompleted( rating, "avg_clenliness_rating")}
                 />
                   <TouchableOpacity
                       style={customStyle.button1}
@@ -228,7 +233,7 @@ class ViewReviews extends Component{
                                  overall_rating: item.overall_rating,
                                  })
                             }}>
-                            <Text style={customStyle.touchOpacityText}> View review in detail</Text>
+                            <Text style={customStyle.touchOpacityText}> View Review in Detail</Text>
                           </TouchableOpacity>
                         </View>
                     )}
@@ -275,13 +280,13 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     justifyContent: 'center',
     padding: 1,
     margin: 2,
-    fontSize:50,
+    fontSize:40,
     fontWeight: 'bold',
     flexWrap: 'wrap'
   },
   resultsText:{
     color: '#C7E8F3',
-    fontSize: 15,
+    fontSize: 20,
     fontWeight:'bold',
     padding: 1
   },
@@ -297,7 +302,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     color: '#C7E8F3',
     padding: 1,
     fontWeight: 'bold',
-    fontSize: 25
+    fontSize: 20
   },
   button1:{
     height: 60,
@@ -306,16 +311,13 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-
   },
   touchOpacityText: { // styles the text colour and style
     color: '#C7E8F3',
-
     fontSize: 20,
     fontWeight:'bold',
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   homeTouchOpacity: {
     color: '#C7E8F3',
@@ -323,7 +325,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     fontWeight:'bold',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 5
+    padding: 3
   },
   flatListView: { // styles the text colour and style
     flex: 1,

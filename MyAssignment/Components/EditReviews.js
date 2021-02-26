@@ -42,8 +42,8 @@ this.checkedloggedIn will call the function check logged in as the user opens th
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
           this.getUserData();
+            this.checkLoggedIn();
       });
-        this.checkLoggedIn();
     }
     /**
     unsubscribed to clear the memory to stop clogage
@@ -68,8 +68,6 @@ finally responseJson is then set to the required format and and applied to a var
             "X-Authorization": token
           },
       })
-
-
       .then((response)=> {
         if(response.status === 200){
           return response.json()
@@ -285,8 +283,6 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
         }
       })
     }
-
-
 /***
 checks if the user is logged in if not will not allow the user to use drawer navigation to get to this page
 ***/
@@ -335,7 +331,11 @@ When the correct button is pressed the function which is part of that button wil
                   <Text style={ customStyle.buttonText }> Clenliness Rating: { item.review.clenliness_rating }</Text>
                   <Text style={ customStyle.buttonText }> Review body: { item.review.review_body }</Text>
                   <Text style={ customStyle.buttonText }> Number of likes: { item.review.likes }</Text>
-                  <Text style={ customStyle.buttonText }> Photo: { item.location.photo_path }</Text>
+                  <Text style={ customStyle.buttonText }> Photo: </Text>
+                  <Image
+                    style={customStyle.logo}
+                    source={{uri: item.location.photo_path}}
+                  />
                   <TouchableOpacity
                     style={customStyle.like}
                     onPress={() => {
@@ -569,7 +569,15 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     flex:1,
     justifyContent: 'flex-end',
     alignItems: 'center'
-  }
+  },
+logo: {
+  flex:1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderWidth: 10,
+  width: 300,
+  height: 300,
+}
 });
 
 export default EditReviews;

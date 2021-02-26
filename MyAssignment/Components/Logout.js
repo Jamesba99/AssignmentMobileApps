@@ -65,9 +65,12 @@ class LogoutScreen extends Component {
     const navigation = this.props.navigation;
       return(
         <SafeAreaView style={customStyle.container}>
-          <Text style={ customStyle.titleText }> Are You Sure  </Text>
-          <Text style={ customStyle.titleText }> You Want To  </Text>
-          <Text style={ customStyle.titleText }> Logout? </Text>
+        <ScrollView>
+        <Text style={ customStyle.titleText }> Thank You for using</Text>
+          <Text style={ customStyle.titleText }> CoffiDa Reviews  </Text>
+          <Text style={customStyle.titleText}> ---------------------- </Text>
+          <Text style={ customStyle.titleText }> Are You Sure You Want</Text>
+          <Text style={ customStyle.titleText }>     To Logout? </Text>
             <TouchableOpacity
               style={customStyle.button1}
               onPress={() => this.logoutUser()}
@@ -80,6 +83,7 @@ class LogoutScreen extends Component {
               >
               <Text style={customStyle.buttonText}>No - Back!</Text>
             </TouchableOpacity>
+          </ScrollView>
         </SafeAreaView>
       );
   }
@@ -95,8 +99,10 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
   },
   titleText: { // styles the text colour and style
     color: '#C7E8F3',
-    fontSize: 50,
-    fontWeight:"bold"
+    fontSize: 40,
+    fontWeight:"bold",
+    flex:1,
+    justifyContent: 'center',
   },
   text: { // styles the text colour and style
     color: '#C7E8F3',
@@ -116,7 +122,7 @@ const customStyle = StyleSheet.create({ // styles the text on the screen
     alignItems: 'center',
     borderWidth: 10,
     borderColor: '#8E4162',
-    margin:10
+
   },
   buttonText:{
     color: '#C7E8F3',

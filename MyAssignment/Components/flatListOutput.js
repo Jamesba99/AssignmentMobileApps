@@ -3,16 +3,12 @@ import { Text, View, Button, ToastAndroid, SafeAreaView, TouchableOpacity, Style
 import {ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Rating, AirbnbRating } from 'react-native-elements';
-
 /**
 All import variables for this screen
-**/
-/**
- this is the flatlistout screen  for the app - will allow the user to to view a review for a cafe in full showing all the reviews
- imports the contents of editReviews to help display props and data from the previous screen
+this is the flatlistout screen  for the app - will allow the user to to view a review for a cafe in full showing all the reviews
+imports the contents of editReviews to help display props and data from the previous screen
 **/
 import ViewReviews from './ViewReviews';
-
 //builds the props contructor while also declaring the variables
 class FlatListOutput extends Component{
     constructor(props){
@@ -28,7 +24,6 @@ class FlatListOutput extends Component{
         getLocation: ""
       }
     }
-
   /**
   componentDidMount allows everything in the function to be done in the background
   this.checkedloggedIn will call the function check logged in as the user opens the app to make-
@@ -38,7 +33,6 @@ componentDidMount(){
   this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.getLocationData();
   });
-
 }
 /**
 unsubscribed to clear the memory to stop clogage
@@ -46,7 +40,6 @@ unsubscribed to clear the memory to stop clogage
 componentWillUnmount (){
   this.unsubscribe();
 }
-
   getLocationData = async () => {
     const { location_id } = this.props.route.params;
     let token = await AsyncStorage.getItem('@session_token');
@@ -191,23 +184,34 @@ Constants are made for all the props that are being used on this screen they are
     const {quality_rating} = this.props.route.params;
     const { location_id }= this.props.route.params;
 
+    if(this.state.isLoading){
+      return(
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#41393E'
+          }}>
+          <Text style={{fontSize: 50, fontWeight: 'bold', color: '#C7E8F3'}}> Loading.... </Text>
+      </View>
+      );
+    }else{
     return(
       <SafeAreaView style={ customStyle.container }>
           <Text style={customStyle.titleText}> Review of { this.state.getLocation.location_name }</Text>
           <Text style={customStyle.titleText}> { this.state.getLocation.location_town } </Text>
+            <Text style={customStyle.resultsText}> ----------------------- </Text>
           <Text style={customStyle.resultsText}> Overall rating is: { this.state.getLocation.avg_overall_rating }</Text>
           <Text style={customStyle.resultsText}> Price Rating: { this.state.getLocation.avg_price_rating} </Text>
           <Text style={customStyle.resultsText}> Quality Rating: { this.state.getLocation.avg_quality_rating } </Text>
           <Text style={customStyle.resultsText}> Clenliness Rating: { this.state.getLocation.avg_clenliness_rating } </Text>
-          <Text style={customStyle.resultsText}> Latitude: { this.state.getLocation.latitude } </Text>
-          <Text style={customStyle.resultsText}> Longitude: { this.state.getLocation.longitude } </Text>
-
           <Text style={customStyle.resultsText}> ----------------------- </Text>
           <FlatList
             data={location_reviews}
             renderItem={({item}) => (
               <View style={ customStyle.flatListView }>
-                <Text style={customStyle.resultsText}> -------------</Text>
                 <Text style={ customStyle.resultsText }> User { item.review_id }'s Review: </Text>
                 <Text style={ customStyle.resultsText }> Number of Likes : { item.likes } </Text>
                 <Text style={ customStyle.resultsText }> Overall Rating : { item.review_overallrating } </Text>
@@ -249,6 +253,7 @@ Constants are made for all the props that are being used on this screen they are
       </SafeAreaView>
     );
   }
+}
 }
 // style sheet to allow customisation of the different buttons,views,flatlists and TouchableOpacity
 const customStyle = StyleSheet.create({ // styles the text on the screen

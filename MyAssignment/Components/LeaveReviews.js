@@ -36,6 +36,7 @@ class ViewReviews extends Component{
     **/
     componentDidMount(){
       this.unsubscribe = this.props.navigation.addListener('focus', () => {
+          this.checkLoggedIn();
       });
       this.getFindInformation();
     }
@@ -156,6 +157,7 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
         this.props.navigation.navigate('LoginScreen');
+        ToastAndroid.show("You are not logged in!",ToastAndroid.SHORT)
     }
   };
 
@@ -189,14 +191,14 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
         <View style={customStyle.container}>
             <Text style={customStyle.text}>Leave a Review!</Text>
             <Text style={customStyle.titleText}>-----------------------------</Text>
-            <Text style={customStyle.titleText}>Click a cafe to Review</Text>
+            <Text style={customStyle.titleText}>Click a Cafe to Review</Text>
               <FlatList
                 data = {this.state.listData}
                 renderItem = {({item}) => (
                   <TouchableOpacity
                     onPress={() => this.setState({loc_id: item.location_id})}
                     >
-                    <Text style={customStyle.buttonText}> Cafe: {item.location_id} is {item.location_name}</Text>
+                    <Text style={customStyle.buttonText}>{item.location_name}, {item.location_town}</Text>
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item,index) => index.toString()}
@@ -231,21 +233,19 @@ With other responses (400,401,403,404,500) being caught and printed and toasted 
               />
               <TextInput
                 placeholder= "What was good/bad about this coffee (review body)"
-                onChangeText={(review_body) => this.validate(review_body, "review_body")}
-
+                onChangeText={(review_body) => this.setState({review_body})}
                 backgroundColor="#C7E8F3"
                 value={this.state.review_body}
                 style ={customStyle.textInput}
 
               />
-
               <TouchableOpacity
                 style={customStyle.button1}
                 onPress={()=> {
                   this.addReviews()
 
                   ToastAndroid.show("Review has been added ",ToastAndroid.SHORT);
-                  this.props.navigation.navigate("ViewReviews")
+                  this.props.navigation.navigate("DefaultHomeScreen")
                 }}>
                 <Text style={customStyle.touchOpacityText}> Post Review!</Text>
               </TouchableOpacity>

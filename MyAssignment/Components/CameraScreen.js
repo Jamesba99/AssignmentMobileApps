@@ -103,6 +103,7 @@ a button which calls the take picture function initiates the process of taking t
 **/
 
   render(){
+    const navigation = this.props.navigation; // declaring the navigation constant
       return(
         <View style={{ flex:1,width:'100%'}}>
           <RNCamera
@@ -117,7 +118,13 @@ a button which calls the take picture function initiates the process of taking t
           color= "#8E4162"
           fontWeight = 'bold'
           onPress={() => {this.takePicture()}}/>
+          <Button
+          title= "Go Back"
+          color= "#8E4162"
+          fontWeight = 'bold'
+          onPress={() => navigation.goBack()}/>
         </View>
+
       );
     }
   }
